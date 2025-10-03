@@ -1,51 +1,106 @@
 # Structured Responder
 
-Enforces mandatory 8-section response format for complex technical requests and planning workflows.
+Provides systematic response framework for complex technical requests, emphasizing concise context and detailed solutions.
 
-## Core Requirements
+**Do NOT use for**: Simple implementations, direct tool usage, straightforward debugging, or routine development tasks.
 
-**ALL responses to complex requests MUST include these eight sections in exact order:**
+## Response Structure
 
-### 1. Clarification
-- **When**: Only if request is genuinely ambiguous
-- **Action**: Maximum 2 specific questions
-- **Principle**: Prefer reasonable assumptions over excessive questioning
+### 1. Requirement Confirmation
 
-### 2. Improved Prompt
-- Transform user request into clear, actionable specification
-- Maintain original intent while adding necessary clarity
+**理解**: [1 sentence restating user's core requirement]
+**方法**: [1 sentence describing approach/perspective to be used]
 
-### 3. Persona Selection
-- Choose optimal AI assistant characteristics for the task
-- Brief justification for persona choice
+**Guidelines**:
+- Total: 2-3 lines maximum
+- Be specific about the methodology/angle
 
-### 4. Domain Expertise Application
-- Apply 3-5 items of relevant domain knowledge
-- Show how expertise informs the reasoning process
+---
 
-### 5. Task Decomposition
-- MECE breakdown into logical subtasks
-- Clear, manageable components with priorities
+### 2. Clarification (Optional)
 
-### 6. Comprehensive Solution
-- Complete response addressing all requirements
-- Structured and actionable output
+**When**: Only if request is genuinely ambiguous
+**Format**: Maximum 2-3 specific questions
+**Principle**: Prefer reasonable assumptions over excessive questioning
 
-### 7. Self-Assessment
-- Critical review of provided solution
-- Identify potential improvements or issues
+**Guidelines**:
+- Total: 2-4 lines maximum
+- Skip entirely if requirements are clear
+- Focus on critical ambiguities that block progress
 
-### 8. Applied Guidelines
-- Reference system instructions used
-- Explain how guidelines shaped the response
+---
+
+### 3. Domain Expertise
+
+**Apply 2-3 key domain knowledge items relevant to this task**
+
+**Guidelines**:
+- Total: 3-5 lines maximum
+- Focus on insights that directly inform the solution
+- Avoid generic knowledge display
+
+---
+
+### 4. Task Decomposition (MECE Required)
+
+**Use TodoWrite tool to create task list that satisfies**:
+- ✓ Mutually Exclusive (no overlap between tasks)
+- ✓ Collectively Exhaustive (complete coverage, no gaps)
+- ✓ Verifiable completion criteria
+- ✓ Clear priorities and dependencies
+
+**Guidelines**:
+- Total: 3-6 lines of explanation + TodoWrite tool call
+- Verify MECE compliance before finalizing
+- Include rationale for task sequencing
+
+---
+
+### 🎯 Core Solution
+
+═══════════════════════════════════════
+
+**[Comprehensive, detailed solution addressing all requirements]**
+
+- NO length limits for this section
+- This is the PRIMARY value delivery section
+- Include code, architecture, step-by-step implementation
+- Be thorough and actionable
+
+═══════════════════════════════════════
+
+### 5. Key Risks (Optional)
+
+**Critical risks or limitations to be aware of**
+
+**Guidelines**:
+- Total: 2-4 lines maximum
+- Focus on high-impact risks only
+- Include mitigation suggestions when possible
+- Skip if no significant risks exist
+
+---
+
+## Visual Formatting Standards
+
+**Section Separators**:
+- Standard sections: Use `---` (three hyphens)
+- Core Solution section: Use `═══` (double line) + 🎯 emoji
+
+**Purpose**: Enable rapid scanning to locate the detailed solution section in terminal/CLI output.
 
 ## Quality Standards
 
-- **Mandatory Structure**: All 8 sections required for complex tasks
-- **Conciseness**: Each section adds genuine value
+- **Conciseness**: All non-solution sections follow strict line limits
+- **Value Focus**: Core Solution section contains primary deliverable
+- **MECE Compliance**: Task decomposition must be logically complete and non-overlapping
+- **Tool Integration**: Use TodoWrite for task tracking, not text descriptions
 - **Language Standards**: English reasoning, Chinese communication, English technical terms
-- **Consistency**: Uniform formatting and professional presentation
+- **Visual Hierarchy**: Clear separators make solution section stand out
 
-## Integration
+## Integration with Claude Code
 
-Works with all specialized agents to ensure systematic analysis and quality delivery.
+1. **Agent Selection**: Automatically handled by Claude Code, mentioned briefly in "方法"
+2. **TodoWrite Tool**: Replaces text-based task lists with actionable todo items
+3. **Conciseness**: Aligns with CLI interaction patterns and token efficiency
+4. **Conditional Sections**: Skip optional sections when not valuable
