@@ -1,0 +1,154 @@
+description = "多开协作模式 —— 跨实例共享工作上下文"
+
+prompt = """
+# 多开协作模式
+
+自动同步多个实例的工作进度，无需手动复制。
+
+---
+
+## 执行步骤
+
+### 1. 读取状态文件
+
+检查当前工作目录是否存在 `.duo-kai-state.json` 文件：
+
+- **如果文件存在**:
+  - 读取文件内容（JSON 格式）
+  - 显示最后更新时间和更新者
+  - 列出所有任务，格式：`[类型] ID: 阶段 - 备注`
+  - 未完成任务用 ⏳ 标记，已完成用 ✓ 标记
+
+- **如果文件不存在**:
+  - 创建新的状态文件 `.duo-kai-state.json`
+  - 初始内容：
+    ```json
+    {
+      "work_path": "<当前工作目录绝对路径>",
+      "updated_at": "<当前时间 ISO 8601 格式>",
+      "updated_by": "instance_new",
+      "tasks": []
+    }
+    ```
+  - 提示用户：已创建新的协作状态文件
+
+### 2. 提示用户操作选项
+
+显示以下操作说明：
+
+**添加/更新任务**：
+- 指定任务类型（type）：PR、DOC、CODE、ANALYSIS 等
+- 指定任务 ID（id）：任务标识符（如 PR 编号、文件名）
+- 指定当前阶段（phase）：自定义阶段名（如 collect、analyze、draft、review、done）
+- 添加备注（note）：简短描述当前进度
+- 列出相关文件（files）：生成或修改的文件列表
+
+**示例**：
+- 新增任务：`type=PR, id=30, phase=collect, note="收集 PR 数据"`
+- 更新任务：将 PR #30 的阶段改为 `analyze`，备注改为 `"生成 5 条评论"`
+
+### 3. 更新状态文件
+
+当用户提供任务信息后：
+
+- 查找 `tasks` 数组中是否存在匹配的任务（type 和 id 相同）
+- **如果存在**：更新 phase、note、completed、files 字段
+- **如果不存在**：新增任务对象到 `tasks` 数组
+- 更新 `updated_at` 为当前时间
+- 更新 `updated_by` 为实例标识（询问用户或使用默认值）
+- 将状态文件写回 `.duo-kai-state.json`
+
+任务对象结构：
+```json
+{
+  "type": "任务类型",
+  "id": "任务标识",
+  "phase": "当前阶段",
+  "note": "备注",
+  "completed": false,
+  "files": ["相关文件列表"]
+}
+```
+
+---
+
+## 状态文件示例
+
+```json
+{
+  "work_path": "C:/Users/myname/code/docs",
+  "updated_at": "2025-10-29T12:34:56",
+  "updated_by": "instance_A",
+  "tasks": [
+    {
+      "type": "PR",
+      "id": "30",
+      "phase": "analyze",
+      "note": "生成 5 条评论",
+      "completed": false,
+      "files": ["pr_30_data.json", "comments.json"]
+    },
+    {
+      "type": "DOC",
+      "id": "api-design",
+      "phase": "draft",
+      "note": "第 1-3 节已完成",
+      "completed": false,
+      "files": ["docs/api-design/rest-api-design.md"]
+    }
+  ]
+}
+```
+
+---
+
+## 使用示例
+
+### PR 审查流程
+
+**实例 A**:
+1. 调用 `/duo-kai` 读取状态
+2. 执行 PR 数据收集
+3. 更新状态：`type=PR, id=30, phase=collect, files=["pr_30_data.json"]`
+
+**实例 B**:
+1. 调用 `/duo-kai` 看到 `[PR] 30: collect`
+2. 读取 `pr_30_data.json` 进行分析
+3. 更新状态：`phase=analyze, files=["comments.json"]`
+
+**实例 A**:
+1. 调用 `/duo-kai` 看到 `[PR] 30: analyze`
+2. 读取 `comments.json` 发布评论
+3. 更新状态：`phase=done, completed=true`
+
+### 文档协作流程
+
+**实例 A**:
+1. 调用 `/duo-kai` 读取状态
+2. 撰写文档第 1-3 节
+3. 更新状态：`type=DOC, id=api-design, phase=draft, note="第 1-3 节已完成"`
+
+**实例 B**:
+1. 调用 `/duo-kai` 看到 `[DOC] api-design: draft - 第 1-3 节已完成`
+2. 继续撰写第 4-6 节
+3. 更新状态：`phase=review, note="全部 6 节已完成，待审查"`
+
+---
+
+## 核心规则
+
+- **状态文件位置**: 当前工作目录的 `.duo-kai-state.json`（需添加到 `.gitignore`）
+- **通用任务结构**: type + id + phase + note + files
+- **自定义阶段**: phase 字段无固定值，根据任务类型自定义
+- **手动触发**: 调用 `/duo-kai` 同步状态
+- **Last-Write-Wins**: 无锁机制，避免复杂性
+
+---
+
+## 重要提示
+
+1. **首次使用**: 确保在项目根目录添加 `.duo-kai-state.json` 到 `.gitignore`
+2. **实例标识**: 建议每个实例使用不同的 `updated_by` 值（如 `collect`、`analyze`、`writer`）
+3. **文件路径**: `files` 数组中使用相对于工作目录的路径
+4. **阶段命名**: 保持团队内阶段名称一致（如统一使用 `collect` 而非 `data-collection`）
+"""
