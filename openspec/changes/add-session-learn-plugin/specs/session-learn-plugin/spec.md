@@ -12,16 +12,68 @@
 **When** 用户输入 `/learn`
 **Then** Claude Code 加载 session-learning skill
 **And** 分析当前会话内容
-**And** 提取学习维度（成功、失败、分歧、偏好）
-**And** 展示学习结果给用户确认
+**And** 将学习分类到三层存储
+**And** 展示分类结果给用户确认
+**And** 用户确认后持久化
+
+---
+
+### Requirement: Recall Command
+
+系统 SHALL 提供 `/recall` 命令，允许用户在对 Claude Code 表现不满时召回相关历史学习。
+
+#### Scenario: 用户因重复错误调用 /recall
+
+**Given** Claude Code 似乎忘记了之前学过的东西
+**And** 用户不想重复解释
+**When** 用户输入 `/recall`
+**Then** Claude Code 加载 session-recall skill
+**And** 提取当前上下文关键词
+**And** 查询 Memory MCP
+**And** 将相关学习注入当前会话
+**And** 明确告知用户回顾到了什么
+
+#### Scenario: 用户指定主题召回
+
+**Given** 用户在 Claude Code 会话中
+**When** 用户输入 `/recall 认证模式`
+**Then** Claude Code 使用 "认证模式" 作为查询关键词
+**And** 返回与认证相关的历史学习
+
+---
+
+### Requirement: Three-Tier Storage Classification
+
+session-learning skill MUST 将学习内容分类到三个存储层级。
+
+#### Scenario: 项目特定内容存储到项目 CLAUDE.md
+
+**Given** 学习内容是 "这个项目使用 Vitest 测试"
+**When** 进行分类
+**Then** 内容被分类为 "项目级"
+**And** 追加到 `{repo}/CLAUDE.md`
+
+#### Scenario: 用户偏好存储到用户 CLAUDE.md
+
+**Given** 学习内容是 "用户偏好使用 bun 而非 npm"
+**When** 进行分类
+**Then** 内容被分类为 "用户级"
+**And** 追加到 `~/.claude/CLAUDE.md`
+
+#### Scenario: 跨项目模式存储到 Memory MCP
+
+**Given** 学习内容是 "先问清楚需求再动手效果更好"
+**When** 进行分类
+**Then** 内容被分类为 "跨项目"
+**And** 使用 Memory MCP 工具存储
 
 ---
 
 ### Requirement: Session Learning Skill
 
-Claude Code MUST 能够通过 session-learning skill 分析会话并使用 Memory MCP 持久化学习。
+Claude Code MUST 能够通过 session-learning skill 分析会话并持久化学习。
 
-#### Scenario: 分析会话并持久化学习
+#### Scenario: 分析会话维度
 
 **Given** session-learning skill 被激活
 **When** Claude Code 分析当前会话
@@ -30,32 +82,27 @@ Claude Code MUST 能够通过 session-learning skill 分析会话并使用 Memor
   - 什么不顺利
   - 用户不同意什么
   - 可推断的用户偏好
-**And** 使用 Memory MCP 工具持久化:
-  - `search_nodes`: 检查已有实体
-  - `create_entities`: 创建新学习实体
-  - `add_observations`: 向已有实体追加
-  - `create_relations`: 建立实体关系
 
-#### Scenario: 避免重复实体
+#### Scenario: 用户确认后持久化
 
-**Given** 知识图谱中已存在 "编码风格偏好" 实体
-**When** 新会话发现相同偏好
-**Then** 使用 `add_observations` 追加而非创建新实体
+**Given** 学习内容已分类完成
+**When** 展示分类结果给用户
+**Then** 用户可以修改分类
+**And** 用户确认后才执行持久化
 
 ---
 
-### Requirement: Entity Types
+### Requirement: Session Recall Skill
 
-插件 SHALL 使用标准化的实体类型进行知识存储。
+Claude Code MUST 能够通过 session-recall skill 查询 Memory MCP 并注入上下文。
 
-#### Scenario: 创建会话学习实体
+#### Scenario: 查询 Memory MCP
 
-**Given** 会话分析完成
-**When** 创建学习实体
-**Then** 使用以下实体类型之一:
-  - `session_learning`: 会话级别学习总结
-  - `user_preference`: 用户偏好
-  - `interaction_pattern`: 交互模式
+**Given** session-recall skill 被激活
+**When** 执行召回
+**Then** 使用 `search_nodes` 查询 Memory MCP
+**And** 使用 `open_nodes` 获取详细内容
+**And** 格式化结果并注入当前会话
 
 ---
 
@@ -72,8 +119,11 @@ plugins/session-learn/
 ├── .claude-plugin/
 │   └── plugin.json
 ├── commands/
-│   └── learn.md
+│   ├── learn.md
+│   └── recall.md
 └── skills/
-    └── session-learning/
+    ├── session-learning/
+    │   └── SKILL.md
+    └── session-recall/
         └── SKILL.md
 ```
