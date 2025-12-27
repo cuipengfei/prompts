@@ -1,0 +1,29 @@
+{
+  "description": "桌面通知 - 任务完成时发送 Windows Toast 通知（WSL/Docker 环境）",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/notify.sh Stop",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/notify.sh Notification",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

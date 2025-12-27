@@ -1,13 +1,13 @@
 {
   "name": "prompts-commands",
   "version": "1.0.0",
-  "description": "实用命令和脚本集合 - 包含 prompt 优化命令和桌面通知脚本",
+  "description": "实用命令和钩子集合 - 包含 prompt 优化命令和桌面通知钩子（WSL/Docker → Windows Toast）",
   "author": "cuipengfei",
   "license": "MIT",
   "repository": "https://github.com/cuipengfei/prompts",
   "keywords": [
     "commands",
-    "scripts",
+    "hooks",
     "prompt-engineering",
     "notifications",
     "utilities"
@@ -16,13 +16,6 @@
     {
       "name": "improve-prompt",
       "description": "优化提示词 - 结构化改写后立即执行，禁止扩展范围"
-    }
-  ],
-  "scripts": [
-    {
-      "name": "notify",
-      "path": "scripts/notify.sh",
-      "description": "桌面通知脚本 - WSL/Docker 到 Windows Toast 通知，供用户配置到 hooks 使用"
     }
   ]
 }
