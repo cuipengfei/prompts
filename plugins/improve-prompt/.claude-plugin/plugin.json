@@ -2,10 +2,16 @@
   "name": "improve-prompt",
   "version": "1.0.0",
   "description": "优化提示词命令 - 结构化改写后立即执行，禁止扩展范围",
-  "author": "cuipengfei",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
   "license": "MIT",
   "repository": "https://github.com/cuipengfei/prompts",
-  "keywords": ["prompt-engineering", "prompt-optimization"],
+  "keywords": [
+    "prompt-engineering",
+    "prompt-optimization"
+  ],
   "commands": [
     {
       "name": "improve-prompt",
