@@ -7,11 +7,5 @@
     "email": "cuipengfei@gmail.com"
   },
   "license": "MIT",
-  "repository": "https://github.com/cuipengfei/prompts",
-  "skills": [
-    {
-      "name": "ba-collaboration",
-      "description": "BA 协作 - 与业务分析师协作的专业化工作流。帮助 BA 编写高质量用户故事和验收标准。"
-    }
-  ]
+  "repository": "https://github.com/cuipengfei/prompts"
 }

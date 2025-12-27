@@ -7,11 +7,5 @@
     "email": "cuipengfei@gmail.com"
   },
   "license": "MIT",
-  "repository": "https://github.com/cuipengfei/prompts",
-  "skills": [
-    {
-      "name": "memory-bank",
-      "description": "记忆库 - 跨会话知识持久化管理。作为项目上下文的唯一真实来源。"
-    }
-  ]
+  "repository": "https://github.com/cuipengfei/prompts"
 }

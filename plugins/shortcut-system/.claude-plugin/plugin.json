@@ -7,11 +7,5 @@
     "email": "cuipengfei@gmail.com"
   },
   "license": "MIT",
-  "repository": "https://github.com/cuipengfei/prompts",
-  "skills": [
-    {
-      "name": "shortcut-system",
-      "description": "快捷命令系统 - 快捷命令定义和使用指南。定义以 ! 结尾的短命令触发特定响应。"
-    }
-  ]
+  "repository": "https://github.com/cuipengfei/prompts"
 }

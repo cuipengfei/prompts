@@ -7,11 +7,5 @@
     "email": "cuipengfei@gmail.com"
   },
   "license": "MIT",
-  "repository": "https://github.com/cuipengfei/prompts",
-  "skills": [
-    {
-      "name": "response-guidelines",
-      "description": "响应指南 - 简洁响应 + 按需提示词增强。核心铁律：简洁优先，保真原意，禁止扩展范围。"
-    }
-  ]
+  "repository": "https://github.com/cuipengfei/prompts"
 }

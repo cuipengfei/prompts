@@ -7,11 +7,5 @@
     "email": "cuipengfei@gmail.com"
   },
   "license": "MIT",
-  "repository": "https://github.com/cuipengfei/prompts",
-  "skills": [
-    {
-      "name": "testing-guidelines",
-      "description": "测试指南 - 测试设计和实现的原则与最佳实践。包含测试设计模板和断言最佳实践。"
-    }
-  ]
+  "repository": "https://github.com/cuipengfei/prompts"
 }

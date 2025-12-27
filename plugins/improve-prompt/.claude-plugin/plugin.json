@@ -11,11 +11,5 @@
   "keywords": [
     "prompt-engineering",
     "prompt-optimization"
-  ],
-  "commands": [
-    {
-      "name": "improve-prompt",
-      "description": "优化提示词 - 结构化改写后立即执行，禁止扩展范围"
-    }
   ]
 }
