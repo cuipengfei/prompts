@@ -1,0 +1,19 @@
+{
+  "name": "prompts-commands",
+  "version": "1.0.0",
+  "description": "实用命令集合 - 包含 prompt 优化等常用斜杠命令",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "keywords": [
+    "commands",
+    "prompt-engineering",
+    "utilities"
+  ],
+  "commands": [
+    {
+      "name": "improve-prompt",
+      "description": "优化和改进用户的 prompt - 提升清晰度、具体性和有效性"
+    }
+  ]
+}

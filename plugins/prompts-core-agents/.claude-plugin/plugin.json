@@ -1,0 +1,33 @@
+{
+  "name": "prompts-core-agents",
+  "version": "1.0.0",
+  "description": "核心 AI 代理集合 - 包含代码专家、记忆管理、规划分析和 TDD 教练四个专业化代理",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "keywords": [
+    "agents",
+    "code-quality",
+    "tdd",
+    "planning",
+    "memory"
+  ],
+  "agents": [
+    {
+      "name": "code-specialist",
+      "description": "代码质量专家 - 执行 SOLID 原则、识别代码异味、防止反模式、指导重构"
+    },
+    {
+      "name": "memory-manager",
+      "description": "记忆管理器 - 跨会话知识持久化、上下文维护、信息检索"
+    },
+    {
+      "name": "planning-analyst",
+      "description": "规划分析师 - 从想法到实现的结构化规划、需求分解、可行性分析"
+    },
+    {
+      "name": "tdd-coach",
+      "description": "TDD 教练 - 测试驱动开发指导、Red-Green-Refactor 循环、测试策略"
+    }
+  ]
+}

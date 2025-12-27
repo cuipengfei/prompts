@@ -1,0 +1,42 @@
+{
+  "name": "prompts",
+  "owner": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "metadata": {
+    "description": "AI 编程助手指令框架 - 包含 agents、commands、output-styles 和 skills 的完整插件集合",
+    "version": "1.0.0",
+    "license": "MIT",
+    "repository": "https://github.com/cuipengfei/prompts",
+    "keywords": [
+      "claude-code",
+      "ai-assistant",
+      "instruction-framework",
+      "agents",
+      "skills"
+    ]
+  },
+  "plugins": [
+    {
+      "name": "prompts-core-agents",
+      "path": "plugins/prompts-core-agents",
+      "description": "核心 AI 代理集合 - 包含代码专家、记忆管理、规划分析和 TDD 教练四个专业化代理"
+    },
+    {
+      "name": "prompts-commands",
+      "path": "plugins/prompts-commands",
+      "description": "实用命令集合 - 包含 prompt 优化等常用斜杠命令"
+    },
+    {
+      "name": "prompts-output-styles",
+      "path": "plugins/prompts-output-styles",
+      "description": "输出风格模板集合 - 定义 AI 响应的格式、结构和表达方式"
+    },
+    {
+      "name": "prompts-skills",
+      "path": "plugins/prompts-skills",
+      "description": "AI 编程助手指令技能集 - 包含编程工作流、质量标准、测试指南等核心技能"
+    }
+  ]
+}

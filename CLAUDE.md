@@ -27,11 +27,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Structure
 
-- `.github/instructions/` - 核心指令文件，定义 AI 助手的行为准则和工作流程
-- `claude-config/setup.sh` - Claude Code 环境配置脚本
+- `.claude-plugin/` - Claude Code Marketplace 配置
+  - `marketplace.json` - Marketplace 元数据和插件列表
+- `plugins/` - Claude Code 插件集合
+  - `prompts-core-agents/` - 4 个专业化代理
+  - `prompts-commands/` - 实用斜杠命令
+  - `prompts-output-styles/` - 输出风格模板
+  - `prompts-skills/` - 10 个核心技能
+- `.github/instructions/` - 原始指令文件（供 GitHub Copilot 使用）
+- `openspec/` - OpenSpec 规范驱动开发配置
 - `README.md` - 项目说明文档（中文主版本）
-- `README.en.md` - 英文版说明文档
-- `README.guwen.md` - 古文版说明文档
 
 ## Core Framework Components
 

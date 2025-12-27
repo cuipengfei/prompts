@@ -1,0 +1,57 @@
+{
+  "name": "prompts-skills",
+  "version": "1.0.0",
+  "description": "AI 编程助手指令技能集 - 包含编程工作流、质量标准、测试指南等核心技能",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "keywords": [
+    "skills",
+    "instruction-framework",
+    "tdd",
+    "quality-standards",
+    "best-practices"
+  ],
+  "skills": [
+    {
+      "name": "foundational-principles",
+      "description": "基础原则 - 核心思维原则和指令框架概述"
+    },
+    {
+      "name": "quality-standards",
+      "description": "质量标准 - 代码质量、设计模式和反模式指南"
+    },
+    {
+      "name": "programming-workflow",
+      "description": "编程工作流 - 统一的测试驱动开发(TDD)工作流程"
+    },
+    {
+      "name": "testing-guidelines",
+      "description": "测试指南 - 测试设计和实现的原则与最佳实践"
+    },
+    {
+      "name": "planning-workflow",
+      "description": "规划工作流 - 从想法到实现计划的结构化流程"
+    },
+    {
+      "name": "ba-collaboration",
+      "description": "BA 协作 - 与业务分析师协作的专业化工作流"
+    },
+    {
+      "name": "memory-bank",
+      "description": "记忆库 - 跨会话知识持久化管理"
+    },
+    {
+      "name": "response-guidelines",
+      "description": "响应指南 - 结构化交互和通信协议"
+    },
+    {
+      "name": "sequential-thinking",
+      "description": "顺序思维 - 使用 sequentialthinking MCP 工具进行复杂问题求解"
+    },
+    {
+      "name": "shortcut-system",
+      "description": "快捷命令系统 - 快捷命令定义和使用指南"
+    }
+  ]
+}

@@ -88,6 +88,46 @@
 
 **小贴士：** 路径用相对路径，或自定义 text 规则。越具体，洗脑效果越强。
 
+## Claude Code 插件安装（推荐！）
+
+本仓库现已支持 Claude Code 插件系统！一行命令即可安装所有指令：
+
+```bash
+# 添加 marketplace（一次性）
+/plugin marketplace add cuipengfei/prompts
+
+# 查看可用插件
+/plugin list
+
+# 安装全部插件
+/plugin install prompts-core-agents
+/plugin install prompts-commands
+/plugin install prompts-output-styles
+/plugin install prompts-skills
+```
+
+### 可用插件
+
+| 插件 | 描述 |
+|------|------|
+| `prompts-core-agents` | 4 个专业化代理：代码专家、记忆管理、规划分析、TDD 教练 |
+| `prompts-commands` | 实用斜杠命令：`/improve-prompt` 等 |
+| `prompts-output-styles` | 输出风格模板：结构化响应器 |
+| `prompts-skills` | 10 个核心技能：编程工作流、质量标准、测试指南等 |
+
+### 插件使用示例
+
+```bash
+# 使用 improve-prompt 命令
+/prompts-commands:improve-prompt
+
+# 启动代码专家代理
+# Claude 会在适当时候自动调用
+
+# 查看 TDD 工作流技能
+/prompts-skills:programming-workflow
+```
+
 ## 免责声明
 
 给 AI 洗脑是门艺术，而非精确科学。结果可能因人而异。可能导致你的 AI 产生优越感。请负责任地使用。
