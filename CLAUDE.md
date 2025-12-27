@@ -184,3 +184,9 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
 - **内部推理**: 英语
 - **用户交流**: 中文
 - **技术术语**: 保持英语
+- **SKILL.md 内容**: 使用中文，与项目其他插件保持一致
+
+## OpenSpec Conventions
+
+- **proposal 格式要求**：必须包含 `## Why` 和 `## What Changes` sections
+- **不要忽略验证警告**：即使标记为 "non-blocking" 也应处理
