@@ -1,5 +1,17 @@
 # Proposal: Add Session-Learn Plugin
 
+## Why
+
+当前存在三个独立的知识存储层级（项目 CLAUDE.md、用户 CLAUDE.md、Memory MCP），但缺乏结构化的方式来从会话中提取学习并正确分类，也无法主动召回跨项目学习。
+
+## What Changes
+
+- 新增 `/learn` 命令：从当前会话提取学习，按三层存储分类持久化
+- 新增 `/recall` 命令：查询 Memory MCP，将相关上下文注入当前会话
+- 新增 `session-learning` skill：会话分析 + 三层分类 + 用户确认流程
+- 新增 `session-recall` skill：Memory MCP 查询 + 上下文注入
+- 更新 marketplace.json 和 README 文档
+
 ## Summary
 
 创建 `session-learn` 插件，提供两个命令：

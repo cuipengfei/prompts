@@ -55,6 +55,8 @@ description: 分析当前会话并持久化学习到三层存储（项目 CLAUDE
 
 **位置**: `{repo}/CLAUDE.md` 或 `{repo}/.claude/CLAUDE.md`
 
+**优先级**: 如果 `.claude/CLAUDE.md` 存在，优先使用它（项目内聚）；否则使用根目录的 `CLAUDE.md`。
+
 **格式**（追加，不覆盖）:
 ```markdown
 ## 会话学习 - {YYYY-MM-DD}

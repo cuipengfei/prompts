@@ -1,5 +1,16 @@
 # 变更提案：转型为 Claude Code 插件市场
 
+## Why
+
+当前仓库是一个"AI 编程助手指令框架"项目，包含丰富的 agents、commands、output-styles 和指令文件，但这些资产仅作为**项目级配置**存在于 `.claude/` 目录中，无法被其他项目复用或社区发现。
+
+## What Changes
+
+- 创建 `.claude-plugin/marketplace.json` 定义插件目录
+- 将现有资产重构为可复用的独立插件
+- 每个插件目录添加 `.claude-plugin/plugin.json`
+- 更新 README.md 说明如何作为 Marketplace 使用
+
 ## 为什么
 
 当前仓库是一个"AI 编程助手指令框架"项目，包含丰富的 agents、commands、output-styles 和指令文件，但这些资产仅作为**项目级配置**存在于 `.claude/` 目录中，无法被其他项目复用或社区发现。

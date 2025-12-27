@@ -1,5 +1,16 @@
 # Proposal: Split Plugins into Granular Components
 
+## Why
+
+当前 marketplace 只提供 3 个打包插件，用户想要单个功能（如 `quality-standards`）时被迫安装所有 11 个 skills，违反了"按需安装"的原则。
+
+## What Changes
+
+- 将 3 个打包插件拆分为 14 个独立插件（每个功能一个插件）
+- 重组目录结构：每个插件有独立的 `.claude-plugin/plugin.json`
+- 更新 `marketplace.json` 为 14 个条目
+- 用户可选择性安装任意组合
+
 ## Problem
 
 当前 marketplace 只提供 3 个打包插件，用户无法选择性安装需要的功能：

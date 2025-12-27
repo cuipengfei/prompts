@@ -133,6 +133,11 @@
 # 只安装提示词优化
 /plugin install improve-prompt
 
+# 只安装会话学习（需要 Memory MCP 服务器）
+/plugin install session-learn
+# 使用: /learn 或 /learn 代码风格
+# 使用: /recall 或 /recall 认证模式
+
 # 安装全部
 /plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn
 ```

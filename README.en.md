@@ -133,6 +133,11 @@ Users can selectively install any combination:
 # Install only prompt optimization
 /plugin install improve-prompt
 
+# Install only session learning (requires Memory MCP server)
+/plugin install session-learn
+# Usage: /learn or /learn code-style
+# Usage: /recall or /recall auth-patterns
+
 # Install all
 /plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn
 ```
