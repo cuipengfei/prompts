@@ -1,0 +1,14 @@
+{
+  "name": "response-guidelines",
+  "version": "1.0.0",
+  "description": "响应指南 - 简洁响应 + 按需提示词增强。核心铁律：简洁优先，保真原意，禁止扩展范围。",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "skills": [
+    {
+      "name": "response-guidelines",
+      "description": "响应指南 - 简洁响应 + 按需提示词增强。核心铁律：简洁优先，保真原意，禁止扩展范围。"
+    }
+  ]
+}

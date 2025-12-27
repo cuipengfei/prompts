@@ -1,0 +1,14 @@
+{
+  "name": "memory-bank",
+  "version": "1.0.0",
+  "description": "记忆库 - 跨会话知识持久化管理。作为项目上下文的唯一真实来源。",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "skills": [
+    {
+      "name": "memory-bank",
+      "description": "记忆库 - 跨会话知识持久化管理。作为项目上下文的唯一真实来源。"
+    }
+  ]
+}

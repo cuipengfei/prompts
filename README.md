@@ -90,37 +90,50 @@
 
 ## Claude Code 插件安装（推荐！）
 
-本仓库现已支持 Claude Code 插件系统！一行命令即可安装所有指令：
+本仓库现已支持 Claude Code 插件系统！**每个功能都是独立插件**，按需安装：
 
 ```bash
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看可用插件
+# 查看所有 14 个可用插件
 /plugin list
-
-# 安装全部插件
-/plugin install prompts-commands
-/plugin install prompts-output-styles
-/plugin install prompts-skills
 ```
 
-### 可用插件
+### 可用插件（14 个独立插件）
 
-| 插件 | 描述 |
-|------|------|
-| `prompts-commands` | 命令和钩子：`/improve-prompt` + 桌面通知（WSL/Docker → Windows Toast） |
-| `prompts-output-styles` | 输出风格模板：结构化响应器 |
-| `prompts-skills` | 11 个核心技能：编程工作流、质量标准、测试指南等（含执行指导） |
+用户可以选择性安装任意组合：
 
-### 插件使用示例
+| Category | Plugin | 描述 |
+|----------|--------|------|
+| 🛠 Productivity | `improve-prompt` | 提示词优化命令 |
+| 🛠 Productivity | `desktop-notify` | 桌面通知钩子（WSL → Windows Toast） |
+| 📚 Learning | `structured-responder` | 结构化响应输出风格 |
+| 📚 Learning | `response-guidelines` | 响应指南 skill |
+| 🏗 Development | `foundational-principles` | 基础原则 skill |
+| 🏗 Development | `quality-standards` | 质量标准 skill |
+| 🏗 Development | `programming-workflow` | TDD 工作流 skill |
+| 🏗 Development | `testing-guidelines` | 测试指南 skill |
+| 🏗 Development | `planning-workflow` | 规划工作流 skill |
+| 🏗 Development | `memory-bank` | 记忆库 skill |
+| 🔧 Tools | `sequential-thinking` | 顺序思维 skill |
+| 🔧 Tools | `shortcut-system` | 快捷命令 skill |
+| 🔧 Tools | `zellij-control` | Zellij 控制 skill |
+| 🤝 Collaboration | `ba-collaboration` | BA 协作 skill |
+
+### 安装示例
 
 ```bash
-# 使用 improve-prompt 命令
-/prompts-commands:improve-prompt
+# 只安装 TDD 相关
+/plugin install quality-standards
+/plugin install programming-workflow
+/plugin install testing-guidelines
 
-# 查看 TDD 工作流技能
-/prompts-skills:programming-workflow
+# 只安装提示词优化
+/plugin install improve-prompt
+
+# 安装全部
+/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control
 ```
 
 ## 免责声明

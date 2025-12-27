@@ -1,0 +1,9 @@
+{
+  "name": "desktop-notify",
+  "version": "1.0.0",
+  "description": "桌面通知钩子 - 任务完成时发送 Windows Toast 通知（WSL/Docker 环境）",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "keywords": ["hooks", "notifications", "wsl", "windows-toast"]
+}

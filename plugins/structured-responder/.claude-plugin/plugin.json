@@ -1,15 +1,11 @@
 {
-  "name": "prompts-output-styles",
+  "name": "structured-responder",
   "version": "1.0.0",
-  "description": "输出风格模板集合 - 定义 AI 响应的格式、结构和表达方式",
+  "description": "结构化响应器 - 系统化的技术响应框架，简洁上下文配合详细解决方案",
   "author": "cuipengfei",
   "license": "MIT",
   "repository": "https://github.com/cuipengfei/prompts",
-  "keywords": [
-    "output-styles",
-    "response-format",
-    "templates"
-  ],
+  "keywords": ["output-style", "structured-response", "technical-writing"],
   "outputStyles": [
     {
       "name": "structured-responder",

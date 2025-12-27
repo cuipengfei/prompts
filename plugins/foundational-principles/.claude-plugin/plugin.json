@@ -1,0 +1,14 @@
+{
+  "name": "foundational-principles",
+  "version": "1.0.0",
+  "description": "基础原则 - AI 助手的核心思维原则和指令框架概述。包含系统思维、辩证思维、创新思维和批判思维四大核心原则。",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "skills": [
+    {
+      "name": "foundational-principles",
+      "description": "基础原则 - AI 助手的核心思维原则和指令框架概述。包含系统思维、辩证思维、创新思维和批判思维四大核心原则。"
+    }
+  ]
+}

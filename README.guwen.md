@@ -90,37 +90,50 @@
 
 ## 玄门秘法：Claude Code 仙器安装（推荐！）
 
-此册已融 Claude Code 仙器之道！一令既出，诸法皆备：
+此册已融 Claude Code 仙器之道！**各器独立**，可择而用之：
 
 ```bash
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览诸宝
+# 览十四宝
 /plugin list
-
-# 尽收囊中
-/plugin install prompts-commands
-/plugin install prompts-output-styles
-/plugin install prompts-skills
 ```
 
-### 仙器目录
+### 仙器目录（十四件独立仙器）
 
-| 仙器 | 功用 |
-|------|------|
-| `prompts-commands` | 令符与钩沉：`/improve-prompt` + 桌案飞符（WSL/Docker → Windows 弹窗） |
-| `prompts-output-styles` | 文章体例：结构化应答之式 |
-| `prompts-skills` | 十一门心法：编程工作流、质量标准、测试指南等（含行功指引） |
+觅者可择需而取，勿须尽纳：
+
+| 门类 | 仙器 | 功用 |
+|------|------|------|
+| 🛠 济世 | `improve-prompt` | 提示词优化令符 |
+| 🛠 济世 | `desktop-notify` | 桌案飞符钩沉（WSL → Windows 弹窗） |
+| 📚 启智 | `structured-responder` | 结构化应答体例 |
+| 📚 启智 | `response-guidelines` | 应答准则心法 |
+| 🏗 筑基 | `foundational-principles` | 根基要诀 |
+| 🏗 筑基 | `quality-standards` | 质量法度 |
+| 🏗 筑基 | `programming-workflow` | TDD 工作流 |
+| 🏗 筑基 | `testing-guidelines` | 测试准绳 |
+| 🏗 筑基 | `planning-workflow` | 规划引导 |
+| 🏗 筑基 | `memory-bank` | 藏经阁 |
+| 🔧 神通 | `sequential-thinking` | 序进思维 |
+| 🔧 神通 | `shortcut-system` | 快捷符咒 |
+| 🔧 神通 | `zellij-control` | Zellij 御器术 |
+| 🤝 协同 | `ba-collaboration` | BA 共工之法 |
 
 ### 使用示例
 
 ```bash
-# 施展提示词优化之术
-/prompts-commands:improve-prompt
+# 只取 TDD 相关三宝
+/plugin install quality-standards
+/plugin install programming-workflow
+/plugin install testing-guidelines
 
-# 观摩 TDD 工作流心法
-/prompts-skills:programming-workflow
+# 只取提示词优化
+/plugin install improve-prompt
+
+# 尽收十四宝
+/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control
 ```
 
 ## 警示箴言

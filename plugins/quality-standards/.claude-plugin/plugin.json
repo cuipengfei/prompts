@@ -1,0 +1,14 @@
+{
+  "name": "quality-standards",
+  "version": "1.0.0",
+  "description": "质量标准 - 代码质量、设计模式和反模式的统一指南。包含 SOLID 原则、代码异味识别和最佳实践。",
+  "author": "cuipengfei",
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "skills": [
+    {
+      "name": "quality-standards",
+      "description": "质量标准 - 代码质量、设计模式和反模式的统一指南。包含 SOLID 原则、代码异味识别和最佳实践。"
+    }
+  ]
+}

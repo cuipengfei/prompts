@@ -1,17 +1,11 @@
 {
-  "name": "prompts-commands",
+  "name": "improve-prompt",
   "version": "1.0.0",
-  "description": "实用命令和钩子集合 - 包含 prompt 优化命令和桌面通知钩子（WSL/Docker → Windows Toast）",
+  "description": "优化提示词命令 - 结构化改写后立即执行，禁止扩展范围",
   "author": "cuipengfei",
   "license": "MIT",
   "repository": "https://github.com/cuipengfei/prompts",
-  "keywords": [
-    "commands",
-    "hooks",
-    "prompt-engineering",
-    "notifications",
-    "utilities"
-  ],
+  "keywords": ["prompt-engineering", "prompt-optimization"],
   "commands": [
     {
       "name": "improve-prompt",

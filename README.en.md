@@ -90,37 +90,50 @@ Want to brainwash Copilot directly in VS Code? Use the right structure:
 
 ## Claude Code Plugin Installation (Recommended!)
 
-This repository now supports the Claude Code plugin system! Install all instructions with simple commands:
+This repository now supports the Claude Code plugin system! **Each feature is an independent plugin** for selective installation:
 
 ```bash
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# List available plugins
+# View all 14 available plugins
 /plugin list
-
-# Install all plugins
-/plugin install prompts-commands
-/plugin install prompts-output-styles
-/plugin install prompts-skills
 ```
 
-### Available Plugins
+### Available Plugins (14 Independent Plugins)
 
-| Plugin | Description |
-|--------|-------------|
-| `prompts-commands` | Commands & hooks: `/improve-prompt` + desktop notifications (WSL/Docker → Windows Toast) |
-| `prompts-output-styles` | Output style templates: structured-responder |
-| `prompts-skills` | 11 core skills: programming workflow, quality standards, testing guidelines, etc. (with execution guidance) |
+Users can selectively install any combination:
 
-### Usage Examples
+| Category | Plugin | Description |
+|----------|--------|-------------|
+| 🛠 Productivity | `improve-prompt` | Prompt optimization command |
+| 🛠 Productivity | `desktop-notify` | Desktop notification hooks (WSL → Windows Toast) |
+| 📚 Learning | `structured-responder` | Structured response output style |
+| 📚 Learning | `response-guidelines` | Response guidelines skill |
+| 🏗 Development | `foundational-principles` | Foundational principles skill |
+| 🏗 Development | `quality-standards` | Quality standards skill |
+| 🏗 Development | `programming-workflow` | TDD workflow skill |
+| 🏗 Development | `testing-guidelines` | Testing guidelines skill |
+| 🏗 Development | `planning-workflow` | Planning workflow skill |
+| 🏗 Development | `memory-bank` | Memory bank skill |
+| 🔧 Tools | `sequential-thinking` | Sequential thinking skill |
+| 🔧 Tools | `shortcut-system` | Shortcut system skill |
+| 🔧 Tools | `zellij-control` | Zellij control skill |
+| 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
+
+### Installation Examples
 
 ```bash
-# Use improve-prompt command
-/prompts-commands:improve-prompt
+# Install only TDD-related
+/plugin install quality-standards
+/plugin install programming-workflow
+/plugin install testing-guidelines
 
-# View TDD workflow skill
-/prompts-skills:programming-workflow
+# Install only prompt optimization
+/plugin install improve-prompt
+
+# Install all
+/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control
 ```
 
 ## Disclaimer
