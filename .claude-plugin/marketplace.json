@@ -1,36 +1,30 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
+  "version": "1.0.0",
+  "description": "AI 编程助手指令框架 - 包含 commands、hooks、output-styles 和 skills 的完整插件集合",
   "owner": {
     "name": "cuipengfei",
     "email": "cuipengfei@gmail.com"
   },
-  "metadata": {
-    "description": "AI 编程助手指令框架 - 包含 commands、output-styles 和 skills 的完整插件集合",
-    "version": "1.0.0",
-    "license": "MIT",
-    "repository": "https://github.com/cuipengfei/prompts",
-    "keywords": [
-      "claude-code",
-      "ai-assistant",
-      "instruction-framework",
-      "skills"
-    ]
-  },
   "plugins": [
     {
       "name": "prompts-commands",
-      "path": "plugins/prompts-commands",
-      "description": "实用命令和钩子集合 - 包含 prompt 优化命令和桌面通知脚本"
+      "description": "实用命令和钩子集合 - 包含 prompt 优化命令和桌面通知钩子（WSL/Docker → Windows Toast）",
+      "source": "./plugins/prompts-commands",
+      "category": "productivity"
     },
     {
       "name": "prompts-output-styles",
-      "path": "plugins/prompts-output-styles",
-      "description": "输出风格模板集合 - 定义 AI 响应的格式、结构和表达方式"
+      "description": "输出风格模板集合 - 定义 AI 响应的格式、结构和表达方式",
+      "source": "./plugins/prompts-output-styles",
+      "category": "learning"
     },
     {
       "name": "prompts-skills",
-      "path": "plugins/prompts-skills",
-      "description": "AI 编程助手指令技能集 - 包含编程工作流、质量标准、测试指南等核心技能（已整合执行指导）"
+      "description": "AI 编程助手指令技能集 - 包含编程工作流、质量标准、测试指南等核心技能（已整合执行指导）",
+      "source": "./plugins/prompts-skills",
+      "category": "development"
     }
   ]
 }
