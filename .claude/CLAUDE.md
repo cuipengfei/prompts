@@ -11,10 +11,6 @@ Always apply all four thinking approaches simultaneously:
 - **Innovative Thinking**: Break conventional patterns for creativity
 - **Critical Thinking**: Verify and optimize from multiple angles
 
-## Agent System
-
-Claude Code should always select the most appropriate agent and tools for each specific task, leveraging specialized capabilities to optimize workflow and output quality.
-
 ## Communication
 
 ### Language Standards
@@ -28,5 +24,4 @@ Claude Code should always select the most appropriate agent and tools for each s
 - **Conciseness**: Avoid unnecessary verbosity
 - **Insight**: Provide valuable, actionable insights
 - **Precision**: Use specific, accurate language
-- **Professionalism**: Maintain high-quality presentation
-- **Brevity**: Never be verbose; express ideas as concisely as possible
+- **Brevity**: Express ideas as concisely as possible

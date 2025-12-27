@@ -88,6 +88,41 @@
 
 **心法要诀：** 文件路径宜用相对之道，亦可自定义箴言。愈精愈详，则 AI 愈能心领神会。
 
+## 玄门秘法：Claude Code 仙器安装（推荐！）
+
+此册已融 Claude Code 仙器之道！一令既出，诸法皆备：
+
+```bash
+# 添仙阁（一次即可）
+/plugin marketplace add cuipengfei/prompts
+
+# 览诸宝
+/plugin list
+
+# 尽收囊中
+/plugin install prompts-commands
+/plugin install prompts-output-styles
+/plugin install prompts-skills
+```
+
+### 仙器目录
+
+| 仙器 | 功用 |
+|------|------|
+| `prompts-commands` | 令符与钩沉：`/improve-prompt` + 桌案飞符（WSL/Docker → Windows 弹窗） |
+| `prompts-output-styles` | 文章体例：结构化应答之式 |
+| `prompts-skills` | 十一门心法：编程工作流、质量标准、测试指南等（含行功指引） |
+
+### 使用示例
+
+```bash
+# 施展提示词优化之术
+/prompts-commands:improve-prompt
+
+# 观摩 TDD 工作流心法
+/prompts-skills:programming-workflow
+```
+
 ## 警示箴言
 
 驯化天工，乃精微之道，非一蹴而就，亦非万应灵丹。结果或因 AI 之悟性、指令之巧妙而异。倘若 AI 因此恃才傲物，桀骜不驯，务必戒慎恐惧，善加引导。运用之妙，存乎一心。

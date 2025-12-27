@@ -88,6 +88,41 @@ Want to brainwash Copilot directly in VS Code? Use the right structure:
 
 **Pro tip:** Use relative paths to your instruction files, or add custom text rules. The more specific, the stronger the brainwashing.
 
+## Claude Code Plugin Installation (Recommended!)
+
+This repository now supports the Claude Code plugin system! Install all instructions with simple commands:
+
+```bash
+# Add marketplace (one-time)
+/plugin marketplace add cuipengfei/prompts
+
+# List available plugins
+/plugin list
+
+# Install all plugins
+/plugin install prompts-commands
+/plugin install prompts-output-styles
+/plugin install prompts-skills
+```
+
+### Available Plugins
+
+| Plugin | Description |
+|--------|-------------|
+| `prompts-commands` | Commands & hooks: `/improve-prompt` + desktop notifications (WSL/Docker → Windows Toast) |
+| `prompts-output-styles` | Output style templates: structured-responder |
+| `prompts-skills` | 11 core skills: programming workflow, quality standards, testing guidelines, etc. (with execution guidance) |
+
+### Usage Examples
+
+```bash
+# Use improve-prompt command
+/prompts-commands:improve-prompt
+
+# View TDD workflow skill
+/prompts-skills:programming-workflow
+```
+
 ## Disclaimer
 
 Brainwashing AI is an art, not an exact science. Results may vary. May cause your AI to develop a superiority complex. Use responsibly.

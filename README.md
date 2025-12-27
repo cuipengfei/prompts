@@ -100,7 +100,6 @@
 /plugin list
 
 # 安装全部插件
-/plugin install prompts-core-agents
 /plugin install prompts-commands
 /plugin install prompts-output-styles
 /plugin install prompts-skills
@@ -110,19 +109,15 @@
 
 | 插件 | 描述 |
 |------|------|
-| `prompts-core-agents` | 4 个专业化代理：代码专家、记忆管理、规划分析、TDD 教练 |
-| `prompts-commands` | 实用斜杠命令：`/improve-prompt` 等 |
+| `prompts-commands` | 命令和钩子：`/improve-prompt` + 桌面通知（WSL/Docker → Windows Toast） |
 | `prompts-output-styles` | 输出风格模板：结构化响应器 |
-| `prompts-skills` | 10 个核心技能：编程工作流、质量标准、测试指南等 |
+| `prompts-skills` | 11 个核心技能：编程工作流、质量标准、测试指南等（含执行指导） |
 
 ### 插件使用示例
 
 ```bash
 # 使用 improve-prompt 命令
 /prompts-commands:improve-prompt
-
-# 启动代码专家代理
-# Claude 会在适当时候自动调用
 
 # 查看 TDD 工作流技能
 /prompts-skills:programming-workflow
