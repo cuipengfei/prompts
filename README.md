@@ -96,11 +96,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 14 个可用插件
+# 查看所有 15 个可用插件
 /plugin list
 ```
 
-### 可用插件（14 个独立插件）
+### 可用插件（15 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -110,6 +110,7 @@
 | 🛠 Productivity | `desktop-notify` | 桌面通知钩子（WSL → Windows Toast） |
 | 📚 Learning | `structured-responder` | 结构化响应输出风格 |
 | 📚 Learning | `response-guidelines` | 响应指南 skill |
+| 📚 Learning | `session-learn` | 会话学习 - 三层存储分类 + Memory MCP 召回 |
 | 🏗 Development | `foundational-principles` | 基础原则 skill |
 | 🏗 Development | `quality-standards` | 质量标准 skill |
 | 🏗 Development | `programming-workflow` | TDD 工作流 skill |
@@ -133,7 +134,7 @@
 /plugin install improve-prompt
 
 # 安装全部
-/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control
+/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn
 ```
 
 ## 免责声明

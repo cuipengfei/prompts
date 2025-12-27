@@ -8,7 +8,7 @@
 
 ### Phase 1: Plugin Structure
 
-- [ ] **T1**: 创建插件目录结构
+- [x] **T1**: 创建插件目录结构
   ```
   plugins/session-learn/
   ├── .claude-plugin/plugin.json
@@ -23,13 +23,13 @@
 
 ### Phase 2: Commands Implementation
 
-- [ ] **T2**: 创建 `/learn` 命令
+- [x] **T2**: 创建 `/learn` 命令
   - 文件: `commands/learn.md`
   - YAML frontmatter (description)
   - 简短指令，引导使用 session-learning skill
   - **验证**: 命令可被识别
 
-- [ ] **T3**: 创建 `/recall` 命令
+- [x] **T3**: 创建 `/recall` 命令
   - 文件: `commands/recall.md`
   - YAML frontmatter (description)
   - 简短指令，引导使用 session-recall skill
@@ -37,7 +37,7 @@
 
 ### Phase 3: Skills Implementation
 
-- [ ] **T4**: 创建 `session-learning` skill
+- [x] **T4**: 创建 `session-learning` skill
   - 文件: `skills/session-learning/SKILL.md`
   - 内容:
     - 会话分析指南（成功、失败、分歧、偏好）
@@ -50,7 +50,7 @@
     - 用户确认流程
   - **验证**: Skill 格式正确
 
-- [ ] **T5**: 创建 `session-recall` skill
+- [x] **T5**: 创建 `session-recall` skill
   - 文件: `skills/session-recall/SKILL.md`
   - 内容:
     - 上下文提取指南
@@ -61,13 +61,13 @@
 
 ### Phase 4: Marketplace Integration
 
-- [ ] **T6**: 更新 marketplace.json
+- [x] **T6**: 更新 marketplace.json
   - 添加 session-learn 插件条目
   - **验证**: `jq . marketplace.json` 无错误
 
 ### Phase 5: Documentation
 
-- [ ] **T7**: 更新 README 文件
+- [x] **T7**: 更新 README 文件
   - README.md, README.en.md, README.guwen.md
   - 添加 session-learn 插件说明
   - **验证**: 所有 3 个 README 一致

@@ -96,11 +96,11 @@
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览十四宝
+# 览十五宝
 /plugin list
 ```
 
-### 仙器目录（十四件独立仙器）
+### 仙器目录（十五件独立仙器）
 
 觅者可择需而取，勿须尽纳：
 
@@ -110,6 +110,7 @@
 | 🛠 济世 | `desktop-notify` | 桌案飞符钩沉（WSL → Windows 弹窗） |
 | 📚 启智 | `structured-responder` | 结构化应答体例 |
 | 📚 启智 | `response-guidelines` | 应答准则心法 |
+| 📚 启智 | `session-learn` | 会话学习 - 三层藏经 + 忆念召唤 |
 | 🏗 筑基 | `foundational-principles` | 根基要诀 |
 | 🏗 筑基 | `quality-standards` | 质量法度 |
 | 🏗 筑基 | `programming-workflow` | TDD 工作流 |
@@ -132,8 +133,8 @@
 # 只取提示词优化
 /plugin install improve-prompt
 
-# 尽收十四宝
-/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control
+# 尽收十五宝
+/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn
 ```
 
 ## 警示箴言

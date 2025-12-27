@@ -91,6 +91,12 @@
       "description": "Zellij 控制 - 使用 Zellij 终端复用器控制交互式 CLI 程序（TUI、REPL、分页器）",
       "source": "./plugins/zellij-control",
       "category": "tools"
+    },
+    {
+      "name": "session-learn",
+      "description": "会话学习 - 从会话中提取学习并持久化到三层存储，通过 /recall 召回历史学习",
+      "source": "./plugins/session-learn",
+      "category": "learning"
     }
   ]
 }

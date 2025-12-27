@@ -1,0 +1,11 @@
+{
+  "name": "session-learn",
+  "version": "1.0.0",
+  "description": "会话学习 - 从会话中提取学习并持久化到三层存储，通过 /recall 召回历史学习",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}

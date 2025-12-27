@@ -96,11 +96,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 14 available plugins
+# View all 15 available plugins
 /plugin list
 ```
 
-### Available Plugins (14 Independent Plugins)
+### Available Plugins (15 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -110,6 +110,7 @@ Users can selectively install any combination:
 | 🛠 Productivity | `desktop-notify` | Desktop notification hooks (WSL → Windows Toast) |
 | 📚 Learning | `structured-responder` | Structured response output style |
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
+| 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
 | 🏗 Development | `foundational-principles` | Foundational principles skill |
 | 🏗 Development | `quality-standards` | Quality standards skill |
 | 🏗 Development | `programming-workflow` | TDD workflow skill |
@@ -133,7 +134,7 @@ Users can selectively install any combination:
 /plugin install improve-prompt
 
 # Install all
-/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control
+/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn
 ```
 
 ## Disclaimer
