@@ -190,3 +190,6 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
 
 - **proposal 格式要求**：必须包含 `## Why` 和 `## What Changes` sections
 - **不要忽略验证警告**：即使标记为 "non-blocking" 也应处理
+- **spec.md 验证规则**：
+  - 新建 spec 只能用 `ADDED Requirements`，不能用 `MODIFIED`（目标 spec 不存在）
+  - `SHALL/MUST` 关键词必须出现在 Requirement 标题下的描述行（验证器检查描述行，非标题）

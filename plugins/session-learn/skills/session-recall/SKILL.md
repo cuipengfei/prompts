@@ -207,7 +207,19 @@ mcp__memory__search_nodes
 
 mcp__memory__open_nodes
 - names: string[]（要检索的实体名称）
+
+mcp__memory__read_graph
+- 读取整个图谱（用于整理）
 ```
+
+## 整理原则
+
+每次使用 Memory MCP 时，顺便整理知识图谱：
+
+1. **删除过时实体**: 内容已合并到其他实体或不再相关
+2. **合并重复实体**: 将语义相近的实体合并（observations 合并到更通用的实体）
+3. **清理孤立关系**: 删除指向不存在实体的关系
+4. **保持简洁**: 图谱应结构清晰、易于理解
 
 ## 与 session-learn 的一致性
 
