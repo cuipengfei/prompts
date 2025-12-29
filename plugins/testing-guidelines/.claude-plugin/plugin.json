@@ -1,6 +1,6 @@
 {
   "name": "testing-guidelines",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "[Skill] 测试指南 - 测试设计和实现的原则与最佳实践。包含测试设计模板和断言最佳实践。",
   "author": {
     "name": "cuipengfei",

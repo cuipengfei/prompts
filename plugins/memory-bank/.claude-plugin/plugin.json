@@ -1,6 +1,6 @@
 {
   "name": "memory-bank",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "[Skill] 记忆库 - 跨会话知识持久化管理。作为项目上下文的唯一真实来源。",
   "author": {
     "name": "cuipengfei",

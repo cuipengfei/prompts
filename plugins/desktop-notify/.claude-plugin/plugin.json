@@ -1,6 +1,6 @@
 {
   "name": "desktop-notify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "[Hook] 桌面通知钩子 - 任务完成时发送 Windows Toast 通知（WSL/Docker 环境）",
   "author": {
     "name": "cuipengfei",

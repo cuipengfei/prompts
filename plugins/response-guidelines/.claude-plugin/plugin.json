@@ -1,6 +1,6 @@
 {
   "name": "response-guidelines",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "[Skill] 响应指南 - 简洁响应 + 按需提示词增强。核心铁律：简洁优先，保真原意，禁止扩展范围。",
   "author": {
     "name": "cuipengfei",

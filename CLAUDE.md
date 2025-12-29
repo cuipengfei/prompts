@@ -93,6 +93,28 @@ plugins/
    - Plugin hooks: `{"hooks": {"Stop": [...]}}`
    - User settings: 直接 `{"Stop": [...]}`
 
+6. **版本管理**
+   - **任何修改必须 bump version**:
+     - 修改 plugin.json、SKILL.md、hooks.json 等任何文件
+     - 包括 description、keywords 等元数据字段
+     - 即使是文档性修改也应递增 PATCH 版本
+
+   - **语义化版本规则**:
+     - PATCH (x.y.Z): 修复、文档、描述优化
+     - MINOR (x.Y.0): 新增功能、新增 skill/command
+     - MAJOR (X.0.0): 破坏性变更、API 变更
+
+   - **技术原因**:
+     - `claude plugin update` 通过版本号判断是否需要更新
+     - 缓存路径 `~/.claude/plugins/cache/{plugin}/{version}/`
+     - 版本相同 → 跳过更新，使用旧缓存
+     - 用户需手动 uninstall + install 才能看到变更
+
+   - **最佳实践**:
+     - 修改文件前先 bump version
+     - git commit 包含 version 变更
+     - 避免让已安装用户看到过时内容
+
 ### ❌ DON'Ts
 
 1. **不要在 plugin.json 中声明组件数组**
