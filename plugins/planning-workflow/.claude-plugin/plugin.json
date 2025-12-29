@@ -1,7 +1,7 @@
 {
   "name": "planning-workflow",
   "version": "1.0.0",
-  "description": "规划工作流 - 从想法到实现计划的结构化流程。通过迭代细化单个 Markdown 文档将模糊想法转化为清晰实现计划。",
+  "description": "[Skill] 规划工作流 - 从想法到实现计划的结构化流程。通过迭代细化单个 Markdown 文档将模糊想法转化为清晰实现计划。",
   "author": {
     "name": "cuipengfei",
     "email": "cuipengfei@gmail.com"

@@ -10,91 +10,91 @@
   "plugins": [
     {
       "name": "improve-prompt",
-      "description": "优化提示词命令 - 结构化改写后立即执行，禁止扩展范围",
+      "description": "[Command] 优化提示词命令 - 结构化改写后立即执行，禁止扩展范围",
       "source": "./plugins/improve-prompt",
       "category": "productivity"
     },
     {
       "name": "desktop-notify",
-      "description": "桌面通知钩子 - 任务完成时发送 Windows Toast 通知（WSL/Docker 环境）",
+      "description": "[Hook] 桌面通知钩子 - 任务完成时发送 Windows Toast 通知（WSL/Docker 环境）",
       "source": "./plugins/desktop-notify",
       "category": "productivity"
     },
     {
       "name": "structured-responder",
-      "description": "结构化响应器 - 系统化的技术响应框架，简洁上下文配合详细解决方案",
+      "description": "[Output Style] 结构化响应器 - 系统化的技术响应框架，简洁上下文配合详细解决方案",
       "source": "./plugins/structured-responder",
       "category": "learning"
     },
     {
       "name": "foundational-principles",
-      "description": "基础原则 - 核心思维原则和指令框架概述",
+      "description": "[Skill] 基础原则 - 核心思维原则和指令框架概述",
       "source": "./plugins/foundational-principles",
       "category": "development"
     },
     {
       "name": "quality-standards",
-      "description": "质量标准 - 代码质量、设计模式和反模式指南",
+      "description": "[Skill] 质量标准 - 代码质量、设计模式和反模式指南",
       "source": "./plugins/quality-standards",
       "category": "development"
     },
     {
       "name": "programming-workflow",
-      "description": "编程工作流 - 统一的测试驱动开发(TDD)工作流程",
+      "description": "[Skill] 编程工作流 - 统一的测试驱动开发(TDD)工作流程",
       "source": "./plugins/programming-workflow",
       "category": "development"
     },
     {
       "name": "testing-guidelines",
-      "description": "测试指南 - 测试设计和实现的原则与最佳实践",
+      "description": "[Skill] 测试指南 - 测试设计和实现的原则与最佳实践",
       "source": "./plugins/testing-guidelines",
       "category": "development"
     },
     {
       "name": "planning-workflow",
-      "description": "规划工作流 - 从想法到实现计划的结构化流程",
+      "description": "[Skill] 规划工作流 - 从想法到实现计划的结构化流程",
       "source": "./plugins/planning-workflow",
       "category": "development"
     },
     {
       "name": "ba-collaboration",
-      "description": "BA 协作 - 与业务分析师协作的专业化工作流",
+      "description": "[Skill] BA 协作 - 与业务分析师协作的专业化工作流",
       "source": "./plugins/ba-collaboration",
       "category": "collaboration"
     },
     {
       "name": "memory-bank",
-      "description": "记忆库 - 跨会话知识持久化管理",
+      "description": "[Skill] 记忆库 - 跨会话知识持久化管理",
       "source": "./plugins/memory-bank",
       "category": "development"
     },
     {
       "name": "response-guidelines",
-      "description": "响应指南 - 简洁响应 + 按需提示词增强，保真原意",
+      "description": "[Skill] 响应指南 - 简洁响应 + 按需提示词增强，保真原意",
       "source": "./plugins/response-guidelines",
       "category": "learning"
     },
     {
       "name": "sequential-thinking",
-      "description": "顺序思维 - 使用 sequentialthinking MCP 工具进行复杂问题求解",
+      "description": "[Skill] 顺序思维 - 使用 sequentialthinking MCP 工具进行复杂问题求解",
       "source": "./plugins/sequential-thinking",
       "category": "tools"
     },
     {
       "name": "shortcut-system",
-      "description": "快捷命令系统 - 快捷命令定义和使用指南",
+      "description": "[Skill] 快捷命令系统 - 快捷命令定义和使用指南",
       "source": "./plugins/shortcut-system",
       "category": "tools"
     },
     {
       "name": "zellij-control",
-      "description": "Zellij 控制 - 使用 Zellij 终端复用器控制交互式 CLI 程序（TUI、REPL、分页器）",
+      "description": "[Skill] Zellij 控制 - 使用 Zellij 终端复用器控制交互式 CLI 程序（TUI、REPL、分页器）",
       "source": "./plugins/zellij-control",
       "category": "tools"
     },
     {
       "name": "session-learn",
-      "description": "会话学习 - 从会话中提取学习并持久化到三层存储，通过 /recall 召回历史学习",
+      "description": "[Command + Skill] 会话学习 - 从会话中提取学习并持久化到三层存储，通过 /recall 召回历史学习",
       "source": "./plugins/session-learn",
       "category": "learning"
     }
