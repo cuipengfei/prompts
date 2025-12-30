@@ -212,14 +212,28 @@ mcp__memory__read_graph
 - 读取整个图谱（用于整理）
 ```
 
-## 整理原则
+## Memory MCP 整理（MANDATORY）
 
-每次使用 Memory MCP 时，顺便整理知识图谱：
+⚠️ **CRITICAL**: 每次使用 Memory MCP 后必须执行此 checklist。跳过此步骤是**不完整的执行**。
 
-1. **删除过时实体**: 内容已合并到其他实体或不再相关
-2. **合并重复实体**: 将语义相近的实体合并（observations 合并到更通用的实体）
-3. **清理孤立关系**: 删除指向不存在实体的关系
-4. **保持简洁**: 图谱应结构清晰、易于理解
+```markdown
+## Memory MCP Cleanup Checklist
+
+1. [ ] **READ**: 调用 `mcp__memory__read_graph` 查看当前图谱
+2. [ ] **ANALYZE**: 识别以下问题：
+   - 重复/相似实体（可合并）
+   - 不一致的命名（如同一用户有多个实体名）
+   - 孤立关系（指向不存在的实体）
+   - 过时/临时实体（不再相关）
+3. [ ] **CLEANUP**: 执行必要的整理操作：
+   - `mcp__memory__add_observations` - 合并内容到现有实体
+   - `mcp__memory__delete_entities` - 删除重复/过时实体
+   - `mcp__memory__delete_relations` - 删除孤立关系
+   - `mcp__memory__create_relations` - 修复不一致的关系
+4. [ ] **REPORT**: 向用户报告整理了什么
+```
+
+**如果图谱已经干净**：明确说明"已检查图谱，无需整理"。
 
 ## 与 session-learn 的一致性
 

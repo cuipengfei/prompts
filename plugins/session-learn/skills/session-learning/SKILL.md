@@ -105,12 +105,6 @@ mcp__memory__create_relations
 - `applies_to` - 将模式链接到领域
 - `solves` - 将方法链接到问题类型
 
-**整理原则**: 每次使用 Memory MCP 时，顺便整理知识图谱：
-1. 删除临时/过时实体（内容已合并到其他实体或不再相关）
-2. 合并语义重复的实体（将 observations 合并到更通用的实体）
-3. 清理孤立关系
-4. 保持图谱简洁、逻辑清晰
-
 ## 用户确认流程
 
 **重要**: 持久化前必须展示分类结果并获得用户确认。
@@ -144,7 +138,31 @@ mcp__memory__create_relations
 1. 插入到项目 CLAUDE.md 的合适位置（如有项目级内容）
 2. 插入到用户 CLAUDE.md 的合适位置（如有用户级内容）
 3. 在 Memory MCP 中创建/更新实体（如有跨项目内容）
-4. 报告保存了什么、保存到哪里
+4. **执行 Memory MCP 整理（MANDATORY）** - 见下方 checklist
+5. 报告保存了什么、保存到哪里
+
+### 第四步：Memory MCP 整理（MANDATORY）
+
+⚠️ **CRITICAL**: 每次使用 Memory MCP 后必须执行此 checklist。跳过此步骤是**不完整的执行**。
+
+```markdown
+## Memory MCP Cleanup Checklist
+
+1. [ ] **READ**: 调用 `mcp__memory__read_graph` 查看当前图谱
+2. [ ] **ANALYZE**: 识别以下问题：
+   - 重复/相似实体（可合并）
+   - 不一致的命名（如同一用户有多个实体名）
+   - 孤立关系（指向不存在的实体）
+   - 过时/临时实体（不再相关）
+3. [ ] **CLEANUP**: 执行必要的整理操作：
+   - `mcp__memory__add_observations` - 合并内容到现有实体
+   - `mcp__memory__delete_entities` - 删除重复/过时实体
+   - `mcp__memory__delete_relations` - 删除孤立关系
+   - `mcp__memory__create_relations` - 修复不一致的关系
+4. [ ] **REPORT**: 向用户报告整理了什么
+```
+
+**如果图谱已经干净**：明确说明"已检查图谱，无需整理"。
 
 ## 错误处理
 
