@@ -97,6 +97,12 @@
       "description": "[Command + Skill] 会话学习 - 从会话中提取学习并持久化到三层存储，通过 /recall 召回历史学习",
       "source": "./plugins/session-learn",
       "category": "learning"
+    },
+    {
+      "name": "codex",
+      "description": "[Command + Skill] Codex 顾问 - 调用 OpenAI Codex 获取第二意见，批判性评估后展示给用户",
+      "source": "./plugins/codex",
+      "category": "tools"
     }
   ]
 }

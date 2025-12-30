@@ -231,6 +231,16 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
 
 - **proposal 格式要求**：必须包含 `## Why` 和 `## What Changes` sections
 - **不要忽略验证警告**：即使标记为 "non-blocking" 也应处理
-- **spec.md 验证规则**：
-  - 新建 spec 只能用 `ADDED Requirements`，不能用 `MODIFIED`（目标 spec 不存在）
-  - `SHALL/MUST` 关键词必须出现在 Requirement 标题下的描述行（验证器检查描述行，非标题）
+- **spec.md Requirement 格式**（重要，常犯错误）：
+  ```markdown
+  ### Requirement: Short Name    ← 标题用简短名称，不含 SHALL
+
+  系统 SHALL 做某事...           ← SHALL 必须在标题下第一行描述中
+
+  #### Scenario: 场景名
+  ```
+  - ❌ 错误：`### Requirement: 系统 SHALL 提供...`（SHALL 在标题里）
+  - ✅ 正确：`### Requirement: Codex Command` + 下一行 `系统 SHALL...`
+  - 验证器检查描述行，不是标题行
+  - 参考格式：`openspec/specs/session-learn-plugin/spec.md`
+- **新建 spec 用 ADDED**：不能用 `MODIFIED`（目标 spec 不存在时）

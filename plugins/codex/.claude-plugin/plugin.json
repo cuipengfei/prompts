@@ -1,0 +1,11 @@
+{
+  "name": "codex",
+  "version": "1.0.0",
+  "description": "[Command + Skill] Codex 顾问 - 调用 OpenAI Codex 获取第二意见，批判性评估后展示给用户",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}
