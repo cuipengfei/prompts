@@ -170,6 +170,25 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
 - **知识定义** - 原则、标准、流程
 - **执行指导** - 触发条件、检查清单（如 quality-standards、programming-workflow）
 
+### Command 调用 Skill 的可靠模式
+
+当 command 依赖外部 skill 时，简单指令（如 "使用 xxx 技能"）只有 ~20% 成功率。使用 **Forced Eval 3-Step 模式**可达 ~84%：
+
+```markdown
+# MANDATORY 3-Step Process
+
+**Step 1 - EVALUATE**: 确认此 skill 适用于当前任务
+- Answer: YES - [理由]
+
+**Step 2 - ACTIVATE**: 使用 Skill tool 调用技能
+- Command: `Skill("plugin:skill-name")`
+- ⚠️ **CRITICAL**: 这一步**不可跳过**。直接实现而不调用 Skill tool 是**无效的**。
+
+**Step 3 - IMPLEMENT**: 仅在 skill 加载后，严格按照其指南执行
+```
+
+**原理**: 创建 commitment mechanism，让 Claude 必须显式评估并承诺调用 Skill tool，而非被动建议。
+
 ### Hooks 配置
 ```json
 {
