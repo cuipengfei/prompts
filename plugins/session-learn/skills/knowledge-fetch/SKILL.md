@@ -1,6 +1,6 @@
 ---
-name: session-recall
-description: 全范围召回 - 从 Project CLAUDE.md、User CLAUDE.md 和 Memory MCP 查询历史知识
+name: knowledge-fetch
+description: 知识召回技能 - 从 Project CLAUDE.md、User CLAUDE.md 和 Memory MCP 查询历史知识
 ---
 
 # 会话召回技能
@@ -237,7 +237,7 @@ mcp__memory__read_graph
 
 ## 与 session-learn 的一致性
 
-| session-learn 分类 | session-recall 查询 |
+| session-learn 分类 | knowledge-fetch 查询 |
 |--------------------|---------------------|
 | Project CLAUDE.md | Layer 1 |
 | User CLAUDE.md | Layer 2 |

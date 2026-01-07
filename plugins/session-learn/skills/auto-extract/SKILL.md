@@ -1,6 +1,6 @@
 ---
-name: session-learning
-description: 分析当前会话并持久化学习到三层存储（项目 CLAUDE.md、用户 CLAUDE.md、Memory MCP）
+name: auto-extract
+description: 会话学习技能 - 分析当前会话，提取学习并持久化到三层存储（项目 CLAUDE.md、用户 CLAUDE.md、Memory MCP）
 ---
 
 # 会话学习技能
