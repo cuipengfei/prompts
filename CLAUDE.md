@@ -189,6 +189,17 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
 
 **原理**: 创建 commitment mechanism，让 Claude 必须显式评估并承诺调用 Skill tool，而非被动建议。
 
+### Skill 命名规范
+
+当同一插件包含 command 和 skill 时，**skill 名称应避免包含 command 名称的子串**：
+
+| ❌ 冲突命名 | ✅ 清晰命名 |
+|------------|------------|
+| command: `learn`, skill: `session-learning` | command: `learn`, skill: `auto-extract` |
+| command: `recall`, skill: `session-recall` | command: `recall`, skill: `knowledge-fetch` |
+
+**原因**: Claude Code 使用模糊匹配，子串包含关系会导致调用混淆。
+
 ### Hooks 配置
 ```json
 {

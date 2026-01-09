@@ -124,13 +124,17 @@ mcp__memory__create_relations
 ### Memory MCP（用 /recall 命令召回）
 - [模式 1]
 - [经验 1]
-
-**确认？**（y/n，或建议修改）
 ```
 
-### 第二步：等待确认
+### 第二步：使用 AskUserQuestion 确认
 
-用户确认或修改前**不要**持久化。
+使用 `AskUserQuestion` 工具让用户选择要持久化的项目：
+
+- **multiSelect**: true
+- 每个学习项作为一个选项（label 含层级，description 含内容摘要）
+- 超过 4 项时，按优先级取前 4 个，其余可通过 "Other" 指定
+
+用户可选择全部、部分或跳过。
 
 ### 第三步：执行持久化
 
