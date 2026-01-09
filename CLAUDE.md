@@ -255,3 +255,7 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
   - 验证器检查描述行，不是标题行
   - 参考格式：`openspec/specs/session-learn-plugin/spec.md`
 - **新建 spec 用 ADDED**：不能用 `MODIFIED`（目标 spec 不存在时）
+- **Delta 类型选择**：检查目标 spec 中该 requirement 是否已存在
+  - requirement 不存在 → `ADDED`
+  - requirement 已存在 → `MODIFIED`
+  - 否则 archive 会失败："header not found"
