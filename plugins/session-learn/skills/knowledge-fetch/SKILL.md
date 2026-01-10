@@ -38,6 +38,14 @@ description: 知识召回技能 - 从 Project CLAUDE.md、User CLAUDE.md 和 Mem
 
 ## 三层数据源
 
+### 设计原则
+
+| 层级 | 核心问题 | 特性 |
+|------|----------|------|
+| Project CLAUDE.md | "这个项目需要知道什么？" | 项目特定、自动加载 |
+| User CLAUDE.md | "每个会话都需要知道什么？" | 身份性、高频、自动加载 |
+| Memory MCP | "特定情境下需要召回什么？" | 情境性、按需查询 |
+
 按优先级顺序查询（越具体越优先）：
 
 ### Layer 1: Project CLAUDE.md（项目规则）
@@ -51,24 +59,25 @@ description: 知识召回技能 - 从 Project CLAUDE.md、User CLAUDE.md 和 Mem
 
 **查询方式**: 读取文件，按 section 标题匹配关键词
 
-### Layer 2: User CLAUDE.md（用户偏好）
+### Layer 2: User CLAUDE.md（用户身份）
 
 **位置**: `~/.claude/CLAUDE.md`
 
-**内容类型**:
-- 跨项目的用户偏好
-- 沟通风格
-- 工具偏好
+**内容类型**（身份层 - "What I always need to know"）:
+- 核心身份信息（语言、沟通风格）
+- 高频工具偏好（每会话都用）
+- 环境配置（不变的事实）
+- 响应质量标准
 
 **查询方式**: 读取文件，按 section 标题匹配关键词
 
 ### Layer 3: Memory MCP（历史经验）
 
-**内容类型**:
-- 交互模式 (interaction_pattern)
-- 问题解决方法 (problem_solving)
-- 专业领域 (expertise_area)
-- 学习历史 (learning_history)
+**内容类型**（经验层 - "What I learned for specific situations"）:
+- 问题解决经验 (problem_solving) - 特定技术/工具的解决方案
+- 交互模式 (interaction_pattern) - 从会话中学到的教训
+- 技术知识 (technical_knowledge) - 特定情境的知识
+- 学习历史 (learning_history) - 会话学习摘要
 
 **查询方式**: 使用 `mcp__memory__search_nodes`
 
@@ -235,12 +244,16 @@ mcp__memory__read_graph
 
 **如果图谱已经干净**：明确说明"已检查图谱，无需整理"。
 
-## 与 session-learn 的一致性
+## 与 auto-extract 的一致性
 
-| session-learn 分类 | knowledge-fetch 查询 |
-|--------------------|---------------------|
-| Project CLAUDE.md | Layer 1 |
-| User CLAUDE.md | Layer 2 |
-| Memory MCP | Layer 3 |
+| auto-extract 分类 | knowledge-fetch 查询 | 核心问题 |
+|-------------------|---------------------|----------|
+| Project CLAUDE.md | Layer 1 | "这个项目需要知道什么？" |
+| User CLAUDE.md | Layer 2 | "每个会话都需要知道什么？" |
+| Memory MCP | Layer 3 | "特定情境下需要召回什么？" |
+
+**边界原则**:
+- **User CLAUDE.md** = 身份层 = "What I always need to know"
+- **Memory MCP** = 经验层 = "What I learned for specific situations"
 
 确保双向一致：学习时分类到哪层，召回时就从哪层查询。
