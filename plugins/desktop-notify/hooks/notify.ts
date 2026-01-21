@@ -20,6 +20,8 @@ interface HookInput {
   cwd?: string;
   transcript_path?: string;
   hook_event_name?: string;
+  message?: string;  // Notification hook includes this
+  notification_type?: string;
 }
 
 interface NotifyMessage {
@@ -72,13 +74,15 @@ async function extractLastAssistantMessage(transcriptPath?: string): Promise<str
   return "";
 }
 
-function formatMessage(project: string, hookType: string, messageText: string): NotifyMessage {
+function formatMessage(project: string, hookType: string, messageText: string, notificationMessage?: string): NotifyMessage {
   const isStop = hookType === "Stop";
   const icon = isStop ? "✓" : "⏳";
   const title = `${icon} ${project}`;
 
-  // Use extracted message or fallback
-  const text = messageText || (isStop ? "任务完成" : "等待输入");
+  // Stop: show what was completed; Notification: show action needed
+  const text = isStop
+    ? (messageText || "任务完成")
+    : "Waiting for your input...";
 
   return { title, text };
 }
@@ -299,7 +303,7 @@ async function clientMode() {
 
   const project = extractProjectName(input.cwd);
   const messageText = await extractLastAssistantMessage(input.transcript_path);
-  const message = formatMessage(project, hookType, messageText);
+  const message = formatMessage(project, hookType, messageText, input.message);
 
   // Check if server is running (with short timeout)
   const controller = new AbortController();
