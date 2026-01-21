@@ -190,12 +190,11 @@ const HTML = `<!DOCTYPE html>
         if (Notification.permission === 'granted') {
           try {
             const data = JSON.parse(e.data);
-            new Notification('Claude Code', {
-              body: data.text || e.data,
-              tag: 'cc-notify'
+            new Notification(data.title || 'Claude Code', {
+              body: data.text || e.data
             });
           } catch {
-            new Notification('Claude Code', { body: e.data, tag: 'cc-notify' });
+            new Notification('Claude Code', { body: e.data });
           }
         }
       };
