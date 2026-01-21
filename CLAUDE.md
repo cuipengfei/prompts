@@ -33,7 +33,7 @@ Claude Code 插件市场项目 - 14 个独立可选安装的插件，每个插�
 
 plugins/
 ├── improve-prompt/         # Command: 提示词优化
-├── desktop-notify/         # Hooks: Stop + Notification 通知
+├── desktop-notify/         # Hooks: Stop + Notification 通知 (Bun WebSocket)
 ├── structured-responder/   # Output-style: 结构化响应
 ├── foundational-principles/ # Skill: 基础原则
 ├── quality-standards/      # Skill: 质量标准
@@ -209,6 +209,24 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
     "Notification": [{"matcher": ".*", "hooks": [{...}]}]
   }
 }
+```
+
+### Hooks 开发注意事项
+
+**Notification hook matchers**（官方支持的类型）:
+- `permission_prompt` - 权限请求
+- `idle_prompt` - 空闲 60 秒后
+- `auth_success` - 认证成功
+- `elicitation_dialog` - MCP 工具输入
+
+**Bun WebSocket pub/sub 注意事项**:
+- `server.publish()` 返回**字节数**，不是客户端数
+- 使用 `server.subscriberCount(topic)` 获取真实客户端数
+- 在 `close` handler 中显式 `ws.unsubscribe(topic)` 清理订阅
+
+**测试 hooks 时复制到 cache**:
+```bash
+cp -r plugins/xxx/* ~/.claude/plugins/cache/prompts/xxx/{version}/
 ```
 
 ## Marketplace Schema
