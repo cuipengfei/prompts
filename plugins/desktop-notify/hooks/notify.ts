@@ -18,20 +18,69 @@ const TOPIC = "notify";
 
 interface HookInput {
   cwd?: string;
-  transcript?: string;
+  transcript_path?: string;
+  hook_event_name?: string;
 }
 
 interface NotifyMessage {
+  title: string;
   text: string;
-  icon: string;
 }
 
-function formatMessage(project: string, hookType: string): NotifyMessage {
+async function extractLastAssistantMessage(transcriptPath?: string): Promise<string> {
+  if (!transcriptPath) return "";
+
+  try {
+    const file = Bun.file(transcriptPath);
+    const content = await file.text();
+    const lines = content.trim().split("\n");
+
+    // Find the last assistant message (JSONL format)
+    for (let i = lines.length - 1; i >= 0; i--) {
+      try {
+        const entry = JSON.parse(lines[i]);
+        if (entry.type === "assistant" && entry.message?.content) {
+          // Extract text from content blocks
+          const textParts = entry.message.content
+            .filter((block: { type: string }) => block.type === "text")
+            .map((block: { text: string }) => block.text)
+            .join(" ");
+
+          if (textParts) {
+            // Clean up and truncate
+            let text = textParts
+              .replace(/<[^>]+>/g, "")        // remove HTML/XML tags
+              .replace(/\s+/g, " ")            // normalize whitespace
+              .replace(/[#*`_\[\]]/g, "")      // remove markdown
+              .trim();
+
+            // Windows notification limit
+            if (text.length > 120) {
+              text = text.slice(0, 117) + "...";
+            }
+            return text;
+          }
+        }
+      } catch {
+        // Skip malformed lines
+      }
+    }
+  } catch {
+    // File read error
+  }
+
+  return "";
+}
+
+function formatMessage(project: string, hookType: string, messageText: string): NotifyMessage {
   const isStop = hookType === "Stop";
-  return {
-    text: `cc: ${project} - ${isStop ? "✓ 完成" : "⏳ 等待输入"}`,
-    icon: isStop ? "✓" : "⏳",
-  };
+  const icon = isStop ? "✓" : "⏳";
+  const title = `${icon} ${project}`;
+
+  // Use extracted message or fallback
+  const text = messageText || (isStop ? "任务完成" : "等待输入");
+
+  return { title, text };
 }
 
 function extractProjectName(cwd?: string): string {
@@ -249,7 +298,8 @@ async function clientMode() {
   }
 
   const project = extractProjectName(input.cwd);
-  const message = formatMessage(project, hookType);
+  const messageText = await extractLastAssistantMessage(input.transcript_path);
+  const message = formatMessage(project, hookType, messageText);
 
   // Check if server is running
   const alive = await fetch(`http://localhost:${PORT}/health`)
