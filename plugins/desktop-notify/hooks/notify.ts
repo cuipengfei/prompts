@@ -250,9 +250,10 @@ function serverMode() {
       if (url.pathname === "/notify" && req.method === "POST") {
         return req.text().then((body) => {
           const msg = body || JSON.stringify({ text: "Notification" });
-          const count = srv.publish(TOPIC, msg);
-          console.log(`[${new Date().toISOString()}] Sent to ${count} clients: ${msg}`);
-          return new Response(`sent to ${count} clients`);
+          const subscribers = srv.subscriberCount(TOPIC);
+          const bytes = srv.publish(TOPIC, msg);
+          console.log(`[${new Date().toISOString()}] Sent ${bytes} bytes to ${subscribers} client(s): ${msg}`);
+          return new Response(`sent to ${subscribers} client(s)`);
         });
       }
 
@@ -266,7 +267,8 @@ function serverMode() {
       message(_ws, message) {
         console.log(`[${new Date().toISOString()}] Received:`, message);
       },
-      close(_ws) {
+      close(ws) {
+        ws.unsubscribe(TOPIC);
         console.log(`[${new Date().toISOString()}] Client disconnected`);
       },
     },
