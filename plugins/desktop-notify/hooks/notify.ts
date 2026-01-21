@@ -301,16 +301,17 @@ async function clientMode() {
   const messageText = await extractLastAssistantMessage(input.transcript_path);
   const message = formatMessage(project, hookType, messageText);
 
-  // Check if server is running
-  const alive = await fetch(`http://localhost:${PORT}/health`)
-    .then((r) => r.ok)
-    .catch(() => false);
+  // Check if server is running (with short timeout)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 500);
+  const alive = await fetch(`http://localhost:${PORT}/health`, { signal: controller.signal })
+    .then((r) => { clearTimeout(timeoutId); return r.ok; })
+    .catch(() => { clearTimeout(timeoutId); return false; });
 
   // Start server if not running
   if (!alive) {
-    console.log("Starting notify server...");
-    spawn(["bun", import.meta.path, "--serve"], {
-      detached: true,
+    const serverScript = import.meta.path;
+    spawn(["sh", "-c", `nohup bun "${serverScript}" --serve > /tmp/notify-server.log 2>&1 &`], {
       stdout: "ignore",
       stderr: "ignore",
       stdin: "ignore",
@@ -324,7 +325,7 @@ async function clientMode() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(message),
-  }).catch((e) => ({ ok: false, text: () => e.message }));
+  }).catch(() => ({ ok: false }));
 
   if (res.ok) {
     console.log(`Notified: ${message.text}`);
