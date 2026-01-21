@@ -1,7 +1,7 @@
 {
   "name": "desktop-notify",
-  "version": "1.0.1",
-  "description": "[Hook] 桌面通知钩子 - 任务完成时发送 Windows Toast 通知（WSL/Docker 环境）",
+  "version": "2.0.0",
+  "description": "[Hook] 桌面通知 - WebSocket 推送到浏览器（支持 WSL/Docker/容器环境）",
   "author": {
     "name": "cuipengfei",
     "email": "cuipengfei@gmail.com"
@@ -11,7 +11,7 @@
   "keywords": [
     "hooks",
     "notifications",
-    "wsl",
-    "windows-toast"
+    "websocket",
+    "browser"
   ]
 }

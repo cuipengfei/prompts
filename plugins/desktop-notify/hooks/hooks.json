@@ -1,5 +1,5 @@
 {
-  "description": "桌面通知 - 任务完成时发送 Windows Toast 通知（WSL/Docker 环境）",
+  "description": "桌面通知 - WebSocket 推送到浏览器（支持 WSL/Docker/容器环境）",
   "hooks": {
     "Stop": [
       {
@@ -7,8 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/notify.sh Stop",
-            "timeout": 10
+            "command": "bun ${CLAUDE_PLUGIN_ROOT}/hooks/notify.ts Stop",
+            "timeout": 5
           }
         ]
       }
@@ -19,8 +19,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/notify.sh Notification",
-            "timeout": 10
+            "command": "bun ${CLAUDE_PLUGIN_ROOT}/hooks/notify.ts Notification",
+            "timeout": 5
           }
         ]
       }
