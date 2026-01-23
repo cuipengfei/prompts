@@ -8,15 +8,19 @@
 
 ## API 和 Provider 配置
 
-### API_MAX_INPUT_TOKENS ⚠️
+### API_MAX_INPUT_TOKENS ✅
 API 请求的最大输入 token 数限制。
+
+**默认值**: `180000`
 
 ```bash
 export API_MAX_INPUT_TOKENS="150000"
 ```
 
-### API_TARGET_INPUT_TOKENS ⚠️
+### API_TARGET_INPUT_TOKENS ✅
 目标输入 token 数，用于上下文管理优化。
+
+**默认值**: `40000`
 
 ```bash
 export API_TARGET_INPUT_TOKENS="100000"
@@ -29,6 +33,8 @@ export API_TARGET_INPUT_TOKENS="100000"
 ### CLAUDE_BASH_NO_LOGIN ✅
 跳过 Bash 工具的登录 shell 初始化。加快命令执行速度。
 
+**默认值**: `false` (启用登录 Shell)
+
 ```bash
 export CLAUDE_BASH_NO_LOGIN="1"
 ```
@@ -38,8 +44,10 @@ export CLAUDE_BASH_NO_LOGIN="1"
 
 ## 权限和安全
 
-### CLAUDE_CODE_ADDITIONAL_PROTECTION ⚠️
-启用额外的安全保护机制。
+### CLAUDE_CODE_ADDITIONAL_PROTECTION ✅
+启用额外的安全保护机制（添加 `x-anthropic-additional-protection` 头）。
+
+**默认值**: `false` (禁用)
 
 ```bash
 export CLAUDE_CODE_ADDITIONAL_PROTECTION="1"
@@ -47,6 +55,8 @@ export CLAUDE_CODE_ADDITIONAL_PROTECTION="1"
 
 ### CLAUDE_CODE_DISABLE_COMMAND_INJECTION_CHECK ✅
 禁用命令注入安全检查（Haiku preflight）。**加速 bash 命令执行，但降低安全性**。
+
+**默认值**: `false` (检查已启用)
 
 ```bash
 export CLAUDE_CODE_DISABLE_COMMAND_INJECTION_CHECK="1"
@@ -57,8 +67,10 @@ export CLAUDE_CODE_DISABLE_COMMAND_INJECTION_CHECK="1"
 
 ## 界面和显示
 
-### CLAUDE_CODE_FORCE_FULL_LOGO ⚠️
+### CLAUDE_CODE_FORCE_FULL_LOGO ✅
 强制显示完整 logo。
+
+**默认值**: `false` (禁用)
 
 ```bash
 export CLAUDE_CODE_FORCE_FULL_LOGO="1"
@@ -68,8 +80,10 @@ export CLAUDE_CODE_FORCE_FULL_LOGO="1"
 
 ## 上下文和内存管理
 
-### CLAUDE_CODE_CONTEXT_LIMIT ⚠️
+### CLAUDE_CODE_CONTEXT_LIMIT ✅
 自定义上下文窗口限制。
+
+**默认值**: 动态 (取决于模型)
 
 ```bash
 export CLAUDE_CODE_CONTEXT_LIMIT="150000"
@@ -77,6 +91,8 @@ export CLAUDE_CODE_CONTEXT_LIMIT="150000"
 
 ### DISABLE_MICROCOMPACT ✅
 禁用微压缩（将大工具输出卸载到磁盘）。
+
+**默认值**: `false` (微压缩已启用)
 
 ```bash
 export DISABLE_MICROCOMPACT="1"
@@ -87,8 +103,10 @@ export DISABLE_MICROCOMPACT="1"
 
 ## 远程和 IDE 集成
 
-### CLAUDE_CODE_SSE_PORT ⚠️
+### CLAUDE_CODE_SSE_PORT ✅
 Server-Sent Events 通信端口。
+
+**默认值**: `null` (无固定端口)
 
 ```bash
 export CLAUDE_CODE_SSE_PORT="8080"
@@ -98,8 +116,10 @@ export CLAUDE_CODE_SSE_PORT="8080"
 
 ## 调试和日志
 
-### CLAUDE_CODE_PROFILE_STARTUP ⚠️
+### CLAUDE_CODE_PROFILE_STARTUP ✅
 启用启动性能分析。
+
+**默认值**: `false` (禁用)
 
 ```bash
 export CLAUDE_CODE_PROFILE_STARTUP="1"
@@ -112,6 +132,8 @@ export CLAUDE_CODE_PROFILE_STARTUP="1"
 ### CLAUDE_ENV_FILE ✅
 SessionStart hook 专用。用于持久化环境变量。
 
+**默认值**: `undefined`
+
 ```bash
 # 在 hook 脚本中使用
 echo "export MY_VAR=value" >> "$CLAUDE_ENV_FILE"
@@ -122,15 +144,20 @@ echo "export MY_VAR=value" >> "$CLAUDE_ENV_FILE"
 
 ## 功能开关
 
-### CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION ⚠️
+### CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION ✅
 启用提示建议功能。
 
+**默认值**: `true` (启用)
+**禁用方式**: 设置为 `"false"`
+
 ```bash
-export CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION="1"
+export CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION="false"
 ```
 
-### CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT ⚠️
+### CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT ✅
 启用 token 使用量附件。
+
+**默认值**: `false` (禁用)
 
 ```bash
 export CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT="1"
@@ -140,50 +167,65 @@ export CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT="1"
 
 ## MCP 配置
 
-### ENABLE_EXPERIMENTAL_MCP_CLI ⚠️
+### ENABLE_EXPERIMENTAL_MCP_CLI ✅
 启用实验性 MCP CLI 功能。
+
+**默认值**: `false` (禁用)
 
 ```bash
 export ENABLE_EXPERIMENTAL_MCP_CLI="1"
 ```
 
-### ENABLE_MCP_CLI ⚠️
+### ENABLE_MCP_CLI ✅
 启用 MCP CLI。
+
+**默认值**: `false` (禁用)
 
 ```bash
 export ENABLE_MCP_CLI="1"
 ```
 
-### ENABLE_MCP_CLI_ENDPOINT ⚠️
+### ENABLE_MCP_CLI_ENDPOINT ✅
 启用 MCP CLI 端点。
+
+**默认值**: `true` (当 MCP CLI 启用时)
 
 ```bash
 export ENABLE_MCP_CLI_ENDPOINT="1"
 ```
 
-### ENABLE_MCP_LARGE_OUTPUT_FILES ⚠️
+### ENABLE_MCP_LARGE_OUTPUT_FILES ✅
 允许 MCP 输出大文件。
+
+**默认值**: `true` (启用)
+**禁用方式**: 设置为 `"false"` 或 `"0"`
 
 ```bash
 export ENABLE_MCP_LARGE_OUTPUT_FILES="1"
 ```
 
-### MCP_CONNECTION_NONBLOCKING ⚠️
+### MCP_CONNECTION_NONBLOCKING ✅
 非阻塞 MCP 连接。
+
+**默认值**: `false` (阻塞)
 
 ```bash
 export MCP_CONNECTION_NONBLOCKING="1"
 ```
 
-### MCP_REMOTE_SERVER_CONNECTION_BATCH_SIZE ⚠️
+### MCP_REMOTE_SERVER_CONNECTION_BATCH_SIZE ✅
 远程 MCP 服务器连接批量大小。
+
+**默认值**: `20`
 
 ```bash
 export MCP_REMOTE_SERVER_CONNECTION_BATCH_SIZE="5"
 ```
 
-### MCP_SERVER_CONNECTION_BATCH_SIZE ⚠️
+### MCP_SERVER_CONNECTION_BATCH_SIZE ✅
 MCP 服务器连接批量大小。
+
+**默认值**: `3`
 
 ```bash
 export MCP_SERVER_CONNECTION_BATCH_SIZE="10"
@@ -196,20 +238,18 @@ export MCP_SERVER_CONNECTION_BATCH_SIZE="10"
 ### DISABLE_AUTO_MIGRATE_TO_NATIVE ✅
 禁用自动迁移到原生版本的提示。
 
-**默认值**: 未设置（自动迁移功能启用）
+**默认值**: `false` (提示已启用)
 **禁用方式**: 设置为 `"1"`, `"true"`, `"yes"`, 或 `"on"`
-
-内部使用 `a1()` truthy 检查函数：
-- 未设置/空值 → false → 迁移提示启用
-- 设置为 truthy 值 → true → 迁移提示禁用
 
 ```bash
 export DISABLE_AUTO_MIGRATE_TO_NATIVE="1"
 ```
 **来源**: cli.js 源码验证
 
-### DISABLE_EXTRA_USAGE_COMMAND ⚠️
+### DISABLE_EXTRA_USAGE_COMMAND ✅
 禁用额外的 usage 命令。
+
+**默认值**: `false` (命令已启用)
 
 ```bash
 export DISABLE_EXTRA_USAGE_COMMAND="1"
@@ -219,37 +259,47 @@ export DISABLE_EXTRA_USAGE_COMMAND="1"
 
 ## 性能和限制
 
-### CLAUDE_CODE_EFFORT_LEVEL ⚠️
+### CLAUDE_CODE_EFFORT_LEVEL ✅
 Opus 4.5 的 effort 参数（low/medium/high）。控制 token 使用量和响应深度。
+
+**默认值**: `"medium"`
 
 ```bash
 export CLAUDE_CODE_EFFORT_LEVEL="medium"
 ```
 **来源**: GitHub Issue #12376（功能请求）
 
-### CLAUDE_CODE_LOOPY_MODE ⚠️
-循环模式（具体含义未知，可能与迭代行为相关）。
+### CLAUDE_CODE_LOOPY_MODE ✅
+循环模式。主要通过 `-p/--loopy` 标志设置。
+
+**默认值**: 禁用 (内部)
 
 ```bash
 export CLAUDE_CODE_LOOPY_MODE="1"
 ```
 
-### CLAUDE_CODE_MAX_RETRIES ⚠️
+### CLAUDE_CODE_MAX_RETRIES ✅
 请求失败时的最大重试次数。
+
+**默认值**: `10`
 
 ```bash
 export CLAUDE_CODE_MAX_RETRIES="3"
 ```
 
-### CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY ⚠️
+### CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY ✅
 工具使用的最大并发数。
+
+**默认值**: `10`
 
 ```bash
 export CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY="5"
 ```
 
-### MAX_STRUCTURED_OUTPUT_RETRIES ⚠️
+### MAX_STRUCTURED_OUTPUT_RETRIES ✅
 结构化输出的最大重试次数。
+
+**默认值**: `5`
 
 ```bash
 export MAX_STRUCTURED_OUTPUT_RETRIES="3"
@@ -259,29 +309,37 @@ export MAX_STRUCTURED_OUTPUT_RETRIES="3"
 
 ## 文件和附件
 
-### CLAUDE_CODE_DISABLE_ATTACHMENTS ⚠️
+### CLAUDE_CODE_DISABLE_ATTACHMENTS ✅
 禁用附件功能。
+
+**默认值**: `false` (附件已启用)
 
 ```bash
 export CLAUDE_CODE_DISABLE_ATTACHMENTS="1"
 ```
 
-### CLAUDE_CODE_DISABLE_CLAUDE_MDS ⚠️
+### CLAUDE_CODE_DISABLE_CLAUDE_MDS ✅
 禁用 CLAUDE.md 文件加载。
+
+**默认值**: `false` (加载已启用)
 
 ```bash
 export CLAUDE_CODE_DISABLE_CLAUDE_MDS="1"
 ```
 
-### CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING ⚠️
+### CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING ✅
 禁用文件检查点功能。
+
+**默认值**: `false` (检查点已启用)
 
 ```bash
 export CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING="1"
 ```
 
-### CLAUDE_CODE_USE_NATIVE_FILE_SEARCH ⚠️
+### CLAUDE_CODE_USE_NATIVE_FILE_SEARCH ✅
 使用原生文件搜索。
+
+**默认值**: `false` (使用 git/rg)
 
 ```bash
 export CLAUDE_CODE_USE_NATIVE_FILE_SEARCH="1"
@@ -291,22 +349,28 @@ export CLAUDE_CODE_USE_NATIVE_FILE_SEARCH="1"
 
 ## 容器和沙箱
 
-### CLAUDE_CODE_BUBBLEWRAP ⚠️
+### CLAUDE_CODE_BUBBLEWRAP ✅
 使用 Bubblewrap 沙箱。
+
+**默认值**: `false` (禁用)
 
 ```bash
 export CLAUDE_CODE_BUBBLEWRAP="1"
 ```
 
-### CLAUDE_CODE_CONTAINER_ID ⚠️
+### CLAUDE_CODE_CONTAINER_ID ✅
 容器 ID 标识。
+
+**默认值**: `undefined`
 
 ```bash
 export CLAUDE_CODE_CONTAINER_ID="container-123"
 ```
 
-### CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE ⚠️
+### CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE ✅
 覆盖阻塞限制。
+
+**默认值**: 动态
 
 ```bash
 export CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE="100"
@@ -316,51 +380,65 @@ export CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE="100"
 
 ## 内部/实验性
 
-### CLAUDE_CODE_ENTRYPOINT ⚠️
+### CLAUDE_CODE_ENTRYPOINT ✅
 自定义入口点。用于特殊部署场景。
+
+**默认值**: `"cli"`
 
 ```bash
 export CLAUDE_CODE_ENTRYPOINT="sdk-py"
 ```
 **来源**: claude-agent-sdk-python
 
-### CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION ⚠️
+### CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION ✅
 环境运行器版本。
+
+**默认值**: `undefined`
 
 ```bash
 export CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION="1.0.0"
 ```
 
-### CLAUDE_CODE_EXTRA_BODY ⚠️
+### CLAUDE_CODE_EXTRA_BODY ✅
 API 请求的额外 JSON 数据。
+
+**默认值**: `{}`
 
 ```bash
 export CLAUDE_CODE_EXTRA_BODY='{"custom_field": "value"}'
 ```
 
-### CLAUDE_CODE_GIT_BASH_PATH ⚠️
+### CLAUDE_CODE_GIT_BASH_PATH ✅
 Windows 上 Git Bash 可执行文件路径。
+
+**默认值**: 自动检测 (`bash.exe`)
 
 ```bash
 export CLAUDE_CODE_GIT_BASH_PATH="C:\\Program Files\\Git\\bin\\bash.exe"
 ```
 
-### CLAUDE_CODE_TAGS ⚠️
+### CLAUDE_CODE_TAGS ✅
 自定义标签。
+
+**默认值**: `undefined`
 
 ```bash
 export CLAUDE_CODE_TAGS="dev,experimental"
 ```
 
-### CLAUDE_CODE_TEST_FIXTURES_ROOT ⚠️
+### CLAUDE_CODE_TEST_FIXTURES_ROOT ✅
 测试 fixtures 根目录。
+
+**默认值**: 当前工作目录
 
 ```bash
 export CLAUDE_CODE_TEST_FIXTURES_ROOT="/path/to/fixtures"
 ```
 
-### CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR ⚠️
+### CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR ✅
 WebSocket 认证文件描述符。
+
+**默认值**: `undefined`
 
 ```bash
 export CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR="4"
@@ -370,15 +448,19 @@ export CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR="4"
 
 ## Plan 模式
 
-### CLAUDE_CODE_PLAN_V2_AGENT_COUNT ⚠️
+### CLAUDE_CODE_PLAN_V2_AGENT_COUNT ✅
 Plan V2 模式的 agent 数量。
+
+**默认值**: 取决于订阅层级 (1-3)
 
 ```bash
 export CLAUDE_CODE_PLAN_V2_AGENT_COUNT="3"
 ```
 
-### CLAUDE_CODE_PLAN_V2_EXPLORE_AGENT_COUNT ⚠️
+### CLAUDE_CODE_PLAN_V2_EXPLORE_AGENT_COUNT ✅
 Plan V2 模式的 explore agent 数量。
+
+**默认值**: 取决于订阅层级
 
 ```bash
 export CLAUDE_CODE_PLAN_V2_EXPLORE_AGENT_COUNT="2"
@@ -388,8 +470,10 @@ export CLAUDE_CODE_PLAN_V2_EXPLORE_AGENT_COUNT="2"
 
 ## 调查和反馈
 
-### CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY ⚠️
+### CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY ✅
 禁用反馈调查。
+
+**默认值**: `false` (启用)
 
 ```bash
 export CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY="1"
@@ -407,6 +491,7 @@ export CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY="1"
 6. **unkn0wncode/f87295d055dd0f0e8082358a0b5cc467** - 社区 Gist 解释
 7. **decodeclaude.com** - 社区文档
 8. **GitHub Issues** - 功能请求和讨论
+9. **@anthropic-ai/claude-code/cli.js** - 源码分析验证
 
 ---
 
