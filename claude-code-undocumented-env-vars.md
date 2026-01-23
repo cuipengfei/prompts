@@ -24,10 +24,6 @@ export API_TARGET_INPUT_TOKENS="100000"
 
 ---
 
-## SDK 和集成
-
----
-
 ## Bash 和命令执行
 
 ### CLAUDE_BASH_NO_LOGIN ✅
@@ -41,7 +37,6 @@ export CLAUDE_BASH_NO_LOGIN="1"
 ---
 
 ## 权限和安全
-
 
 ### CLAUDE_CODE_ADDITIONAL_PROTECTION ⚠️
 启用额外的安全保护机制。
@@ -80,7 +75,6 @@ export CLAUDE_CODE_FORCE_FULL_LOGO="1"
 export CLAUDE_CODE_CONTEXT_LIMIT="150000"
 ```
 
-
 ### DISABLE_MICROCOMPACT ✅
 禁用微压缩（将大工具输出卸载到磁盘）。
 
@@ -88,14 +82,6 @@ export CLAUDE_CODE_CONTEXT_LIMIT="150000"
 export DISABLE_MICROCOMPACT="1"
 ```
 **来源**: GitHub Issue #7176
-
----
-
-## 思维和推理
-
----
-
-## OAuth 和认证
 
 ---
 
@@ -131,7 +117,6 @@ SessionStart hook 专用。用于持久化环境变量。
 echo "export MY_VAR=value" >> "$CLAUDE_ENV_FILE"
 ```
 **来源**: plugin-dev hook-development skill
-
 
 ---
 
@@ -304,8 +289,6 @@ export CLAUDE_CODE_USE_NATIVE_FILE_SEARCH="1"
 
 ---
 
----
-
 ## 容器和沙箱
 
 ### CLAUDE_CODE_BUBBLEWRAP ⚠️
@@ -382,8 +365,6 @@ WebSocket 认证文件描述符。
 ```bash
 export CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR="4"
 ```
-
----
 
 ---
 
