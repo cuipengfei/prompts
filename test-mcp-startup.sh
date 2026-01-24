@@ -1,9 +1,23 @@
 #!/bin/bash
 # MCP Startup Optimization Test Script
 # Tests the effect of MCP_CONNECTION_NONBLOCKING and MCP_SERVER_CONNECTION_BATCH_SIZE
+# Also compares Node.js vs Bun runtime performance
 
-LOG_FILE="/mnt/d/code/prompts/mcp-startup-test.log"
-ROUNDS=${1:-3}  # Default 3 rounds, can override with argument
+RUNTIME=${1:-node}  # "node" or "bun"
+ROUNDS=${2:-3}      # Default 3 rounds
+LOG_FILE="/mnt/d/code/prompts/mcp-startup-test-${RUNTIME}.log"
+
+# Determine CLI path and command
+CLI_PATH="$HOME/.bun/install/global/node_modules/@anthropic-ai/claude-code/cli.js"
+
+if [[ "$RUNTIME" == "bun" ]]; then
+    CLAUDE_CMD="bun $CLI_PATH"
+elif [[ "$RUNTIME" == "node" ]]; then
+    CLAUDE_CMD="node $CLI_PATH"
+else
+    echo "Usage: $0 [node|bun] [rounds]"
+    exit 1
+fi
 
 # Clear previous log
 > "$LOG_FILE"
@@ -24,7 +38,7 @@ run_test() {
 
     MCP_CONNECTION_NONBLOCKING="$nonblocking" \
     MCP_SERVER_CONNECTION_BATCH_SIZE="$batch_size" \
-    claude -p "respond with just: ok" --dangerously-skip-permissions 2>/dev/null | head -1 > /dev/null
+    $CLAUDE_CMD -p "respond with just: ok" --dangerously-skip-permissions 2>/dev/null | head -1 > /dev/null
 
     end_time=$(date +%s.%N)
     elapsed=$(echo "$end_time - $start_time" | bc)
@@ -36,6 +50,7 @@ run_test() {
 log "=============================================="
 log "MCP Startup Optimization Test"
 log "=============================================="
+log "Runtime: $RUNTIME ($CLAUDE_CMD)"
 log "Rounds: $ROUNDS"
 log "MCP Servers: $(ls ~/.claude/.mcp*.json 2>/dev/null | wc -l) config files"
 log ""

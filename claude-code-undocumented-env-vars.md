@@ -26,6 +26,47 @@
 - [3rd/ccc](https://github.com/3rd/ccc) - Claude Code 配置管理
 
 ---
+## 运行时对比：Node.js vs Bun
+
+> **背景**: 2025年12月，Anthropic 收购了 Bun。官方博客称 "Claude Code ships as a Bun executable"，但当前分发版本 (v2.1.7) 的 shebang 仍是 `#!/usr/bin/env node`，默认使用 Node.js 运行。
+
+### 可以用 Bun 运行 Claude Code 吗？
+
+**可以**。显式指定 `bun` 命令即可：
+
+```bash
+# 默认（使用 Node.js）
+claude
+
+# 强制使用 Bun
+bun ~/.bun/install/global/node_modules/@anthropic-ai/claude-code/cli.js
+```
+
+### 性能对比（实测数据）
+
+测试环境：WSL2, 9 个 MCP 服务器, `MCP_CONNECTION_NONBLOCKING=1`
+
+| 指标 | Node.js v24.0.0 | Bun v1.3.6 | 说明 |
+|------|-----------------|------------|------|
+| **启动时间** | **7.6s** | 9.5s | Node 快 25% |
+| **物理内存 (RSS)** | 688 MB | **270 MB** | Bun 省 60% |
+| **虚拟内存 (VSZ)** | 26.7 GB | 73 GB | Bun 高（正常，预分配策略） |
+| **稳定性** | 方差小 | 波动较大 | Node 更稳定 |
+
+### 结论
+
+| 场景 | 推荐运行时 |
+|------|-----------|
+| 追求启动速度 | Node.js v24 |
+| 内存受限环境 | Bun |
+| 日常使用 | 保持默认（Node.js） |
+
+**注意**:
+- 高 VSZ 不是问题，RSS 才是真正消耗的物理内存
+- Anthropic 收购 Bun 后，未来版本可能原生切换到 Bun 运行时
+- 测试脚本: `./test-mcp-startup.sh [node|bun] [rounds]`
+
+---
 ## 界面和显示
 ### CLAUDE_CODE_FORCE_FULL_LOGO ✅ ⭐
 强制使用完整欢迎框布局，防止终端 resize 时界面闪烁。
