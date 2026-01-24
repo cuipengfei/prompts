@@ -132,7 +132,7 @@ export CLAUDE_CODE_DISABLE_COMMAND_INJECTION_CHECK="1"
 
 ## 界面和显示
 
-### CLAUDE_CODE_FORCE_FULL_LOGO ✅
+### CLAUDE_CODE_FORCE_FULL_LOGO ✅ ⭐
 强制显示完整 logo。
 
 **默认值**: `false` (禁用)
@@ -150,7 +150,7 @@ export CLAUDE_CODE_FORCE_FULL_LOGO="1"
 
 ## 上下文和内存管理
 
-### CLAUDE_CODE_CONTEXT_LIMIT ✅
+### CLAUDE_CODE_CONTEXT_LIMIT ✅ ⭐
 自定义上下文窗口限制。**这是最常用的未记录变量之一**。
 
 **默认值**: `200000`（部分模型如 claude-sonnet-4 可达 `1_000_000`）
@@ -173,7 +173,7 @@ export CLAUDE_CODE_CONTEXT_LIMIT="500000"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:8 | Piebald-AI/tweakcc
 
-### DISABLE_MICROCOMPACT ✅
+### DISABLE_MICROCOMPACT ✅ ⭐
 禁用微压缩（将大工具输出卸载到磁盘）。
 
 **默认值**: `false` (微压缩已启用)
@@ -285,7 +285,7 @@ fi
 
 ## 功能开关
 
-### CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION ✅
+### CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION ✅ ⭐
 启用提示建议功能。
 
 **默认值**: `true` (启用)
@@ -300,7 +300,7 @@ export CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION="false"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:3333,3364
 
-### CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT ✅
+### CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT ✅ ⭐
 启用 token 使用量附件。
 
 **默认值**: `false` (禁用)
@@ -318,7 +318,7 @@ export CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT="1"
 
 ## MCP 配置
 
-### ENABLE_EXPERIMENTAL_MCP_CLI ✅
+### ENABLE_EXPERIMENTAL_MCP_CLI ✅ ⭐
 启用实验性 MCP CLI 功能。
 
 **默认值**: `false` (禁用)
@@ -332,7 +332,7 @@ export ENABLE_EXPERIMENTAL_MCP_CLI="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:1179
 
-### ENABLE_MCP_CLI ✅
+### ENABLE_MCP_CLI ✅ ⭐
 启用 MCP CLI。
 
 **默认值**: `false` (禁用)
@@ -346,7 +346,7 @@ export ENABLE_MCP_CLI="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:1179
 
-### ENABLE_MCP_CLI_ENDPOINT ✅
+### ENABLE_MCP_CLI_ENDPOINT ✅ ⭐
 启用 MCP CLI 端点。
 
 **默认值**: `true` (当 MCP CLI 启用时)
@@ -375,7 +375,7 @@ export ENABLE_MCP_LARGE_OUTPUT_FILES="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:3194,1712
 
-### MCP_CONNECTION_NONBLOCKING ✅
+### MCP_CONNECTION_NONBLOCKING ✅ ⭐
 非阻塞 MCP 连接。
 
 **默认值**: `false` (阻塞)
@@ -389,7 +389,7 @@ export MCP_CONNECTION_NONBLOCKING="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:5526
 
-### MCP_REMOTE_SERVER_CONNECTION_BATCH_SIZE ✅
+### MCP_REMOTE_SERVER_CONNECTION_BATCH_SIZE ✅ ⭐
 远程 MCP 服务器连接批量大小。
 
 **默认值**: `20`
@@ -403,7 +403,7 @@ export MCP_REMOTE_SERVER_CONNECTION_BATCH_SIZE="5"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:3194
 
-### MCP_SERVER_CONNECTION_BATCH_SIZE ✅
+### MCP_SERVER_CONNECTION_BATCH_SIZE ✅ ⭐
 MCP 服务器连接批量大小。
 
 **默认值**: `3`
@@ -421,7 +421,7 @@ export MCP_SERVER_CONNECTION_BATCH_SIZE="10"
 
 ## 命令禁用
 
-### DISABLE_AUTO_MIGRATE_TO_NATIVE ✅
+### DISABLE_AUTO_MIGRATE_TO_NATIVE ✅ ⭐
 禁用自动迁移到原生版本的提示。
 
 **默认值**: `false` (提示已启用)
@@ -436,7 +436,7 @@ export DISABLE_AUTO_MIGRATE_TO_NATIVE="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:5223
 
-### DISABLE_EXTRA_USAGE_COMMAND ✅
+### DISABLE_EXTRA_USAGE_COMMAND ✅ ⭐
 禁用额外的 usage 命令。
 
 **默认值**: `false` (命令已启用)
@@ -454,7 +454,7 @@ export DISABLE_EXTRA_USAGE_COMMAND="1"
 
 ## 性能和限制
 
-### CLAUDE_CODE_EFFORT_LEVEL ✅
+### CLAUDE_CODE_EFFORT_LEVEL ✅ ⭐
 Opus 4.5 的 effort 参数（low/medium/high）。控制 token 使用量和响应深度。
 
 **默认值**: `"medium"`
@@ -468,7 +468,7 @@ export CLAUDE_CODE_EFFORT_LEVEL="medium"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:3275
 
-### CLAUDE_CODE_LOOPY_MODE ✅
+### CLAUDE_CODE_LOOPY_MODE ✅ ⭐
 循环模式。主要通过 `-p/--loopy` 标志设置。
 
 **默认值**: 禁用 (内部)
@@ -496,7 +496,7 @@ export CLAUDE_CODE_MAX_RETRIES="3"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:1076
 
-### CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY ✅
+### CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY ✅ ⭐
 工具使用的最大并发数。
 
 **默认值**: `10`
@@ -510,7 +510,7 @@ export CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY="5"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:3333
 
-### MAX_STRUCTURED_OUTPUT_RETRIES ✅
+### MAX_STRUCTURED_OUTPUT_RETRIES ✅ ⭐
 结构化输出的最大重试次数。
 
 **默认值**: `5`
@@ -528,7 +528,7 @@ export MAX_STRUCTURED_OUTPUT_RETRIES="3"
 
 ## 文件和附件
 
-### CLAUDE_CODE_DISABLE_ATTACHMENTS ✅
+### CLAUDE_CODE_DISABLE_ATTACHMENTS ✅ ⭐
 禁用附件功能。
 
 **默认值**: `false` (附件已启用)
@@ -556,7 +556,7 @@ export CLAUDE_CODE_DISABLE_CLAUDE_MDS="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:1955
 
-### CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING ✅
+### CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING ✅ ⭐
 禁用文件检查点功能。
 
 **默认值**: `false` (检查点已启用)
@@ -570,7 +570,7 @@ export CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:2636
 
-### CLAUDE_CODE_USE_NATIVE_FILE_SEARCH ✅
+### CLAUDE_CODE_USE_NATIVE_FILE_SEARCH ✅ ⭐
 使用原生文件搜索。
 
 **默认值**: `false` (使用 git/rg)
@@ -588,7 +588,7 @@ export CLAUDE_CODE_USE_NATIVE_FILE_SEARCH="1"
 
 ## 容器和沙箱
 
-### CLAUDE_CODE_BUBBLEWRAP ✅
+### CLAUDE_CODE_BUBBLEWRAP ✅ ⭐
 使用 Bubblewrap 沙箱。
 
 **默认值**: `false` (禁用)
@@ -602,7 +602,7 @@ export CLAUDE_CODE_BUBBLEWRAP="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:120
 
-### CLAUDE_CODE_CONTAINER_ID ✅
+### CLAUDE_CODE_CONTAINER_ID ✅ ⭐
 容器 ID 标识。
 
 **默认值**: `undefined`
@@ -616,7 +616,7 @@ export CLAUDE_CODE_CONTAINER_ID="container-123"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:236
 
-### CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE ✅
+### CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE ✅ ⭐
 覆盖阻塞限制。
 
 **默认值**: 动态
@@ -634,7 +634,7 @@ export CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE="100"
 
 ## 内部/实验性
 
-### CLAUDE_CODE_ENTRYPOINT ✅
+### CLAUDE_CODE_ENTRYPOINT ✅ ⭐
 自定义入口点。用于特殊部署场景。
 
 **默认值**: `"cli"`
@@ -648,7 +648,7 @@ export CLAUDE_CODE_ENTRYPOINT="sdk-py"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:5477,912,2257,236
 
-### CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION ✅
+### CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION ✅ ⭐
 环境运行器版本。
 
 **默认值**: `undefined`
@@ -662,7 +662,7 @@ export CLAUDE_CODE_ENVIRONMENT_RUNNER_VERSION="1.0.0"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:5350
 
-### CLAUDE_CODE_EXTRA_BODY ✅
+### CLAUDE_CODE_EXTRA_BODY ✅ ⭐
 API 请求的额外 JSON 数据。
 
 **默认值**: `{}`
@@ -709,7 +709,7 @@ export CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR="4"
 
 ## Plan 模式
 
-### CLAUDE_CODE_PLAN_V2_AGENT_COUNT ✅
+### CLAUDE_CODE_PLAN_V2_AGENT_COUNT ✅ ⭐
 Plan V2 模式的 agent 数量。
 
 **默认值**: 取决于订阅层级 (1-3)
@@ -723,7 +723,7 @@ export CLAUDE_CODE_PLAN_V2_AGENT_COUNT="3"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:4815
 
-### CLAUDE_CODE_PLAN_V2_EXPLORE_AGENT_COUNT ✅
+### CLAUDE_CODE_PLAN_V2_EXPLORE_AGENT_COUNT ✅ ⭐
 Plan V2 模式的 explore agent 数量。
 
 **默认值**: `3`
