@@ -367,6 +367,13 @@ export ENABLE_MCP_CLI_ENDPOINT="1"
 - 部分工具调用可能失败（服务器尚未连接）
 - 社区功能请求：[#13329](https://github.com/anthropics/claude-code/issues/13329)（Non-Blocking Session Creation）
 
+**实测数据**（WSL2, 9 个 MCP 服务器, 3 轮平均）:
+
+| 配置 | 平均启动时间 | 加速比 |
+|------|-------------|--------|
+| 禁用（默认） | 15.6s | — |
+| **NONBLOCKING=1** | **7.6s** | **51% 更快** |
+
 ```bash
 export MCP_CONNECTION_NONBLOCKING="1"
 ```
@@ -422,6 +429,17 @@ Batch 3: [server7, server8, server9] → 等 Batch 2 完成后连接
 - `NONBLOCKING=1` + `BATCH_SIZE=10` = 异步 + 高并发（最快）
 - `NONBLOCKING=1` + `BATCH_SIZE=3` = 异步 + 保守并发（默认）
 - `NONBLOCKING=0` + `BATCH_SIZE=10` = 同步阻塞但高并发
+
+**实测数据**（WSL2, 9 个 MCP 服务器, 3 轮平均）:
+
+| 配置 | 平均启动时间 | 加速比 |
+|------|-------------|--------|
+| 禁用（baseline） | 15.6s | — |
+| BATCH_SIZE=8 only | 15.6s | **0%**（无效果） |
+| NONBLOCKING=1 only | 7.6s | 51% 更快 |
+| **Both enabled** | **7.9s** | **49% 更快** |
+
+**结论**: BATCH_SIZE 单独使用几乎无效果，必须配合 NONBLOCKING 才有意义。
 
 **调优建议**:
 | MCP 服务器数量 | 建议值 | 说明 |
