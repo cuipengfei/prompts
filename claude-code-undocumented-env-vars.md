@@ -1,8 +1,10 @@
-# Claude Code 未记录环境变量参考
+# Claude Code 未记录环境变量参考（精选 28 项）
 
-> 从 `@anthropic-ai/claude-code` CLI 源码提取，通过 GitHub 搜索、Exa 搜索、grep.app 和 DeepWiki 验证。
+> 从 `@anthropic-ai/claude-code` CLI 源码提取的 28 个常用/实用**未记录**环境变量。
 >
-> 说明：✅ = 已验证（有来源）| ⚠️ = 推断（基于命名/上下文）| ❓ = 未知
+> ⚠️ **重要**: 这些变量**均未在官方文档中记录**，可能随版本更新变更或移除。
+>
+> 说明：✅ = 已验证（有来源）| ⭐ = 精选推荐
 
 ---
 
@@ -24,114 +26,7 @@
 - [3rd/ccc](https://github.com/3rd/ccc) - Claude Code 配置管理
 
 ---
-
-## API 和 Provider 配置
-
-### API_MAX_INPUT_TOKENS ✅
-API 请求的最大输入 token 数限制。
-
-**默认值**: `180000`
-
-**行为**: 仅在启用 `USE_API_CLEAR_TOOL_RESULTS` 或 `USE_API_CLEAR_TOOL_USES` 时生效；作为 `clear_tool_uses_20250919` 的 `trigger.input_tokens` 阈值，并与 `API_TARGET_INPUT_TOKENS` 一起计算 `clear_at_least`（`J - X`）。
-
-**用户体验影响**: 当启用 API 清理逻辑时，值越小越早触发清理，工具输出/上下文更早被裁剪；值越大则保留更多上下文，但更晚触发清理。
-
-```bash
-export API_MAX_INPUT_TOKENS="150000"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:546
-
-### API_TARGET_INPUT_TOKENS ✅
-目标输入 token 数，用于上下文管理优化。
-
-**默认值**: `40000`
-
-**行为**: 仅在启用 `USE_API_CLEAR_TOOL_RESULTS` 或 `USE_API_CLEAR_TOOL_USES` 时生效；与 `API_MAX_INPUT_TOKENS` 一起用于 `clear_tool_uses_20250919` 的 `clear_at_least` 计算（`J - X`）。
-
-**用户体验影响**: 当启用 API 清理逻辑时，值越大，清理至少值（`J - X`）越小，清理力度更弱；值越小，清理更激进。
-
-```bash
-export API_TARGET_INPUT_TOKENS="100000"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:546
-
----
-
-## Bash 和命令执行
-
-### CLAUDE_BASH_NO_LOGIN ✅
-跳过 Bash 工具的登录 shell 初始化。**性能优化常用变量**。
-
-**默认值**: `false` (使用登录 Shell)
-
-**行为**: 设为 `"1"` 时，执行 Bash 命令跳过 `-l`（login shell）标志。
-
-**用户体验影响**:
-| 设置 | 效果 |
-|------|------|
-| 默认（false） | ✅ 加载完整环境（PATH、别名等） ⚠️ 每个命令启动略慢 |
-| 启用（1） | ⚡ 命令执行更快 ⚠️ 可能缺少 ~/.bash_profile 中定义的 PATH 或环境变量 |
-
-**典型问题**: 启用后可能出现 "command not found" 错误，因为某些工具的 PATH 在登录 shell 初始化时才设置。
-
-**社区验证**: 3rd/ccc 配置中默认启用此变量以提升性能。
-
-```bash
-export CLAUDE_BASH_NO_LOGIN="1"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:1637 | 3rd/ccc
-
----
-
-## 权限和安全
-
-### CLAUDE_CODE_ADDITIONAL_PROTECTION ✅
-启用额外的安全保护机制（添加 `x-anthropic-additional-protection` 头）。
-
-**默认值**: `false` (禁用)
-
-**行为**: 若为 truthy，向 API 请求头注入 `x-anthropic-additional-protection: true`。
-
-**用户体验影响**: 仅改变请求头；具体启用哪些服务端保护策略在 CLI 源码中未体现，效果取决于服务端实现。
-
-```bash
-export CLAUDE_CODE_ADDITIONAL_PROTECTION="1"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:1075
-
-### CLAUDE_CODE_DISABLE_COMMAND_INJECTION_CHECK ✅
-禁用命令注入安全检查。**⚠️ 安全相关，谨慎使用**。
-
-**默认值**: `false` (检查已启用)
-
-**行为**:
-- 默认情况下，对 Bash 命令进行注入模式检测（如 `${...}`、复合命令等）
-- 检测到危险模式时触发 `ask/deny` 权限提示
-- 设为 `"1"` 跳过所有检查
-
-**用户体验影响**:
-| 设置 | 效果 |
-|------|------|
-| 默认（启用检查） | 🔒 更安全，但某些复杂命令可能触发权限提示 |
-| 禁用检查 | ⚡ 命令执行更快、更少提示 ⚠️ 降低安全保护，可能执行危险命令 |
-
-**检测的模式**（来自 shareAI-lab/Kode-cli 源码）:
-- 变量扩展：`${...}`
-- 不安全的复合命令
-- 潜在的命令注入模式
-
-**社区验证**: shareAI-lab/Kode-cli、shcv/claude-investigations 均记录此变量。
-
-```bash
-# ⚠️ 仅在受信任环境中使用
-export CLAUDE_CODE_DISABLE_COMMAND_INJECTION_CHECK="1"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:3134 | shareAI-lab/Kode-cli
-
----
-
 ## 界面和显示
-
 ### CLAUDE_CODE_FORCE_FULL_LOGO ✅ ⭐
 强制显示完整 logo。
 
@@ -147,9 +42,7 @@ export CLAUDE_CODE_FORCE_FULL_LOGO="1"
 **来源**: @anthropic-ai/claude-code/cli.js:3727
 
 ---
-
 ## 上下文和内存管理
-
 ### CLAUDE_CODE_CONTEXT_LIMIT ✅ ⭐
 自定义上下文窗口限制。**这是最常用的未记录变量之一**。
 
@@ -196,95 +89,9 @@ export DISABLE_MICROCOMPACT="1"
 **来源**: @anthropic-ai/claude-code/cli.js:3273
 
 ---
-
-## 远程和 IDE 集成
-
-### CLAUDE_CODE_SSE_PORT ✅
-Server-Sent Events 通信端口。**IDE 集成的核心变量**。
-
-**默认值**: `null` (自动选择端口)
-
-**行为**: 指定 Claude Code 与 IDE 扩展通信的 SSE 端口。
-
-**用户体验影响**:
-| 设置 | 效果 |
-|------|------|
-| 未设置 | Claude Code 自动选择可用端口，IDE 扩展自动发现 |
-| 指定端口（如 8080） | 固定端口通信，适用于防火墙/代理配置场景 |
-
-**IDE 集成**:
-- **Neovim**: claudecode.nvim 使用此变量启动 Claude 时传递端口
-- **Emacs**: claude-code-ide.el 通过此变量建立连接
-- **VS Code**: 原生支持，通常自动配置
-
-**社区验证**: coder/claudecode.nvim、manzaltu/claude-code-ide.el 等项目广泛使用。
-
-```bash
 # 通常由 IDE 扩展自动设置，手动设置示例：
-export CLAUDE_CODE_SSE_PORT="12345"
-export ENABLE_IDE_INTEGRATION="true"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:3195 | coder/claudecode.nvim
-
 ---
-
-## 调试和日志
-
-### CLAUDE_CODE_PROFILE_STARTUP ✅
-启用启动性能分析。
-
-**默认值**: `false` (禁用)
-
-**行为**: 设为 `"1"` 会强制启用启动性能分析（`idA`/`OH1` 为 true）；未设置时仍有概率采样（`ES9=0.005`、`z77=0.05`）。启用后会记录 `tengu_startup_perf`，并在 headless 路径输出 `[headlessProfiler]` 指标日志。
-
-**用户体验影响**: 启用时会产生额外性能统计与日志输出，可能轻微增加启动开销；未设置时仅小比例采样，影响很小。
-
-```bash
-export CLAUDE_CODE_PROFILE_STARTUP="1"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:12,3331
-
----
-
-## Hooks 和插件
-
-### CLAUDE_ENV_FILE ✅
-SessionStart hook 专用。**用于在 hook 中持久化环境变量到会话**。
-
-**默认值**: `undefined`（由 Claude Code 在 hook 执行时自动设置）
-
-**行为**:
-- Claude Code 启动时创建临时文件，路径通过此变量传递给 SessionStart hook
-- Hook 脚本可将 `export VAR=value` 写入该文件
-- Claude Code 会读取文件内容并加载到会话环境
-
-**用户体验影响**:
-| 使用场景 | 效果 |
-|----------|------|
-| 项目类型检测 | Hook 检测 package.json/Cargo.toml 等，设置 PROJECT_TYPE 变量 |
-| 工具版本缓存 | 避免每次命令都检测 Node/Python 版本 |
-| 自定义环境 | 根据项目自动设置 API keys、配置路径等 |
-
-**典型用法**（来自官方 plugin-dev 示例）:
-```bash
-#!/bin/bash
-# SessionStart hook 示例
-if [ -f "package.json" ]; then
-  echo "export PROJECT_TYPE=nodejs" >> "$CLAUDE_ENV_FILE"
-fi
-if [ -f "tsconfig.json" ]; then
-  echo "export USES_TYPESCRIPT=true" >> "$CLAUDE_ENV_FILE"
-fi
-```
-
-**社区验证**: anthropics/claude-code 官方插件、ddev/ddev、onetimesecret/onetimesecret 等项目使用。
-
-**来源**: @anthropic-ai/claude-code/cli.js:1636,3028 | anthropics/claude-code plugins
-
----
-
 ## 功能开关
-
 ### CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION ✅ ⭐
 启用提示建议功能。
 
@@ -315,9 +122,7 @@ export CLAUDE_CODE_ENABLE_TOKEN_USAGE_ATTACHMENT="1"
 **来源**: @anthropic-ai/claude-code/cli.js:3198
 
 ---
-
 ## MCP 配置
-
 ### ENABLE_EXPERIMENTAL_MCP_CLI ✅ ⭐
 启用实验性 MCP CLI 功能。
 
@@ -359,21 +164,6 @@ export ENABLE_MCP_CLI="1"
 export ENABLE_MCP_CLI_ENDPOINT="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:4992
-
-### ENABLE_MCP_LARGE_OUTPUT_FILES ✅
-允许 MCP 输出大文件。
-
-**默认值**: `true` (启用)
-**禁用方式**: 设置为 `"false"` 或 `"0"`
-
-**行为**: 当 MCP 工具输出过大且为非图片内容时，默认会写入磁盘并返回文件引用；若显式设置为 falsey（`0/false/no/off`），则走 `hX0()` 直接内联输出路径，不写大文件。
-
-**用户体验影响**: 启用时大输出更可能落盘、消息更短；禁用时输出直接内联，消息更长但不产生大文件。
-
-```bash
-export ENABLE_MCP_LARGE_OUTPUT_FILES="1"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:3194,1712
 
 ### MCP_CONNECTION_NONBLOCKING ✅ ⭐
 非阻塞 MCP 连接。
@@ -418,9 +208,7 @@ export MCP_SERVER_CONNECTION_BATCH_SIZE="10"
 **来源**: @anthropic-ai/claude-code/cli.js:3194
 
 ---
-
 ## 命令禁用
-
 ### DISABLE_AUTO_MIGRATE_TO_NATIVE ✅ ⭐
 禁用自动迁移到原生版本的提示。
 
@@ -451,9 +239,7 @@ export DISABLE_EXTRA_USAGE_COMMAND="1"
 **来源**: @anthropic-ai/claude-code/cli.js:2327
 
 ---
-
 ## 性能和限制
-
 ### CLAUDE_CODE_EFFORT_LEVEL ✅ ⭐
 Opus 4.5 的 effort 参数（low/medium/high）。控制 token 使用量和响应深度。
 
@@ -481,20 +267,6 @@ export CLAUDE_CODE_EFFORT_LEVEL="medium"
 export CLAUDE_CODE_LOOPY_MODE="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:5478
-
-### CLAUDE_CODE_MAX_RETRIES ✅
-请求失败时的最大重试次数。
-
-**默认值**: `10`
-
-**行为**: 优先使用请求参数 `maxRetries`；若未设置则读取该变量并 `parseInt`；否则回退内置默认值 `10`。
-
-**用户体验影响**: 值越大失败时等待更久但更容易自动恢复；值越小更快失败返回。
-
-```bash
-export CLAUDE_CODE_MAX_RETRIES="3"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:1076
 
 ### CLAUDE_CODE_MAX_TOOL_USE_CONCURRENCY ✅ ⭐
 工具使用的最大并发数。
@@ -525,9 +297,7 @@ export MAX_STRUCTURED_OUTPUT_RETRIES="3"
 **来源**: @anthropic-ai/claude-code/cli.js:3362
 
 ---
-
 ## 文件和附件
-
 ### CLAUDE_CODE_DISABLE_ATTACHMENTS ✅ ⭐
 禁用附件功能。
 
@@ -541,20 +311,6 @@ export MAX_STRUCTURED_OUTPUT_RETRIES="3"
 export CLAUDE_CODE_DISABLE_ATTACHMENTS="1"
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:3196
-
-### CLAUDE_CODE_DISABLE_CLAUDE_MDS ✅
-禁用 CLAUDE.md 文件加载。
-
-**默认值**: `false` (加载已启用)
-
-**行为**: 若该变量存在（非空），`XD0()` 不会被调用，`claudeMd` 置空并记录 `claudemd_disabled`。
-
-**用户体验影响**: 不再加载 CLAUDE.md 指令，行为只受全局/项目其他配置影响。
-
-```bash
-export CLAUDE_CODE_DISABLE_CLAUDE_MDS="1"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:1955
 
 ### CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING ✅ ⭐
 禁用文件检查点功能。
@@ -585,9 +341,7 @@ export CLAUDE_CODE_USE_NATIVE_FILE_SEARCH="1"
 **来源**: @anthropic-ai/claude-code/cli.js:4730
 
 ---
-
 ## 容器和沙箱
-
 ### CLAUDE_CODE_BUBBLEWRAP ✅ ⭐
 使用 Bubblewrap 沙箱。
 
@@ -631,9 +385,7 @@ export CLAUDE_CODE_BLOCKING_LIMIT_OVERRIDE="100"
 **来源**: @anthropic-ai/claude-code/cli.js:3275
 
 ---
-
 ## 内部/实验性
-
 ### CLAUDE_CODE_ENTRYPOINT ✅ ⭐
 自定义入口点。用于特殊部署场景。
 
@@ -676,39 +428,8 @@ export CLAUDE_CODE_EXTRA_BODY='{"custom_field": "value"}'
 ```
 **来源**: @anthropic-ai/claude-code/cli.js:4650
 
-
-### CLAUDE_CODE_TEST_FIXTURES_ROOT ✅
-测试 fixtures 根目录。
-
-**默认值**: 当前工作目录
-
-**行为**: 当 fixtures 模式启用时，用该路径读取 `fixtures/*.json`；未设置则使用当前工作目录。
-
-**用户体验影响**: 仅影响测试/fixture 读取路径，正常运行无影响。
-
-```bash
-export CLAUDE_CODE_TEST_FIXTURES_ROOT="/path/to/fixtures"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:1076
-
-### CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR ✅
-WebSocket 认证文件描述符。
-
-**默认值**: `undefined`
-
-**行为**: 若设置该变量，会解析为文件描述符并用于 WebSocket 认证；值非法会记录错误并忽略。
-
-**用户体验影响**: 影响远程/本地 WebSocket 认证来源，对普通交互无直接影响。
-
-```bash
-export CLAUDE_CODE_WEBSOCKET_AUTH_FILE_DESCRIPTOR="4"
-```
-**来源**: @anthropic-ai/claude-code/cli.js:1708
-
 ---
-
 ## Plan 模式
-
 ### CLAUDE_CODE_PLAN_V2_AGENT_COUNT ✅ ⭐
 Plan V2 模式的 agent 数量。
 
@@ -738,11 +459,6 @@ export CLAUDE_CODE_PLAN_V2_EXPLORE_AGENT_COUNT="2"
 **来源**: @anthropic-ai/claude-code/cli.js:4815
 
 ---
-
-## 调查和反馈
-
----
-
 ## 搜索记录
 
 - ✅ `rg "<ENV_VAR>" cli.js` / GrepTool 精确匹配变量名，输出可控。
