@@ -158,6 +158,17 @@ plugins/
    - `validate-hook-schema.sh` 只支持 direct format
    - Plugin wrapper format 需要先提取 `.hooks`
 
+5. **不要在 plugin.json 中使用 `$schema` 字段**
+   ```json
+   // ❌ 错误 - Claude Code 验证器不接受额外字段
+   {"$schema": "https://...", "name": "..."}
+
+   // ✅ 正确 - 只用官方支持的字段
+   {"name": "...", "version": "...", ...}
+   ```
+   - Claude Code 使用**严格模式**验证 plugin.json
+   - 不识别的字段会导致安装失败：`Unrecognized key: "$schema"`
+
 ## Validation Commands
 
 ```bash

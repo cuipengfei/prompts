@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/.claude-plugin/plugin.schema.json",
   "name": "debate",
   "version": "0.1.0",
   "description": "[Command + Skill] 辩论插件 - 主代理与子代理进行结构化辩论，发现盲点、探索多角度视角",
