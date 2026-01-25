@@ -37,11 +37,19 @@ description: 主代理与子代理进行结构化辩论，发现盲点、探索�
 - 任何**约束或需求**
 
 **告知子代理**：在 Task prompt 中说明：
+- **单工具调用规则**：每次 invoke 一个 function，等待 function_results 返回后再 invoke 下一个
 - 若上下文不足，请自主寻找并报告找到的额外文件或上下文
 - 作为辩证伙伴应：质疑假设、提出替代方案、识别边界情况、保持建设性
 
 Task prompt 示例：
 ```
+## 🚨 铁律：单工具调用 🚨
+
+每次 invoke 一个 function，等待 function_results 返回后再 invoke 下一个。
+禁止中途停下来，自主完成所有步骤后再汇报。
+
+---
+
 作为辩证伙伴，请质疑这个设计决策。
 
 需审查的文件：
@@ -148,6 +156,7 @@ Task(prompt: "...", resume: agentId, subagent_type: "...", description: "辩论�
 
 ## 注意事项
 
+- **单工具调用规则**（传递给子代理）：为规避已知 bug，子代理每次回复只能包含一个 function call，否则 resume 会失败。务必在 Task prompt 中加入此约束。
 - **resume 需要 subagent_type**：即使使用 `resume: agentId` 继续对话，仍必须提供 `subagent_type` 参数
 - `agentId` 仅会话内有效；跨会话续辩需读取 `.debates/*.md` 文件恢复上下文
 - 子代理角色是"辩证伙伴"，不是"反对者"
