@@ -4,7 +4,7 @@
 
 ## 准备阶段
 
-- [ ] **T1: 创建插件目录结构**
+- [x] **T1: 创建插件目录结构**
   - 创建 `plugins/debate/.claude-plugin/`
   - 创建 `plugins/debate/commands/`
   - 创建 `plugins/debate/skills/dialectic-partner/`
@@ -14,7 +14,7 @@
 
 ## 元数据阶段
 
-- [ ] **T2: 创建 plugin.json**
+- [x] **T2: 创建 plugin.json**
   - 路径：`plugins/debate/.claude-plugin/plugin.json`
   - 包含：name, version, description, author, license, repository
   - 遵循：auto-discovery 原则，不声明组件数组
@@ -22,7 +22,7 @@
 
 ## 命令阶段
 
-- [ ] **T3: 创建 debate.md 命令**
+- [x] **T3: 创建 debate.md 命令**
   - 路径：`plugins/debate/commands/debate.md`
   - frontmatter：description
   - 内容：调用 dialectic-partner skill 的 3-Step 模式
@@ -30,7 +30,7 @@
 
 ## Skill 阶段
 
-- [ ] **T4: 创建 SKILL.md**
+- [x] **T4: 创建 SKILL.md**
   - 路径：`plugins/debate/skills/dialectic-partner/SKILL.md`
   - frontmatter：name, description
   - 核心内容：
@@ -40,12 +40,13 @@
     - 用户参与时机（AskUserQuestion）
     - 辩论历史持久化流程
     - 使用 Task + resume 机制的指导
+    - **主代理隔离原则**（不得在用户同意前执行子代理建议的修改）
   - 保持简洁，信任模型能力
   - 验证：frontmatter 可解析
 
 ## 注册阶段
 
-- [ ] **T5: 更新 marketplace.json**
+- [x] **T5: 更新 marketplace.json**
   - 路径：`.claude-plugin/marketplace.json`
   - 添加 debate 插件条目
   - category: collaboration
@@ -53,7 +54,7 @@
 
 ## 验证阶段
 
-- [ ] **T6: 端到端验证**
+- [x] **T6: 端到端验证**
   - 复制插件到缓存目录测试
   - 验证 /debate 命令可调用
   - 验证 skill 正确加载

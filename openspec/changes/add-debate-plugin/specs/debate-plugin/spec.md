@@ -25,18 +25,12 @@ Then 主代理询问具体辩论主题
 
 系统 SHALL 根据辩论主题动态选择最合适的 subagent_type。
 
-#### Scenario: 技术架构辩论
+#### Scenario: 选择专业代理
 
-Given 辩论主题涉及系统架构设计
+Given 辩论主题有明确专业领域
 When 主代理启动辩论
 Then 评估可用的 subagent types
-And 选择 `backend-development:backend-architect` 或类似专业代理
-
-#### Scenario: 代码质量辩论
-
-Given 辩论主题涉及代码风格或质量
-When 主代理启动辩论
-Then 选择 `code-refactoring:code-reviewer` 或类似专业代理
+And 选择最匹配主题的专业代理
 
 #### Scenario: 通用话题
 
@@ -73,15 +67,15 @@ And 包含依赖关系说明
 
 Given 辩论涉及代码变更
 When 主代理启动子代理
-Then Task prompt 包含 git diff 输出
+Then Task prompt 告知子代理运行 git diff
 And 包含变更文件列表
 
 #### Scenario: 避免空泛辩论
 
-Given 主代理未提供具体上下文
-When 子代理尝试辩论
-Then 子代理应请求具体上下文
-And 不应基于假设进行辩论
+Given 主代理启动子代理
+When 存在上下文可能不足的风险
+Then 主代理在 Task prompt 中说明"若上下文不足，请自主寻找并报告"
+And 子代理应自主探索而非空泛辩论
 
 ### Requirement: Dialectic Partner Role
 
@@ -171,8 +165,10 @@ But 不强制结束，用户可选择继续
 
 Given dialectic-partner skill 加载
 When skill 内容被读取
-Then 仅包含目的说明、角色定义、质量标准
-And 不包含详细辩论技巧教程
+Then 包含目的说明、角色定义、质量标准
+And 可包含操作流程和机制说明（如 Task + resume 使用、记录持久化）
+And 不包含辩论技巧教程或逻辑谬误清单
+But 信任模型已知如何进行高质量辩论
 
 #### Scenario: 避免重复
 
@@ -265,3 +261,36 @@ And 填写 Outcome（consensus | partial | disagreement）
 Given 用户选择不保留记录
 When 确认删除
 Then 删除辩论文件
+
+### Requirement: Main Agent Isolation
+
+系统 SHALL 确保主代理不会在用户同意前根据子代理建议修改代码或文件。
+
+#### Scenario: 子代理提出修改建议
+
+Given 子代理在辩论中提出代码修改建议
+When 主代理收到建议
+Then 主代理只能展示建议内容
+And 不得自动执行任何修改
+And 必须使用 AskUserQuestion 询问用户是否采纳
+
+#### Scenario: 用户同意修改
+
+Given 子代理提出修改建议
+When 用户通过 AskUserQuestion 明确同意
+Then 主代理可以执行修改
+And 在辩论记录中注明"用户已同意"
+
+#### Scenario: 用户拒绝修改
+
+Given 子代理提出修改建议
+When 用户拒绝或未响应
+Then 主代理不得执行任何修改
+And 辩论继续进行
+
+#### Scenario: 违反隔离原则
+
+Given 主代理在未获用户同意前执行了子代理建议的修改
+When 检测到此行为
+Then 视为严重错误
+And 应立即停止并向用户报告
