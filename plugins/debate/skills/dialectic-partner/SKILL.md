@@ -63,8 +63,8 @@ Task prompt 示例：
 Task(prompt: "...", subagent_type: "...", description: "辩论第 1 轮")
 → 返回 agentId
 
-# 后续轮次
-Task(prompt: "...", resume: agentId, description: "辩论第 2 轮")
+# 后续轮次（注意：resume 时仍需提供 subagent_type）
+Task(prompt: "...", resume: agentId, subagent_type: "...", description: "辩论第 2 轮")
 ```
 
 **每轮操作**：
@@ -148,6 +148,7 @@ Task(prompt: "...", resume: agentId, description: "辩论第 2 轮")
 
 ## 注意事项
 
+- **resume 需要 subagent_type**：即使使用 `resume: agentId` 继续对话，仍必须提供 `subagent_type` 参数
 - `agentId` 仅会话内有效；跨会话续辩需读取 `.debates/*.md` 文件恢复上下文
 - 子代理角色是"辩证伙伴"，不是"反对者"
 - 信任 SOTA 模型能力，不必过度指定辩论技巧
