@@ -27,6 +27,12 @@
       "category": "learning"
     },
     {
+      "name": "natural-writing",
+      "description": "[Output Style] 自然写作 - 避免 24 种 AI 写作模式，生成更自然的文本",
+      "source": "./plugins/natural-writing",
+      "category": "productivity"
+    },
+    {
       "name": "foundational-principles",
       "description": "[Skill] 基础原则 - 核心思维原则和指令框架概述",
       "source": "./plugins/foundational-principles",
