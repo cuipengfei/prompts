@@ -96,11 +96,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 15 available plugins
+# View all 18 available plugins
 /plugin list
 ```
 
-### Available Plugins (15 Independent Plugins)
+### Available Plugins (18 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -108,6 +108,7 @@ Users can selectively install any combination:
 |----------|--------|-------------|
 | 🛠 Productivity | `improve-prompt` | Prompt optimization command |
 | 🛠 Productivity | `desktop-notify` | Desktop notification hooks (WSL → Windows Toast) |
+| 🛠 Productivity | `natural-writing` | Natural writing output style |
 | 📚 Learning | `structured-responder` | Structured response output style |
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
 | 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
@@ -120,7 +121,9 @@ Users can selectively install any combination:
 | 🔧 Tools | `sequential-thinking` | Sequential thinking skill |
 | 🔧 Tools | `shortcut-system` | Shortcut system skill |
 | 🔧 Tools | `zellij-control` | Zellij control skill |
+| 🔧 Tools | `codex` | Codex advisor - call OpenAI Codex for second opinions |
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
+| 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
 
 ### Installation Examples
 
@@ -139,7 +142,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
 ```
 
 ## Disclaimer

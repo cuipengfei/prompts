@@ -96,11 +96,11 @@
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览十五宝
+# 览十八宝
 /plugin list
 ```
 
-### 仙器目录（十五件独立仙器）
+### 仙器目录（十八件独立仙器）
 
 觅者可择需而取，勿须尽纳：
 
@@ -108,6 +108,7 @@
 |------|------|------|
 | 🛠 济世 | `improve-prompt` | 提示词优化令符 |
 | 🛠 济世 | `desktop-notify` | 桌案飞符钩沉（WSL → Windows 弹窗） |
+| 🛠 济世 | `natural-writing` | 自然写作文风 |
 | 📚 启智 | `structured-responder` | 结构化应答体例 |
 | 📚 启智 | `response-guidelines` | 应答准则心法 |
 | 📚 启智 | `session-learn` | 会话学习 - 三层藏经 + 忆念召唤 |
@@ -120,7 +121,9 @@
 | 🔧 神通 | `sequential-thinking` | 序进思维 |
 | 🔧 神通 | `shortcut-system` | 快捷符咒 |
 | 🔧 神通 | `zellij-control` | Zellij 御器术 |
+| 🔧 神通 | `codex` | Codex 顾问 - 唤 OpenAI Codex 为参谋 |
 | 🤝 协同 | `ba-collaboration` | BA 共工之法 |
+| 🤝 协同 | `debate` | 辩论仙器 - 主从代理结构化论道 |
 
 ### 使用示例
 
@@ -138,8 +141,8 @@
 # 用法: /learn 或 /learn 代码风格
 # 用法: /recall 或 /recall 认证模式
 
-# 尽收十五宝
-/plugin install improve-prompt desktop-notify structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn
+# 尽收十八宝
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
 ```
 
 ## 警示箴言

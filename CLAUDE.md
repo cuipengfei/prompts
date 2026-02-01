@@ -23,29 +23,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Claude Code 插件市场项目 - 14 个独立可选安装的插件，每个插件包含单一功能组件。
+Claude Code 插件市场项目 - 18 个独立可选安装的插件，每个插件包含单一功能组件。
 
 ## Project Structure
 
 ```
 .claude-plugin/
-└── marketplace.json       # 14 个独立插件条目
+└── marketplace.json       # 18 个独立插件条目
 
 plugins/
 ├── improve-prompt/         # Command: 提示词优化
-├── desktop-notify/         # Hooks: Stop + Notification 通知 (Bun WebSocket)
+├── desktop-notify/         # Hook: Stop + Notification 通知 (Bun WebSocket)
 ├── structured-responder/   # Output-style: 结构化响应
+├── natural-writing/        # Output-style: 自然写作
+├── session-learn/          # Command + Skill: 会话学习
+├── codex/                  # Command + Skill: Codex 顾问
+├── debate/                 # Command + Skill: 辩论插件
 ├── foundational-principles/ # Skill: 基础原则
 ├── quality-standards/      # Skill: 质量标准
 ├── programming-workflow/   # Skill: TDD 工作流
 ├── testing-guidelines/     # Skill: 测试指南
 ├── planning-workflow/      # Skill: 规划工作流
 ├── ba-collaboration/       # Skill: BA 协作
-├── memory-bank/           # Skill: 记忆库
-├── response-guidelines/   # Skill: 响应指南
-├── sequential-thinking/   # Skill: 顺序思维
-├── shortcut-system/       # Skill: 快捷命令
-└── zellij-control/        # Skill: Zellij 控制
+├── memory-bank/            # Skill: 记忆库
+├── response-guidelines/    # Skill: 响应指南
+├── sequential-thinking/    # Skill: 顺序思维
+├── shortcut-system/        # Skill: 快捷命令
+└── zellij-control/         # Skill: Zellij 控制
 ```
 
 ## Plugin Development Best Practices
