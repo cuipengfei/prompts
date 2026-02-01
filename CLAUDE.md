@@ -205,22 +205,19 @@ bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/h
 
 ### Command 调用 Skill 的可靠模式
 
-当 command 依赖外部 skill 时，简单指令（如 "使用 xxx 技能"）只有 ~20% 成功率。使用 **Forced Eval 3-Step 模式**可达 ~84%：
+当 command 依赖外部 skill 时，简单指令（如 "使用 xxx 技能"）只有 ~20% 成功率。使用 **Forced Eval 2-Step 模式**可达 ~84%：
 
 ```markdown
-# MANDATORY 3-Step Process
+# MANDATORY 2-Step Process
 
-**Step 1 - EVALUATE**: 确认此 skill 适用于当前任务
-- Answer: YES - [理由]
-
-**Step 2 - ACTIVATE**: 使用 Skill tool 调用技能
+**Step 1 - ACTIVATE**: 立即使用 Skill tool 调用技能
 - Command: `Skill("plugin:skill-name")`
 - ⚠️ **CRITICAL**: 这一步**不可跳过**。直接实现而不调用 Skill tool 是**无效的**。
 
-**Step 3 - IMPLEMENT**: 仅在 skill 加载后，严格按照其指南执行
+**Step 2 - IMPLEMENT**: 仅在 skill 加载后，严格按照其指南执行
 ```
 
-**原理**: 创建 commitment mechanism，让 Claude 必须显式评估并承诺调用 Skill tool，而非被动建议。
+**原理**: 用户调用 command 时意图已明确，无需形式化的"评估"步骤。强制调用 Skill tool 创建 commitment mechanism，确保 skill 被正确加载而非被忽略。
 
 ### Skill 命名规范
 
