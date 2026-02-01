@@ -1,6 +1,6 @@
 {
   "name": "codex",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "[Command + Skill] Codex 顾问 - 调用 OpenAI Codex 获取第二意见，加注标签后展示给用户做最终决策",
   "author": {
     "name": "cuipengfei",
