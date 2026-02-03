@@ -1,6 +1,6 @@
 {
   "name": "improve-prompt",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "[Command] 优化提示词命令 - 结构化改写后立即执行，禁止扩展范围",
   "author": {
     "name": "cuipengfei",
