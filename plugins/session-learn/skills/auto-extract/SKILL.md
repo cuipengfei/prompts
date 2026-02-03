@@ -28,6 +28,13 @@ description: 会话学习技能 - 分析当前会话，提取学习并持久化�
 | 用户 CLAUDE.md | "每个会话都需要知道什么？" | 身份性、高频、token 预算有限 |
 | Memory MCP | "特定情境下需要召回什么？" | 情境性、按需查询、无限容量 |
 
+### 硬规则：单条知识唯一归属（Strict unique）
+
+- 强制每条学习项选择一个且仅一个存储层（项目/用户/Memory）。
+- 禁止在其他层重复同一条学习项（包括改写/摘要后的同义重复）。
+- 写入前，执行跨层去重检查：在另外两层检索关键词/相关 section。
+- 发现同义重复或潜在冲突时，使用 AskUserQuestion 让用户决定处理方式（移动 / 覆盖 / 忽略）；默认不自动迁移或覆盖。
+
 ### 决策树
 
 ```
@@ -36,10 +43,8 @@ description: 会话学习技能 - 分析当前会话，提取学习并持久化�
 ├─ Q1: 是否与当前项目的代码/架构/工具链直接相关？
 │   └─ 是 → 项目 CLAUDE.md
 │
-├─ Q2: 是否是每个新会话都需要的信息？
-│   ├─ 是：这是"我是谁"（身份/核心偏好/环境）还是"我学到了什么"（经验）？
-│   │   ├─ 身份/核心偏好 → 用户 CLAUDE.md
-│   │   └─ 通用经验 → Memory MCP（但考虑提炼核心到用户层）
+├─ Q2: 是否是每个新会话都需要的信息（应自动加载）？
+│   ├─ 是 → 用户 CLAUDE.md（身份/核心偏好/常驻交互规则）
 │   └─ 否 → 继续 Q3
 │
 └─ Q3: 是否是特定情境才需要的经验/知识/解决方案？
@@ -47,8 +52,8 @@ description: 会话学习技能 - 分析当前会话，提取学习并持久化�
 ```
 
 **关键区分**：
-- **用户 CLAUDE.md**: "What I always need to know"（身份层）
-- **Memory MCP**: "What I learned for specific situations"（经验层）
+- **用户 CLAUDE.md**: "What I always need to know"（身份/常驻规则）
+- **Memory MCP**: "What I learned for specific situations"（情境经验）
 
 ### 分类示例
 
@@ -60,6 +65,7 @@ description: 会话学习技能 - 分析当前会话，提取学习并持久化�
 | "用户偏好 bun 而非 npm" | 用户 | 每会话需要的工具选择 |
 | "用户偏好简洁响应" | 用户 | 每响应都需要的风格 |
 | "用户偏好中文交流" | 用户 | 每会话需要的语言设置 |
+| "用户说「我都看不懂」= 需要简化或删除" | 用户 | 每会话都需要的交互规则 |
 | "GitHub Code Search 按相关性排序" | Memory | 特定技术的经验教训 |
 | "OpenSpec archive 失败检查 ADDED vs MODIFIED" | Memory | 特定工具的问题解决 |
 | "并行 API 调用用 ThreadPoolExecutor" | Memory | 特定场景的解决方案 |
@@ -140,6 +146,12 @@ mcp__memory__create_relations
 - [模式 1]
 - [经验 1]
 ```
+
+### 第一步.5：跨层去重与冲突处理（MANDATORY）
+
+- 对每条学习项，在另外两层检索关键词/相关 section，确认是否已存在同义内容。
+- 若发现重复或冲突，先向用户展示冲突点，再在 AskUserQuestion 中提供处理选项（移动 / 覆盖 / 忽略）。
+- 默认不自动迁移或覆盖。
 
 ### 第二步：使用 AskUserQuestion 确认
 

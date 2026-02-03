@@ -46,6 +46,11 @@ description: 知识召回技能 - 从 Project CLAUDE.md、User CLAUDE.md 和 Mem
 | User CLAUDE.md | "每个会话都需要知道什么？" | 身份性、高频、自动加载 |
 | Memory MCP | "特定情境下需要召回什么？" | 情境性、按需查询 |
 
+### 硬规则：单条知识唯一归属（Strict unique）
+
+- 在严格唯一模式下，同一条知识不应同时存在于多层。
+- 召回时如果多层都命中同一主题，视为存储不一致：必须显式标注来源并提醒清理，不要静默选择其一。
+
 按优先级顺序查询（越具体越优先）：
 
 ### Layer 1: Project CLAUDE.md（项目规则）
@@ -68,6 +73,7 @@ description: 知识召回技能 - 从 Project CLAUDE.md、User CLAUDE.md 和 Mem
 - 高频工具偏好（每会话都用）
 - 环境配置（不变的事实）
 - 响应质量标准
+- 常驻交互规则（如用户明确要求每会话都遵守的沟通/决策习惯）
 
 **查询方式**: 读取文件，按 section 标题匹配关键词
 
@@ -79,7 +85,9 @@ description: 知识召回技能 - 从 Project CLAUDE.md、User CLAUDE.md 和 Mem
 - 技术知识 (technical_knowledge) - 特定情境的知识
 - 学习历史 (learning_history) - 会话学习摘要
 
-**查询方式**: 使用 `mcp__memory__search_nodes`
+**查询方式**:
+- 优先使用 `mcp__memory__search_nodes`（按关键词检索）
+- 若结果为空/明显不全，使用 `mcp__memory__read_graph` 读取全图谱，再用 `mcp__memory__open_nodes` 精查
 
 ## 执行步骤
 
@@ -91,6 +99,8 @@ description: 知识召回技能 - 从 Project CLAUDE.md、User CLAUDE.md 和 Mem
 3. 确定查询范围
 
 如果用户提供了参数（如 `/recall 代码风格`），用它们作为主要关键词。
+
+如果参数类似“我不知道/你看看/refresh”，视为场景 3（主动刷新）：三层都查，每层展示最相关的 2-3 条。
 
 ### 第二步：查询 Project CLAUDE.md
 
@@ -121,7 +131,9 @@ mcp__memory__search_nodes
 
 ### 第五步：格式化并展示
 
-按层级分组展示结果：
+按层级分组展示结果。
+
+如果同一主题在多层命中，视为存储不一致：必须显式标注来源并提醒清理。
 
 ```markdown
 ## 召回结果
@@ -259,5 +271,6 @@ mcp__memory__read_graph
 **边界原则**:
 - **User CLAUDE.md** = 身份层 = "What I always need to know"
 - **Memory MCP** = 经验层 = "What I learned for specific situations"
+- **严格唯一**：同一知识只应存在于一层；召回发现多层命中时，视为不一致并提醒清理
 
 确保双向一致：学习时分类到哪层，召回时就从哪层查询。
