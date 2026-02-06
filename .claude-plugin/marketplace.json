@@ -115,6 +115,12 @@
       "description": "[Command + Skill] 辩论插件 - 主代理与子代理进行结构化辩论，发现盲点、探索多角度视角",
       "source": "./plugins/debate",
       "category": "collaboration"
+    },
+    {
+      "name": "deep-research",
+      "description": "[Command + Skill] 深度研究 - 多源搜索、交叉验证、结构化输出的研究工作流",
+      "source": "./plugins/deep-research",
+      "category": "tools"
     }
   ]
 }

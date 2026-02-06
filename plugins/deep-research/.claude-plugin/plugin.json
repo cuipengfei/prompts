@@ -1,0 +1,11 @@
+{
+  "name": "deep-research",
+  "version": "1.0.0",
+  "description": "[Command + Skill] 深度研究 - 多源搜索、交叉验证、结构化输出的研究工作流",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}

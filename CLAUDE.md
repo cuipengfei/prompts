@@ -23,13 +23,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Claude Code 插件市场项目 - 18 个独立可选安装的插件，每个插件包含单一功能组件。
+Claude Code 插件市场项目 - 19 个独立可选安装的插件，每个插件包含单一功能组件。
 
 ## Project Structure
 
 ```
 .claude-plugin/
-└── marketplace.json       # 18 个独立插件条目
+└── marketplace.json       # 19 个独立插件条目
 
 plugins/
 ├── improve-prompt/         # Command: 提示词优化
@@ -39,6 +39,7 @@ plugins/
 ├── session-learn/          # Command + Skill: 会话学习
 ├── codex/                  # Command + Skill: Codex 顾问
 ├── debate/                 # Command + Skill: 辩论插件
+├── deep-research/          # Command + Skill: 深度研究
 ├── foundational-principles/ # Skill: 基础原则
 ├── quality-standards/      # Skill: 质量标准
 ├── programming-workflow/   # Skill: TDD 工作流
