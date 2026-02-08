@@ -104,26 +104,26 @@
 
 用户可以选择性安装任意组合：
 
-| Category | Plugin | 描述 |
-|----------|--------|------|
-| 🛠 Productivity | `improve-prompt` | 提示词优化命令 |
-| 🛠 Productivity | `desktop-notify` | 桌面通知钩子（WSL → Windows Toast） |
-| 🛠 Productivity | `natural-writing` | 自然写作输出风格 |
-| 📚 Learning | `structured-responder` | 结构化响应输出风格 |
-| 📚 Learning | `response-guidelines` | 响应指南 skill |
-| 📚 Learning | `session-learn` | 会话学习 - 三层存储分类 + Memory MCP 召回 |
-| 🏗 Development | `foundational-principles` | 基础原则 skill |
-| 🏗 Development | `quality-standards` | 质量标准 skill |
-| 🏗 Development | `programming-workflow` | TDD 工作流 skill |
-| 🏗 Development | `testing-guidelines` | 测试指南 skill |
-| 🏗 Development | `planning-workflow` | 规划工作流 skill |
-| 🏗 Development | `memory-bank` | 记忆库 skill |
-| 🔧 Tools | `sequential-thinking` | 顺序思维 skill |
-| 🔧 Tools | `shortcut-system` | 快捷命令 skill |
-| 🔧 Tools | `zellij-control` | Zellij 控制 skill |
-| 🔧 Tools | `codex` | Codex 顾问 - 调用 OpenAI Codex 获取第二意见 |
-| 🤝 Collaboration | `ba-collaboration` | BA 协作 skill |
-| 🤝 Collaboration | `debate` | 辩论插件 - 主代理与子代理结构化辩论 |
+| Category         | Plugin                    | 描述                                        |
+| ---------------- | ------------------------- | ------------------------------------------- |
+| 🛠 Productivity  | `improve-prompt`          | 提示词优化命令                              |
+| 🛠 Productivity  | `desktop-notify`          | 桌面通知钩子（WSL → Windows Toast）         |
+| 🛠 Productivity  | `natural-writing`         | 自然写作输出风格                            |
+| 📚 Learning      | `structured-responder`    | 结构化响应输出风格                          |
+| 📚 Learning      | `response-guidelines`     | 响应指南 skill                              |
+| 📚 Learning      | `session-learn`           | 会话学习 - 三层存储分类 + Memory MCP 召回   |
+| 🏗 Development   | `foundational-principles` | 基础原则 skill                              |
+| 🏗 Development   | `quality-standards`       | 质量标准 skill                              |
+| 🏗 Development   | `programming-workflow`    | TDD 工作流 skill                            |
+| 🏗 Development   | `testing-guidelines`      | 测试指南 skill                              |
+| 🏗 Development   | `planning-workflow`       | 规划工作流 skill                            |
+| 🏗 Development   | `memory-bank`             | 记忆库 skill                                |
+| 🔧 Tools         | `sequential-thinking`     | 顺序思维 skill                              |
+| 🔧 Tools         | `shortcut-system`         | 快捷命令 skill                              |
+| 🔧 Tools         | `zellij-control`          | Zellij 控制 skill                           |
+| 🔧 Tools         | `codex`                   | Codex 顾问 - 调用 OpenAI Codex 获取第二意见 |
+| 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
+| 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
 
 ### 安装示例
 
