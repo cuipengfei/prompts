@@ -1,0 +1,56 @@
+name: Publish oc-tweaks
+
+on:
+  push:
+    tags:
+      - "oc-tweaks-v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      NPM_CONFIG_TOKEN: ${{ secrets.NPM_CONFIG_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Verify NPM token present
+        run: |
+          if [ -z "${NPM_CONFIG_TOKEN:-}" ]; then
+            echo "NPM_CONFIG_TOKEN is required for publishing" >&2
+            exit 1
+          fi
+
+      - name: Verify tag matches package version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          if [ "${TAG#oc-tweaks-v}" = "$TAG" ]; then
+            echo "Tag ${TAG} does not match required pattern oc-tweaks-v*" >&2
+            exit 1
+          fi
+
+          TAG_VERSION="${TAG#oc-tweaks-v}"
+          PKG_VERSION=$(bun -e "console.log(JSON.parse(await Bun.file('packages/oc-tweaks/package.json').text()).version)")
+
+          if [ -z "$TAG_VERSION" ]; then
+            echo "Unable to parse tag version from ${TAG}" >&2
+            exit 1
+          fi
+
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "Tag version ${TAG_VERSION} does not match package version ${PKG_VERSION}" >&2
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: bun install --cwd packages/oc-tweaks
+
+      - name: Run tests
+        run: bun test --cwd packages/oc-tweaks
+
+      - name: Publish
+        run: bun publish --cwd packages/oc-tweaks --access public
