@@ -130,19 +130,9 @@ async function submitUsage(config: LeaderboardConfig, msg: AssistantMessageInfo)
 }
 
 export const leaderboardPlugin: Plugin = async () => {
-  const ocTweaks = await loadOcTweaksConfig()
-  if (!ocTweaks || ocTweaks.leaderboard?.enabled !== true) return {}
-
-  const config = await loadLeaderboardConfig(ocTweaks.leaderboard?.configPath)
-  if (!config) {
-    await sharedLog(ocTweaks.logging, "INFO", "No leaderboard config found, plugin disabled")
-    return {}
-  }
-
-  await sharedLog(ocTweaks.logging, "INFO", `Plugin loaded, handle=${config.twitter_handle}`)
-
   // Track submitted message IDs to avoid duplicates within this process
   const submitted = new Set<string>()
+  let loggedInit = false
 
   return {
     event: safeHook(
@@ -152,6 +142,17 @@ export const leaderboardPlugin: Plugin = async () => {
           if (!event || typeof event !== "object") return
           const eventRecord = event as Record<string, unknown>
           if (eventRecord.type !== "message.updated") return
+
+          const ocTweaks = await loadOcTweaksConfig()
+          if (!ocTweaks || ocTweaks.leaderboard?.enabled !== true) return
+
+          const config = await loadLeaderboardConfig(ocTweaks.leaderboard?.configPath)
+          if (!config) return
+
+          if (!loggedInit) {
+            await sharedLog(ocTweaks.logging, "INFO", `Plugin loaded, handle=${config.twitter_handle}`)
+            loggedInit = true
+          }
 
           const properties = eventRecord.properties
           if (!properties || typeof properties !== "object") return
@@ -175,7 +176,8 @@ export const leaderboardPlugin: Plugin = async () => {
           await submitUsage(config, msg)
           await sharedLog(ocTweaks.logging, "INFO", "Submitted OK")
         } catch (err) {
-          await sharedLog(ocTweaks.logging, "ERROR", `Submit failed: ${err}`)
+          const ocTweaks = await loadOcTweaksConfig().catch(() => null)
+          await sharedLog(ocTweaks?.logging, "ERROR", `Submit failed: ${err}`)
           // Silently ignore — never disrupt the user's workflow
         }
       },

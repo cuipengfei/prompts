@@ -88,7 +88,7 @@ describe("backgroundSubagentPlugin", () => {
     expect(afterOutput.output).not.toMatch(/[\u4e00-\u9fff]/)
   })
 
-  test("returns empty hooks when disabled", async () => {
+  test("hooks are registered but disabled config makes them no-op", async () => {
     const home = "/tmp/oc-background-disabled"
     ;(Bun.env as any).HOME = home
     const path = `${home}/.config/opencode/oc-tweaks.json`
@@ -101,6 +101,11 @@ describe("backgroundSubagentPlugin", () => {
     const { backgroundSubagentPlugin } = await import("../plugins/background-subagent")
     const hooks = await backgroundSubagentPlugin()
 
-    expect(hooks).toEqual({})
+    // Hooks always registered (hot-reload), but disabled = no-op
+    expect(typeof hooks["experimental.chat.system.transform"]).toBe("function")
+    const output = { system: [] as string[] }
+    await hooks["experimental.chat.system.transform"]({}, output)
+    expect(output.system.length).toBe(0)
   })
 })
+

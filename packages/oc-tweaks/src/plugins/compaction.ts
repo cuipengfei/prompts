@@ -11,9 +11,6 @@ Keep technical terms (filenames, variable names, commands, code snippets) in the
 `;
 
 export const compactionPlugin: Plugin = async () => {
-  const config = await loadOcTweaksConfig();
-  if (!config || config.compaction?.enabled !== true) return {};
-
   return {
     "experimental.session.compacting": safeHook(
       "compaction",
@@ -21,6 +18,8 @@ export const compactionPlugin: Plugin = async () => {
         _input: { sessionID: string },
         output: { context: string[]; prompt?: string },
       ) => {
+        const config = await loadOcTweaksConfig();
+        if (!config || config.compaction?.enabled !== true) return;
         output.context.push(LANGUAGE_PREFERENCE_PROMPT);
       },
     ),

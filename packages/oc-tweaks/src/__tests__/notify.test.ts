@@ -64,7 +64,7 @@ afterEach(() => {
 })
 
 describe("notifyPlugin", () => {
-  test("returns empty hooks when notify.enabled is false", async () => {
+  test("hook is registered but disabled config makes it no-op", async () => {
     const home = "/tmp/oc-notify-disabled"
     ;(Bun.env as any).HOME = home
     const path = `${home}/.config/opencode/oc-tweaks.json`
@@ -74,10 +74,14 @@ describe("notifyPlugin", () => {
       },
     })
 
-    const { $ } = createShellMock({ availableCommands: ["notify-send"] })
+    const { $, calls } = createShellMock({ availableCommands: ["notify-send"] })
     const hooks = await notifyPlugin({ $, directory: "/tmp/demo", client: {} })
 
-    expect(hooks).toEqual({})
+    // Hook always registered (hot-reload), but disabled = no-op
+    expect(typeof hooks.event).toBe("function")
+    await hooks.event({ event: { type: "session.idle", properties: { sessionID: "s0" } } })
+    const notifyCalls = calls.filter((e) => !e.command.startsWith("which "))
+    expect(notifyCalls.length).toBe(0)
   })
 
   test("auto-detects notifier once and caches detection result", async () => {

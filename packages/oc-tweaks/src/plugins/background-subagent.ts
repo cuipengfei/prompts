@@ -21,15 +21,14 @@ You used foreground mode (run_in_background=false). Check the three conditions i
 If not all three are met, consider run_in_background=true + background_output() for next time.`
 
 export const backgroundSubagentPlugin: Plugin = async () => {
-  const config = await loadOcTweaksConfig()
-  if (!config || config.backgroundSubagent?.enabled !== true) return {}
-
   const foregroundCalls = new Set<string>()
 
   return {
     "experimental.chat.system.transform": safeHook(
       "background-subagent:system.transform",
       async (_input: unknown, output: { system: string[] }) => {
+        const config = await loadOcTweaksConfig()
+        if (!config || config.backgroundSubagent?.enabled !== true) return
         output.system.push(SUB_AGENT_DISPATCH_PROMPT)
       },
     ),
@@ -40,6 +39,8 @@ export const backgroundSubagentPlugin: Plugin = async () => {
         input: { tool: string; callID: string },
         output: { args?: { run_in_background?: boolean } },
       ) => {
+        const config = await loadOcTweaksConfig()
+        if (!config || config.backgroundSubagent?.enabled !== true) return
         if (input.tool !== "task") return
         if (!output.args?.run_in_background) {
           foregroundCalls.add(input.callID)

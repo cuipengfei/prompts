@@ -88,7 +88,7 @@ describe("index exports", () => {
     expect(typeof hooks.event === "function" || Object.keys(hooks).length === 0).toBe(true)
   })
 
-  test("leaderboardPlugin with enabled:false returns {}", async () => {
+  test("leaderboardPlugin with enabled:false still registers hooks (hot-reload)", async () => {
     const home = "/tmp/oc-index-lb-disabled"
     ;(Bun.env as any).HOME = home
     const ocTweaksPath = `${home}/.config/opencode/oc-tweaks.json`
@@ -100,7 +100,7 @@ describe("index exports", () => {
     })
 
     const hooks = await leaderboardPlugin()
-    expect(hooks).toEqual({})
+    expect(typeof hooks.event).toBe("function")
   })
 
   test("notifyPlugin with default config returns object with event hook", async () => {
@@ -115,7 +115,7 @@ describe("index exports", () => {
     expect(typeof hooks.event).toBe("function")
   })
 
-  test("notifyPlugin with enabled:false returns {}", async () => {
+  test("notifyPlugin with enabled:false still registers hooks (hot-reload)", async () => {
     const home = "/tmp/oc-index-notify-disabled"
     ;(Bun.env as any).HOME = home
     const path = `${home}/.config/opencode/oc-tweaks.json`
@@ -123,7 +123,7 @@ describe("index exports", () => {
 
     const { $ } = createShellMock({ availableCommands: ["notify-send"] })
     const hooks = await notifyPlugin({ $, directory: "/tmp/demo", client: {} })
-    expect(hooks).toEqual({})
+    expect(typeof hooks.event).toBe("function")
   })
 
   test("leaderboard and notify event handlers coexist without interference", async () => {

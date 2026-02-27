@@ -84,7 +84,7 @@ describe("compactionPlugin", () => {
     expect(prompt.toLowerCase()).toContain("preferred language")
   })
 
-  test("returns empty hooks when compaction is disabled", async () => {
+  test("hook is registered but disabled config makes it no-op", async () => {
     const home = "/tmp/oc-home-compaction-disabled"
     const path = `${home}/.config/opencode/oc-tweaks.json`
 
@@ -96,18 +96,25 @@ describe("compactionPlugin", () => {
     })
 
     const plugin = await compactionPlugin()
+    expect(typeof plugin["experimental.session.compacting"]).toBe("function")
 
-    expect(plugin).toEqual({})
+    const output = { context: [] as string[] }
+    await plugin["experimental.session.compacting"]({ sessionID: "s-disabled" }, output)
+    expect(output.context.length).toBe(0)
   })
 
-  test("returns empty hooks when config file is missing", async () => {
+  test("hook is registered but missing config makes it no-op", async () => {
     const home = "/tmp/oc-home-compaction-missing"
 
     setHome(home)
     mockBunFile({})
 
     const plugin = await compactionPlugin()
+    expect(typeof plugin["experimental.session.compacting"]).toBe("function")
 
-    expect(plugin).toEqual({})
+    const output = { context: [] as string[] }
+    await plugin["experimental.session.compacting"]({ sessionID: "s-missing" }, output)
+    expect(output.context.length).toBe(0)
   })
 })
+

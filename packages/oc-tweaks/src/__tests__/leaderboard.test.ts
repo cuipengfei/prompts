@@ -132,36 +132,37 @@ describe("leaderboardPlugin", () => {
     expect(postedPayloads[2].model).toBe("claude-sonnet-4-20250514")
   })
 
-  test("returns empty hooks when leaderboard is disabled", async () => {
+  test("hook is registered but disabled config makes it no-op", async () => {
     const ocTweaksPath = `${TEST_HOME}/.config/opencode/oc-tweaks.json`
     const leaderboardPath = `${TEST_HOME}/.claude/leaderboard.json`
 
     mockBunFile({
-      [ocTweaksPath]: {
-        leaderboard: { enabled: false },
-      },
-      [leaderboardPath]: {
-        twitter_handle: "alice",
-        twitter_user_id: "u1",
-      },
+      [ocTweaksPath]: { leaderboard: { enabled: false } },
+      [leaderboardPath]: { twitter_handle: "alice", twitter_user_id: "u1" },
     })
+
+    globalThis.fetch = (async () => { throw new Error("should not be called") }) as any
 
     const leaderboardPlugin = await loadPlugin()
     const hooks = await leaderboardPlugin()
 
-    expect(hooks).toEqual({})
+    expect(typeof hooks.event).toBe("function")
+    await hooks.event(buildMessageUpdatedEvent())
   })
 
-  test("returns empty hooks when leaderboard config file is missing", async () => {
+  test("hook is registered but missing leaderboard config makes it no-op", async () => {
     const ocTweaksPath = `${TEST_HOME}/.config/opencode/oc-tweaks.json`
     mockBunFile({
       [ocTweaksPath]: { leaderboard: { enabled: true } },
     })
 
+    globalThis.fetch = (async () => { throw new Error("should not be called") }) as any
+
     const leaderboardPlugin = await loadPlugin()
     const hooks = await leaderboardPlugin()
 
-    expect(hooks).toEqual({})
+    expect(typeof hooks.event).toBe("function")
+    await hooks.event(buildMessageUpdatedEvent())
   })
 
   test("loads valid leaderboard config from default search paths", async () => {
@@ -202,10 +203,13 @@ describe("leaderboardPlugin", () => {
       existsCalls,
     )
 
+    globalThis.fetch = (async () => ({ ok: true, status: 200, text: async () => "" })) as any
+
     const leaderboardPlugin = await loadPlugin()
     const hooks = await leaderboardPlugin()
 
     expect(typeof hooks.event).toBe("function")
+    await hooks.event(buildMessageUpdatedEvent({ id: "msg-override" }))
     expect(existsCalls).toContain(overridePath)
     expect(existsCalls).not.toContain(defaultPath1)
     expect(existsCalls).not.toContain(defaultPath2)

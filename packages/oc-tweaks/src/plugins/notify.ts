@@ -15,56 +15,53 @@ type NotifySender =
   | { kind: "none" }
 
 export const notifyPlugin: Plugin = async ({ $, directory, client }) => {
-  let logConfig: LoggerConfig | undefined
-  try {
-    const config = await loadOcTweaksConfig()
-    if (!config || config.notify?.enabled !== true) return {}
+  // Cache the detected sender (system capability doesn't change at runtime)
+  let cachedSender: NotifySender | null = null
 
-    const notifyOnIdle = config.notify?.notifyOnIdle !== false
-    const notifyOnError = config.notify?.notifyOnError !== false
-    const configuredCommand =
-      typeof config.notify?.command === "string" && config.notify.command.trim().length > 0
-        ? config.notify.command.trim()
-        : null
-    const style = config.notify?.style
-    logConfig = config.logging
+  return {
+    event: safeHook("notify:event", async ({ event }: { event: any }) => {
+      const config = await loadOcTweaksConfig()
+      if (!config || config.notify?.enabled !== true) return
 
-    const sender = configuredCommand
-      ? ({ kind: "custom", commandTemplate: configuredCommand } as const)
-      : await detectNotifySender($ as ShellExecutor, client, logConfig)
+      const logConfig = config.logging
+      const notifyOnIdle = config.notify?.notifyOnIdle !== false
+      const notifyOnError = config.notify?.notifyOnError !== false
+      const configuredCommand =
+        typeof config.notify?.command === "string" && config.notify.command.trim().length > 0
+          ? config.notify.command.trim()
+          : null
+      const style = config.notify?.style
 
-    const sendToast = async (projectName: string, message: string, tag: string) => {
-      const title = `oc: ${projectName}`
-      await notifyWithSender($ as ShellExecutor, sender, title, message, tag, style, logConfig)
-    }
+      const sender = configuredCommand
+        ? ({ kind: "custom", commandTemplate: configuredCommand } as const)
+        : (cachedSender ??= await detectNotifySender($ as ShellExecutor, client, logConfig))
 
-    return {
-      event: safeHook("notify:event", async ({ event }: { event: any }) => {
-        if (event?.type === "session.idle") {
-          if (!notifyOnIdle) return
+      const sendToast = async (projectName: string, message: string, tag: string) => {
+        const title = `oc: ${projectName}`
+        await notifyWithSender($ as ShellExecutor, sender, title, message, tag, style, logConfig)
+      }
 
-          const projectName = getProjectName(directory)
-          const sessionId =
-            (event.properties as { sessionID?: string; sessionId?: string } | undefined)
-              ?.sessionID ??
-            (event.properties as { sessionID?: string; sessionId?: string } | undefined)
-              ?.sessionId
+      if (event?.type === "session.idle") {
+        if (!notifyOnIdle) return
 
-          const message = await extractIdleMessage(client, sessionId)
-          await sendToast(projectName, message, "Stop")
-          return
-        }
+        const projectName = getProjectName(directory)
+        const sessionId =
+          (event.properties as { sessionID?: string; sessionId?: string } | undefined)
+            ?.sessionID ??
+          (event.properties as { sessionID?: string; sessionId?: string } | undefined)
+            ?.sessionId
 
-        if (event?.type === "session.error") {
-          if (!notifyOnError) return
-          const projectName = getProjectName(directory)
-          await sendToast(projectName, "❌ Session error", "Error")
-        }
-      }),
-    }
-  } catch (error) {
-    await log(logConfig, "WARN", "[oc-tweaks] notify:init: " + String(error))
-    return {}
+        const message = await extractIdleMessage(client, sessionId)
+        await sendToast(projectName, message, "Stop")
+        return
+      }
+
+      if (event?.type === "session.error") {
+        if (!notifyOnError) return
+        const projectName = getProjectName(directory)
+        await sendToast(projectName, "❌ Session error", "Error")
+      }
+    }),
   }
 }
 
@@ -375,7 +372,6 @@ function cleanMarkdown(text: string): string {
     .replace(/\s+/g, " ")
     .trim()
 }
-
 
 
 function escapeAppleScript(text: string): string {
