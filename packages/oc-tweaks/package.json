@@ -1,0 +1,27 @@
+{
+  "name": "oc-tweaks",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.2.15"
+  },
+  "bin": {
+    "oc-tweaks": "./src/cli/init.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "smoke": "bun scripts/smoke-test.ts"
+  },
+  "files": [
+    "src/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

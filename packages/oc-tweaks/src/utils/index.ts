@@ -1,0 +1,5 @@
+export { safeHook } from "./safe-hook"
+export { loadJsonConfig, loadOcTweaksConfig } from "./config"
+export type { OcTweaksConfig } from "./config"
+export type { LoggerConfig } from "./logger"
+export { log } from "./logger"
