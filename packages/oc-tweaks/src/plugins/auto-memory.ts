@@ -78,6 +78,12 @@ async function ensureRememberCommand(home: string): Promise<void> {
   await Bun.write(commandPath, REMEMBER_COMMAND_CONTENT)
 }
 
+async function ensureAutoMemoryInfra(home: string, projectMemoryDir: string): Promise<void> {
+  await mkdir(`${home}/.config/opencode/memory`, { recursive: true })
+  await mkdir(projectMemoryDir, { recursive: true })
+  await ensureRememberCommand(home)
+}
+
 async function appendMemoryRecord(filePath: string, content: string): Promise<void> {
   const file = Bun.file(filePath)
   let previous = ""
@@ -148,9 +154,10 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
   const projectMemoryDir = `${directory}/.opencode/memory`
 
   try {
-    await mkdir(globalMemoryDir, { recursive: true })
-    await mkdir(projectMemoryDir, { recursive: true })
-    await ensureRememberCommand(home)
+    const config = await loadOcTweaksConfig()
+    if (config?.autoMemory?.enabled === true) {
+      await ensureAutoMemoryInfra(home, projectMemoryDir)
+    }
   } catch {
     // Never disrupt user workflow
   }
@@ -161,6 +168,8 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
       async (_input: unknown, output: { system: string[] }) => {
         const config = await loadOcTweaksConfig()
         if (!config || config.autoMemory?.enabled !== true) return
+
+        await ensureAutoMemoryInfra(home, projectMemoryDir)
 
         const [globalFiles, projectFiles, preferencesContent] = await Promise.all([
           listMarkdownFiles(globalMemoryDir),
@@ -186,6 +195,8 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
         const config = await loadOcTweaksConfig()
         if (!config || config.autoMemory?.enabled !== true) return
 
+        await ensureAutoMemoryInfra(home, projectMemoryDir)
+
         output.context.push(`## 💾 Memory 保存提示 (Compaction Phase)
 
 如果本轮对话有值得长期保存的信息，请在摘要中标记：
@@ -209,12 +220,19 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
         },
         async execute(args, context) {
           try {
+            const config = await loadOcTweaksConfig()
+            if (!config || config.autoMemory?.enabled !== true) {
+              return "autoMemory is disabled in oc-tweaks config"
+            }
+
             const scope = resolveScope(args.scope)
             const category = sanitizeCategory(args.category)
+            const runtimeHome = getHome()
+            await ensureAutoMemoryInfra(runtimeHome, `${context.directory}/.opencode/memory`)
             const targetDir =
               scope === "project"
                 ? `${context.directory}/.opencode/memory`
-                : `${getHome()}/.config/opencode/memory`
+                : `${runtimeHome}/.config/opencode/memory`
 
             await mkdir(targetDir, { recursive: true })
             const targetPath = `${targetDir}/${category}.md`

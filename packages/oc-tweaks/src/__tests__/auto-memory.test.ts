@@ -71,7 +71,10 @@ describe("autoMemoryPlugin", () => {
 
     const configPath = `${home}/.config/opencode/oc-tweaks.json`
     mockBunFile({ [configPath]: { autoMemory: { enabled: false } } })
-    ;(globalThis as any).Bun.write = async () => {}
+    const writes: string[] = []
+    ;(globalThis as any).Bun.write = async (path: string) => {
+      writes.push(path)
+    }
 
     const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-disabled-project" })
     const systemOut = { system: [] as string[] }
@@ -82,13 +85,17 @@ describe("autoMemoryPlugin", () => {
 
     expect(systemOut.system.length).toBe(0)
     expect(contextOut.context.length).toBe(0)
+    expect(writes.length).toBe(0)
   })
 
   test("missing config makes hooks no-op", async () => {
     const home = "/tmp/oc-auto-missing"
     setHome(home)
     mockBunFile({})
-    ;(globalThis as any).Bun.write = async () => {}
+    const writes: string[] = []
+    ;(globalThis as any).Bun.write = async (path: string) => {
+      writes.push(path)
+    }
 
     const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-missing-project" })
     const systemOut = { system: [] as string[] }
@@ -99,6 +106,7 @@ describe("autoMemoryPlugin", () => {
 
     expect(systemOut.system.length).toBe(0)
     expect(contextOut.context.length).toBe(0)
+    expect(writes.length).toBe(0)
   })
 
   test("injects memory system guide with trigger words", async () => {
@@ -205,5 +213,27 @@ describe("autoMemoryPlugin", () => {
 
     expect(result).toContain("Failed to save memory")
     expect(result).toContain("disk full")
+  })
+
+  test("remember tool returns disabled message and does not write when config disabled", async () => {
+    const home = "/tmp/oc-auto-tool-disabled"
+    setHome(home)
+
+    const configPath = `${home}/.config/opencode/oc-tweaks.json`
+    mockBunFile({ [configPath]: { autoMemory: { enabled: false } } })
+
+    const writes: string[] = []
+    ;(globalThis as any).Bun.write = async (path: string) => {
+      writes.push(path)
+    }
+
+    const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-tool-disabled-project" })
+    const result = await hooks.tool.remember.execute(
+      { content: "should not persist", category: "notes", scope: "global" },
+      { directory: "/tmp/ctx-project", worktree: "/tmp/ctx-project" },
+    )
+
+    expect(result).toContain("disabled")
+    expect(writes.length).toBe(0)
   })
 })
