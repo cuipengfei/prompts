@@ -147,12 +147,13 @@
 
 ## OpenCode 插件
 
-除了 Claude Code 插件，本仓库还提供 OpenCode 插件包 `oc-tweaks`（位于 `packages/oc-tweaks/`），包含四个运行时增强插件：
+除了 Claude Code 插件，本仓库还提供 OpenCode 插件包 `oc-tweaks`（位于 `packages/oc-tweaks/`），包含五个运行时增强插件：
 
 | 插件 | 功能 |
 |------|------|
 | `notify` | 任务完成或出错时发送桌面通知（自动检测 Windows Toast / macOS / Linux） |
 | `compaction` | 会话压缩时自动注入用户语言偏好，摘要不再只输出英文 |
+| `autoMemory` | 智能记忆系统：注入 memory 上下文、识别触发词、支持 `remember` tool 与 `/remember` 主动写入 |
 | `backgroundSubagent` | 强制 sub-agent 默认后台运行，保持主对话响应能力 |
 | `leaderboard` | 向 claudecount.com 报告 token 用量 |
 
@@ -177,6 +178,7 @@
     "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
   },
   "compaction": { "enabled": true },
+  "autoMemory": { "enabled": true },
   "backgroundSubagent": { "enabled": true },
   "leaderboard": { "enabled": false }
 }

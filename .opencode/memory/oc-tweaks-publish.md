@@ -31,3 +31,10 @@
 2. 运行 `opencode -s <session_id>` 恢复当前 session
 
 这样不需要用户手动操作，插件更新后可以立即验证。
+
+## auto-memory v3 关键参考
+
+- OpenCode Plugin 文档: https://opencode.ai/docs/plugins/
+- Custom Tool API（官方示例）: `import { type Plugin, tool } from "@opencode-ai/plugin"`
+- omo 命令注册机制参考: oh-my-opencode 通过内置 hook 系统注册 `/start-work` 等命令
+- Slash command 目录: `~/.config/opencode/commands/*.md`（插件可在初始化阶段自动写入）

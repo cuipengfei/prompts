@@ -34,6 +34,7 @@ export interface NotifyStyle {
 
 export interface OcTweaksConfig extends Record<string, unknown> {
   compaction: { enabled?: boolean }
+  autoMemory: { enabled?: boolean }
   backgroundSubagent: { enabled?: boolean }
   leaderboard: { enabled?: boolean; configPath?: string | null }
   logging?: {
@@ -51,6 +52,7 @@ export interface OcTweaksConfig extends Record<string, unknown> {
 
 const DEFAULT_CONFIG: OcTweaksConfig = {
   compaction: {},
+  autoMemory: {},
   backgroundSubagent: {},
   leaderboard: {},
   notify: {},

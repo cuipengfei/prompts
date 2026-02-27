@@ -3,7 +3,7 @@
  * Standalone smoke test for oc-tweaks plugins.
  * Run: bun scripts/smoke-test.ts
  *
- * Verifies all 4 plugins load, register expected hooks, and handle events
+ * Verifies all 5 plugins load, register expected hooks, and handle events
  * without throwing. No test framework — uses if/throw assertions.
  */
 
@@ -20,6 +20,7 @@ const LEADERBOARD_CONFIG_PATH = `${MOCK_HOME}/.claude/leaderboard.json`
 const mockConfig = {
   notify: { enabled: true, notifyOnIdle: true, notifyOnError: true },
   compaction: { enabled: true },
+  autoMemory: { enabled: true },
   backgroundSubagent: { enabled: true },
   leaderboard: { enabled: true, configPath: LEADERBOARD_CONFIG_PATH },
   logging: { enabled: false, maxLines: 200 },
@@ -79,6 +80,7 @@ function createShellMock(availableCommands: string[] = []) {
 
 // ─── Import plugins (static — loadOcTweaksConfig executes at call time) ───
 import {
+  autoMemoryPlugin,
   backgroundSubagentPlugin,
   compactionPlugin,
   leaderboardPlugin,
@@ -96,8 +98,9 @@ async function main() {
   try {
     const { $ } = createShellMock(["pwsh"])
 
-    // Load all 4 plugins
-    const [bgPlugin, compPlugin, lbPlugin, ntPlugin] = await Promise.all([
+    // Load all 5 plugins
+    const [autoPlugin, bgPlugin, compPlugin, lbPlugin, ntPlugin] = await Promise.all([
+      autoMemoryPlugin({ directory: "/tmp/smoke-project" }),
       backgroundSubagentPlugin(),
       compactionPlugin(),
       leaderboardPlugin(),
@@ -106,6 +109,11 @@ async function main() {
 
     // ── 1. Verify hook registration ──
     const expectations = [
+      {
+        name: "autoMemory",
+        plugin: autoPlugin,
+        keys: ["experimental.chat.system.transform", "experimental.session.compacting", "tool"],
+      },
       {
         name: "compaction",
         plugin: compPlugin,
@@ -141,6 +149,21 @@ async function main() {
       compOut,
     )
     assert(compOut.context.length > 0, "compaction: did not push to context")
+
+    // autoMemory: system transform + compacting + tool
+    const autoSystemOut = { system: [] as string[] }
+    await autoPlugin["experimental.chat.system.transform"]({}, autoSystemOut)
+    assert(autoSystemOut.system.length > 0, "autoMemory: did not push memory guide to system")
+
+    const autoContextOut = { context: [] as string[] }
+    await autoPlugin["experimental.session.compacting"]({ sessionID: "smoke-auto-s1" }, autoContextOut)
+    assert(autoContextOut.context.length > 0, "autoMemory: did not push compacting reminder")
+
+    const rememberResult = await autoPlugin.tool.remember.execute(
+      { content: "smoke memory", category: "smoke", scope: "project" },
+      { directory: "/tmp/smoke-project", worktree: "/tmp/smoke-project" },
+    )
+    assert(String(rememberResult).includes("Saved to"), "autoMemory: remember tool did not return success")
 
     // backgroundSubagent: system transform
     const bgSysOut = { system: [] as string[] }

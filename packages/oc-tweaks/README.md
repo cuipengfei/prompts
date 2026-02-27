@@ -11,6 +11,7 @@ A collection of runtime enhancement plugins for [OpenCode](https://opencode.ai/)
 The currently available plugins are:
 - **`notify`**: Sends desktop notifications when a task is completed or an error occurs.
 - **`compaction`**: Injects a language preference prompt during session compaction to ensure summaries are in your preferred language.
+- **`autoMemory`**: Smart memory assistant that injects memory context, detects memory trigger phrases, and supports active memory writes via `remember` tool and `/remember` command.
 - **`backgroundSubagent`**: Adds a system prompt to encourage using background sub-agents for better responsiveness.
 - **`leaderboard`**: Reports token usage to [claudecount.com](https://claudecount.com) for community leaderboards.
 
@@ -96,6 +97,20 @@ This plugin ensures that when OpenCode compacts a session's context, the resulti
 |---|---|---|---|
 | `enabled` | boolean | `true` | Enable or disable the plugin. |
 
+### `autoMemory`
+
+This plugin provides an intelligent memory workflow:
+- Injects global/project memory context into system prompt.
+- Adds trigger phrases (Chinese + English) so the assistant remembers when to persist key information.
+- Registers a custom `remember` tool for active memory writes.
+- Creates `~/.config/opencode/commands/remember.md` automatically (if missing) so users can run `/remember` explicitly.
+
+**Configuration Options:**
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `enabled` | boolean | `true` | Enable or disable the plugin. |
+
 ### `backgroundSubagent`
 
 This plugin injects a policy into the system prompt, reminding the AI agent to use `run_in_background=true` by default when dispatching sub-agents. It helps maintain a responsive main conversation. If a foreground task is dispatched, a friendly reminder is shown.
@@ -150,6 +165,9 @@ Here is an example of a `~/.config/opencode/oc-tweaks.json` file with all option
   "compaction": {
     "enabled": true
   },
+  "autoMemory": {
+    "enabled": true
+  },
   "backgroundSubagent": {
     "enabled": true
   },
@@ -179,6 +197,7 @@ Here is an example of a `~/.config/opencode/oc-tweaks.json` file with all option
 目前可用的插件包括：
 - **`notify`**: 在任务完成或发生错误时发送桌面通知。
 - **`compaction`**: 在会话上下文压缩期间注入语言偏好提示，以确保摘要使用你的首选语言。
+- **`autoMemory`**: 智能记忆助手——自动注入 memory 上下文、识别触发词，并支持 `remember` tool 与 `/remember` 命令主动写入。
 - **`backgroundSubagent`**: 添加系统提示，鼓励使用后台子代理以获得更好的响应性。
 - **`leaderboard`**: 向 [claudecount.com](https://claudecount.com) 报告 token 用量，用于社区排行榜。
 
@@ -264,6 +283,20 @@ bunx oc-tweaks init
 |---|---|---|---|
 | `enabled` | boolean | `true` | 启用或禁用此插件。 |
 
+### `autoMemory`
+
+该插件提供智能记忆工作流：
+- 自动把全局/项目 memory 上下文注入 system prompt。
+- 内置中英文触发词，命中后优先执行记忆写入。
+- 注册自定义 `remember` tool，支持 AI 主动写入 memory 文件。
+- 自动创建 `~/.config/opencode/commands/remember.md`（若不存在），支持用户显式输入 `/remember`。
+
+**配置选项:**
+
+| 属性 | 类型 | 默认值 | 描述 |
+|---|---|---|---|
+| `enabled` | boolean | `true` | 启用或禁用此插件。 |
+
 ### `backgroundSubagent`
 
 此插件向系统提示中注入一项策略，提醒 AI 代理在派发子代理时默认使用 `run_in_background=true`。这有助于保持主对话的响应性。如果派发了前台任务，则会显示一个友好的提醒。
@@ -316,6 +349,9 @@ bunx oc-tweaks init
     }
   },
   "compaction": {
+    "enabled": true
+  },
+  "autoMemory": {
     "enabled": true
   },
   "backgroundSubagent": {

@@ -7,6 +7,7 @@ declare const Bun: any
 export const DEFAULT_CONFIG = {
   notify: { enabled: true },
   compaction: { enabled: true },
+  autoMemory: { enabled: true },
   backgroundSubagent: { enabled: true },
   leaderboard: { enabled: false },
   logging: { enabled: false, maxLines: 200 }

@@ -3,6 +3,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 
 import {
+  autoMemoryPlugin,
   backgroundSubagentPlugin,
   compactionPlugin,
   leaderboardPlugin,
@@ -64,7 +65,8 @@ afterEach(() => {
 })
 
 describe("index exports", () => {
-  test("all four named exports are functions", () => {
+  test("all five named exports are functions", () => {
+    expect(typeof autoMemoryPlugin).toBe("function")
     expect(typeof backgroundSubagentPlugin).toBe("function")
     expect(typeof compactionPlugin).toBe("function")
     expect(typeof leaderboardPlugin).toBe("function")

@@ -8,7 +8,7 @@
 # 安装依赖
 bun install
 
-# 运行全部测试（43 个测试，8 个文件）
+# 运行全部测试（51 个测试，9 个文件）
 bun test
 
 # 运行单个测试文件
@@ -35,6 +35,7 @@ src/
 ├── plugins/
 │   ├── notify.ts         # 桌面通知（WPF/osascript/notify-send）
 │   ├── compaction.ts     # 上下文压缩时注入语言偏好
+│   ├── auto-memory.ts     # 智能记忆注入 + remember tool + /remember command 文件创建
 │   ├── background-subagent.ts  # 强制子代理后台调度
 │   └── leaderboard.ts   # 向 claudecount.com 上报 token 用量
 ├── utils/
@@ -45,6 +46,7 @@ src/
 └── __tests__/            # 测试文件，与插件结构一一对应
     ├── notify.test.ts
     ├── compaction.test.ts
+    ├── auto-memory.test.ts
     ├── background-subagent.test.ts
     ├── leaderboard.test.ts
     ├── index.test.ts
@@ -60,6 +62,22 @@ src/
 无论 `enabled` 状态如何，所有 hook **始终注册**。每个 hook 回调在调用时执行
 `loadOcTweaksConfig()` 读取最新配置，因此编辑 `~/.config/opencode/oc-tweaks.json`
 无需重启 OpenCode 即可生效。插件被禁用时，hook 为空操作（no-op）。
+
+### auto-memory 插件架构
+
+`auto-memory.ts` 同时提供被动注入和主动写入两类能力：
+
+1. **被动注入**
+   - `experimental.chat.system.transform`：扫描全局与项目 memory 目录，注入 memory 指引、触发词和 preferences 内容。
+   - `experimental.session.compacting`：注入 `[MEMORY: xxx.md]` 摘要标记格式。
+
+2. **主动写入**
+   - `tool.remember`：提供 `content/category/scope` 参数，写入全局或项目 memory 文件。
+   - 插件初始化时自动创建 `~/.config/opencode/commands/remember.md`（若不存在），支持用户显式 `/remember`。
+
+3. **约束**
+   - 仅使用 `autoMemory.enabled` 开关。
+   - 不创建 memory 模板文件，不删除旧 standalone 插件文件。
 
 ### 插件模式
 
@@ -188,3 +206,16 @@ afterEach(() => {
 
 监控 CI：`gh run list --repo cuipengfei/prompts --workflow=publish-oc-tweaks.yml --limit 5`
 （必须指定 `--repo`，因为这是 fork 仓库，`gh` 默认指向上游 `cline/prompts`）。
+
+## 计划文件原则（.sisyphus/plans）
+
+- 计划文件统一放在 `.sisyphus/plans/`。
+- 计划一旦写入即视为**只读规范**，执行阶段不得修改计划内容本身。
+- 推荐结构：`TL;DR → Context → Objectives → Verification → Execution Waves → TODOs → Final Verification`。
+- TODO 任务应包含：`What to do / Must NOT do / Acceptance Criteria / QA Scenarios / Commit`。
+- 依赖矩阵必须明确关键路径与可并行任务，避免隐式顺序。
+
+参考样例：
+- `.sisyphus/plans/oc-tweaks.md`
+- `.sisyphus/plans/oc-tweaks-v2.md`
+- `.sisyphus/plans/oc-tweaks-v3-auto-memory.md`
