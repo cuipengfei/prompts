@@ -1,10 +1,11 @@
 {
   "name": "oc-tweaks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   },
+  "main": "./dist/index.js",
   "peerDependencies": {
     "@opencode-ai/plugin": ">=1.0.0"
   },
@@ -12,14 +13,15 @@
     "@opencode-ai/plugin": "^1.2.15"
   },
   "bin": {
-    "oc-tweaks": "./src/cli/init.ts"
+    "oc-tweaks": "./dist/cli/init.js"
   },
   "scripts": {
+    "build": "bun build src/index.ts --outdir=dist --target=node --format=esm --external @opencode-ai/plugin --external @opencode-ai/sdk && bun build src/cli/init.ts --outdir=dist/cli --target=node --format=esm",
     "test": "bun test",
     "smoke": "bun scripts/smoke-test.ts"
   },
   "files": [
-    "src/"
+    "dist/"
   ],
   "publishConfig": {
     "access": "public"
