@@ -130,13 +130,8 @@ async function detectNotifySender(
   return { kind: "none" }
 }
 
-async function commandExists($: ShellExecutor, command: string): Promise<boolean> {
-  try {
-    await $`which ${command}`
-    return true
-  } catch {
-    return false
-  }
+async function commandExists(_$: ShellExecutor, command: string): Promise<boolean> {
+  return Bun.which(command) !== null
 }
 
 async function notifyWithSender(

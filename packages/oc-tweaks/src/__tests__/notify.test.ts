@@ -6,6 +6,12 @@ import { notifyPlugin } from "../plugins/notify"
 
 const originalBunFile = Bun.file
 const originalHome = Bun.env?.HOME
+const originalBunWhich = Bun.which
+
+function mockBunWhich(availableCommands: string[]) {
+  const available = new Set(availableCommands)
+  ;(globalThis as any).Bun.which = (cmd: string) => available.has(cmd) ? `/usr/bin/${cmd}` : null
+}
 
 function mockBunFile(mockData: Record<string, any>) {
   ;(globalThis as any).Bun.file = (path: string) => ({
@@ -61,6 +67,7 @@ afterEach(() => {
   } else {
     ;(Bun.env as any).HOME = originalHome
   }
+  ;(globalThis as any).Bun.which = originalBunWhich
 })
 
 describe("notifyPlugin", () => {
@@ -90,6 +97,7 @@ describe("notifyPlugin", () => {
     const path = `${home}/.config/opencode/oc-tweaks.json`
     mockBunFile({ [path]: { notify: { enabled: true } } })
 
+    mockBunWhich(["notify-send"])
     const { $, calls } = createShellMock({ availableCommands: ["notify-send"] })
     const client = {
       session: {
@@ -106,10 +114,7 @@ describe("notifyPlugin", () => {
     await hooks.event({ event: { type: "session.idle", properties: { sessionID: "s1" } } })
     await hooks.event({ event: { type: "session.error", properties: {} } })
 
-    const whichCalls = calls.filter((entry) => entry.command.startsWith("which "))
     const notifyCalls = calls.filter((entry) => entry.command.startsWith("notify-send "))
-
-    expect(whichCalls.length).toBe(4)
     expect(notifyCalls.length).toBe(2)
     expect(notifyCalls[0].command).toContain("notify-send oc: demo")
     expect(notifyCalls[0].command).toContain("✓ Done now")
@@ -180,6 +185,7 @@ describe("notifyPlugin", () => {
     const path = `${home}/.config/opencode/oc-tweaks.json`
     mockBunFile({ [path]: { notify: { enabled: true } } })
 
+    mockBunWhich([])
     const { $, calls } = createShellMock()
     const toastCalls: any[] = []
     const client = {
@@ -193,8 +199,7 @@ describe("notifyPlugin", () => {
     const hooks = await notifyPlugin({ $, directory: "/tmp/demo", client })
     await hooks.event({ event: { type: "session.error", properties: {} } })
 
-    const whichCalls = calls.filter((entry) => entry.command.startsWith("which "))
-    expect(whichCalls.length).toBe(4)
+    // Bun.which returns null for all, falls back to tui
     expect(toastCalls.length).toBe(1)
   })
 
@@ -237,6 +242,7 @@ describe("notifyPlugin", () => {
     const path = `${home}/.config/opencode/oc-tweaks.json`
     mockBunFile({ [path]: { notify: { enabled: true } } })
 
+    mockBunWhich(["pwsh"])
     const { $, calls } = createShellMock({ availableCommands: ["pwsh"] })
     const client = {
       session: {
@@ -266,6 +272,7 @@ describe("notifyPlugin", () => {
     const path = `${home}/.config/opencode/oc-tweaks.json`
     mockBunFile({ [path]: { notify: { enabled: true } } })
 
+    mockBunWhich(["pwsh"])
     const { $, calls } = createShellMock({ availableCommands: ["pwsh"] })
     const client = {
       session: {
@@ -301,6 +308,7 @@ describe("notifyPlugin", () => {
       },
     })
 
+    mockBunWhich(["pwsh"])
     const { $, calls } = createShellMock({ availableCommands: ["pwsh"] })
     const client = {
       session: {
