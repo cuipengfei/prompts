@@ -238,7 +238,7 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
             const targetPath = `${targetDir}/${category}.md`
             await appendMemoryRecord(targetPath, args.content)
 
-            return `Saved to ${targetPath}`
+            return `Saved to ${targetPath}\n\nContent preview: ${args.content.slice(0, 150)}${args.content.length > 150 ? '...' : ''}`
           } catch (error) {
             const message = error instanceof Error ? error.message : String(error)
             return `Failed to save memory: ${message}`
