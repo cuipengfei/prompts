@@ -52,5 +52,8 @@ jobs:
       - name: Run tests
         run: bun test --cwd packages/oc-tweaks
 
+      - name: Setup npm auth
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_CONFIG_TOKEN}" >> ~/.npmrc
+
       - name: Publish
         run: bun publish --cwd packages/oc-tweaks --access public
