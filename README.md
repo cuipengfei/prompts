@@ -145,6 +145,46 @@
 /plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
 ```
 
+## OpenCode 插件
+
+除了 Claude Code 插件，本仓库还提供 OpenCode 插件包 `oc-tweaks`（位于 `packages/oc-tweaks/`），包含四个运行时增强插件：
+
+| 插件 | 功能 |
+|------|------|
+| `notify` | 任务完成或出错时发送桌面通知（自动检测 Windows Toast / macOS / Linux） |
+| `compaction` | 会话压缩时自动注入用户语言偏好，摘要不再只输出英文 |
+| `backgroundSubagent` | 强制 sub-agent 默认后台运行，保持主对话响应能力 |
+| `leaderboard` | 向 claudecount.com 报告 token 用量 |
+
+### 启用方式
+
+在 `~/.config/opencode/opencode.json` 中添加插件：
+
+```json
+{
+  "plugin": ["oc-tweaks"]
+}
+```
+
+然后创建 `~/.config/opencode/oc-tweaks.json` 进行配置（所有字段可选，默认全部启用）：
+
+```json
+{
+  "notify": {
+    "enabled": true,
+    "notifyOnIdle": true,
+    "notifyOnError": true,
+    "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
+  },
+  "compaction": { "enabled": true },
+  "backgroundSubagent": { "enabled": true },
+  "leaderboard": { "enabled": false }
+}
+```
+
+`notify.command` 支持 `$TITLE` 和 `$MESSAGE` 两个占位符。上面的 SSH 示例适用于从远程开发机向本地桌面发送通知的场景。如果在本地使用，留空即可，插件会自动检测可用的通知方式。
+
+
 ## 免责声明
 
 给 AI 洗脑是门艺术，而非精确科学。结果可能因人而异。可能导致你的 AI 产生优越感。请负责任地使用。

@@ -145,6 +145,46 @@ Users can selectively install any combination:
 /plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
 ```
 
+## OpenCode Plugins
+
+Beyond Claude Code plugins, this repository also provides the OpenCode plugin package `oc-tweaks` (located in `packages/oc-tweaks/`), containing four runtime enhancement plugins:
+
+| Plugin | Description |
+|--------|-------------|
+| `notify` | Sends desktop notifications on task completion or error (auto-detects Windows Toast / macOS / Linux) |
+| `compaction` | Injects user language preference during session compaction, so summaries aren't English-only |
+| `backgroundSubagent` | Forces sub-agents to run in the background by default, keeping the main conversation responsive |
+| `leaderboard` | Reports token usage to claudecount.com |
+
+### Setup
+
+Add the plugin in `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "plugin": ["oc-tweaks"]
+}
+```
+
+Then create `~/.config/opencode/oc-tweaks.json` for configuration (all fields are optional, everything is enabled by default):
+
+```json
+{
+  "notify": {
+    "enabled": true,
+    "notifyOnIdle": true,
+    "notifyOnError": true,
+    "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
+  },
+  "compaction": { "enabled": true },
+  "backgroundSubagent": { "enabled": true },
+  "leaderboard": { "enabled": false }
+}
+```
+
+`notify.command` supports `$TITLE` and `$MESSAGE` placeholders. The SSH example above works for sending notifications from a remote dev machine to your local desktop. If running locally, leave the field empty and the plugin will auto-detect an available notifier.
+
+
 ## Disclaimer
 
 Brainwashing AI is an art, not an exact science. Results may vary. May cause your AI to develop a superiority complex. Use responsibly.

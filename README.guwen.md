@@ -145,6 +145,46 @@
 /plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
 ```
 
+## 天工开物篇：OpenCode 仙器
+
+除玉清之开台（Claude Code）之外，本册另藏 `oc-tweaks` 之神器（住 `packages/oc-tweaks/` 内），内含四枚运行时增强之符：
+
+| 符管 | 功用 |
+|------|------|
+| `notify` | 事毕或有误时，飞符传讯至案前（自辨 Windows、macOS、Linux 三界） |
+| `compaction` | 压缩存照时自注语言偏好，摘要不再独尊英文 |
+| `backgroundSubagent` | 强令子代理默认退居幕后，主宫保持响应 |
+| `leaderboard` | 向 claudecount.com 报告 token 用量 |
+
+### 启用之法
+
+于 `~/.config/opencode/opencode.json` 中添此一行：
+
+```json
+{
+  "plugin": ["oc-tweaks"]
+}
+```
+
+再建 `~/.config/opencode/oc-tweaks.json` 以定其行止（诸项皆可省略，默认全部启用）：
+
+```json
+{
+  "notify": {
+    "enabled": true,
+    "notifyOnIdle": true,
+    "notifyOnError": true,
+    "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
+  },
+  "compaction": { "enabled": true },
+  "backgroundSubagent": { "enabled": true },
+  "leaderboard": { "enabled": false }
+}
+```
+
+`notify.command` 支 `$TITLE`、`$MESSAGE` 二符。上例之 SSH 路径，适于远端修炼时向本机案前飞符通报。若在本地，留空即可，插件自会察觉可用之道。
+
+
 ## 警示箴言
 
 驯化天工，乃精微之道，非一蹴而就，亦非万应灵丹。结果或因 AI 之悟性、指令之巧妙而异。倘若 AI 因此恃才傲物，桀骜不驯，务必戒慎恐惧，善加引导。运用之妙，存乎一心。
