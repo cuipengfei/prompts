@@ -15,3 +15,19 @@
 - **绝不直接 `npm publish`**，CI 会处理
 - Tag 格式：`oc-tweaks-v{x.y.z}`
 - 发布后更新 `~/.config/opencode/opencode.json` 中的 plugin 版本号（如 `"oc-tweaks@0.1.2"`），下次重启 OpenCode 生效
+
+
+## 监控 CI 发布
+
+- `gh run list --repo cuipengfei/prompts --workflow=publish-oc-tweaks.yml --limit 5` — 查看发布状态
+- `gh run watch --repo cuipengfei/prompts` — 实时监控
+- **必须加 `--repo cuipengfei/prompts`**，因为是 fork repo，`gh` 默认指向上游 `cline/prompts`
+
+## 重启 OpenCode 测试新版插件
+
+发布新版后需要重启 OpenCode 才能加载。可以在当前 session 内自行重启：
+
+1. 杀掉当前 OpenCode 进程
+2. 运行 `opencode -s <session_id>` 恢复当前 session
+
+这样不需要用户手动操作，插件更新后可以立即验证。
