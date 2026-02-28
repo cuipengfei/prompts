@@ -153,7 +153,7 @@
 |------|------|
 | `notify` | 任务完成或出错时发送桌面通知（自动检测 Windows Toast / macOS / Linux） |
 | `compaction` | 会话压缩时自动注入用户语言偏好，摘要不再只输出英文 |
-| `autoMemory` | 智能记忆系统：注入 memory 上下文、识别触发词、支持 `remember` tool 与 `/remember` 主动写入 |
+| `autoMemory` | 智能记忆系统：注入边界化 memory 指引、识别触发词、维护 `/remember` 命令模板并引导用内置 Read/Edit/Write 持久化 |
 | `backgroundSubagent` | 强制 sub-agent 默认后台运行，保持主对话响应能力 |
 | `leaderboard` | 向 claudecount.com 报告 token 用量 |
 

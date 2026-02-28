@@ -112,7 +112,7 @@ async function main() {
       {
         name: "autoMemory",
         plugin: autoPlugin,
-        keys: ["experimental.chat.system.transform", "experimental.session.compacting", "tool"],
+        keys: ["experimental.chat.system.transform", "experimental.session.compacting"],
       },
       {
         name: "compaction",
@@ -159,11 +159,7 @@ async function main() {
     await autoPlugin["experimental.session.compacting"]({ sessionID: "smoke-auto-s1" }, autoContextOut)
     assert(autoContextOut.context.length > 0, "autoMemory: did not push compacting reminder")
 
-    const rememberResult = await autoPlugin.tool.remember.execute(
-      { content: "smoke memory", category: "smoke", scope: "project" },
-      { directory: "/tmp/smoke-project", worktree: "/tmp/smoke-project" },
-    )
-    assert(String(rememberResult).includes("Saved to"), "autoMemory: remember tool did not return success")
+    assert(!Object.prototype.hasOwnProperty.call(autoPlugin, "tool"), "autoMemory: should not register custom tool")
 
     // backgroundSubagent: system transform
     const bgSysOut = { system: [] as string[] }

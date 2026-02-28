@@ -1,5 +1,4 @@
 import type { Plugin } from "@opencode-ai/plugin"
-import { tool } from "@opencode-ai/plugin"
 import { mkdir, readdir } from "node:fs/promises"
 
 import { loadOcTweaksConfig, safeHook } from "../utils"
@@ -10,42 +9,34 @@ const TRIGGER_WORDS_CN = ["记住", "保存偏好", "记录一下", "记到memor
 const TRIGGER_WORDS_EN = ["remember", "save to memory", "note this down", "don't forget", "record"]
 
 const REMEMBER_COMMAND_CONTENT = `---
-description: 记忆助手 - 从当前会话提取关键信息并写入 memory 文件
+description: 记忆助手 - 将关键信息写入 memory 文件
 ---
 
-当用户希望你记住偏好、决策或长期有价值的信息时：
-1. 提取要保存的信息（保持原意，不扩写）
-2. 推断 category（如 preferences / decisions / setup / notes）
-3. 推断 scope（global 或 project）
-4. 调用 remember tool 执行写入
+当用户希望你记住偏好、决策或长期有价值的信息时，
+直接使用 Write 或 Edit 工具操作 memory 文件。
 
-参数：
-- content: 要保存的内容
-- category: 目标文件分类（不带 .md）
-- scope: global | project
+## 保存位置
+- 全局 memory：\`~/.config/opencode/memory/\`
+- 项目 memory：\`{project}/.opencode/memory/\`
+
+## 保存步骤
+1. 提取要保存的信息（保持原意，不扩写）
+2. 确定文件分类（如 preferences.md、decisions.md、setup.md、notes.md）
+3. 确定 scope（全局 vs 项目级）
+4. 使用 Read 工具检查目标文件是否已存在，读取现有内容
+5. 使用 Edit 工具追加新内容（若文件存在），或用 Write 创建新文件
+
+## 格式规范
+- 使用 markdown bullet points
+- 保持简洁，不扩写
+- 不存临时信息（只存跨会话有价值的内容）
+- 不重复 AGENTS.md / CLAUDE.md 中已有的内容
 
 如有参数，则优先围绕参数提取重点：$ARGUMENTS
 `
 
 function getHome(): string {
   return Bun.env?.HOME ?? process.env.HOME ?? ""
-}
-
-function sanitizeCategory(raw?: string): string {
-  if (!raw || !raw.trim()) return "notes"
-  const normalized = raw
-    .trim()
-    .toLowerCase()
-    .replace(/\.md$/i, "")
-    .replace(/[^a-z0-9-_]/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-  return normalized || "notes"
-}
-
-function resolveScope(raw?: string): "global" | "project" {
-  if (!raw) return "global"
-  return raw.trim().toLowerCase() === "project" ? "project" : "global"
 }
 
 async function listMarkdownFiles(path: string): Promise<string[]> {
@@ -57,22 +48,19 @@ async function listMarkdownFiles(path: string): Promise<string[]> {
   }
 }
 
-async function readPreferences(path: string): Promise<string> {
-  try {
-    const file = Bun.file(path)
-    if (!(await file.exists())) return "（尚无 preferences.md）"
-    const content = await file.text()
-    return content.trim() || "（preferences.md 为空）"
-  } catch {
-    return "（读取 preferences.md 失败）"
-  }
-}
-
 async function ensureRememberCommand(home: string): Promise<void> {
   const commandDir = `${home}/.config/opencode/commands`
   const commandPath = `${commandDir}/remember.md`
   const commandFile = Bun.file(commandPath)
-  if (await commandFile.exists()) return
+
+  if (await commandFile.exists()) {
+    try {
+      const existing = await commandFile.text()
+      if (existing.trim() === REMEMBER_COMMAND_CONTENT.trim()) return
+    } catch {
+      // Never disrupt user workflow
+    }
+  }
 
   await mkdir(commandDir, { recursive: true })
   await Bun.write(commandPath, REMEMBER_COMMAND_CONTENT)
@@ -84,29 +72,12 @@ async function ensureAutoMemoryInfra(home: string, projectMemoryDir: string): Pr
   await ensureRememberCommand(home)
 }
 
-async function appendMemoryRecord(filePath: string, content: string): Promise<void> {
-  const file = Bun.file(filePath)
-  let previous = ""
-
-  try {
-    if (await file.exists()) {
-      previous = await file.text()
-    }
-  } catch {
-    // Never disrupt user workflow
-  }
-
-  const prefix = previous.length > 0 && !previous.endsWith("\n") ? "\n" : ""
-  const record = `[${new Date().toISOString()}]\n${content.trim()}\n\n`
-  await Bun.write(filePath, `${previous}${prefix}${record}`)
-}
-
 function buildMemoryGuide(params: {
   globalMemoryDir: string
   projectMemoryDir: string
   globalFiles: string[]
   projectFiles: string[]
-  preferencesContent: string
+  fileContents: Map<string, string>
 }): string {
   const globalList =
     params.globalFiles.length > 0
@@ -118,34 +89,67 @@ function buildMemoryGuide(params: {
       ? params.projectFiles.map((name) => `- \`${name}\``).join("\n")
       : "- （暂无项目级 memory 文件）"
 
+  const injectedContents =
+    params.fileContents.size > 0
+      ? Array.from(params.fileContents.entries())
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([path, content]) => `Contents of ${path}:\n${content}`)
+          .join("\n\n")
+      : "（暂无可注入的 memory 内容）"
+
   return `## 🧠 Memory 系统指引
+
+Memory 是 AGENTS.md / CLAUDE.md 的**补充**，用于存储跨会话有价值的信息。
+不要将 AGENTS.md / CLAUDE.md 中已有的内容重复写入 memory。
 
 可用记忆层：
 1. 全局 memory：\`${params.globalMemoryDir}\`
 2. 项目 memory：\`${params.projectMemoryDir}\`
 
-### 当前文件
+### 何时保存 memory
+
+**你必须（MUST）保存 memory 当：**
+- 用户明确要求记住（触发词：${TRIGGER_WORDS_CN.join("、")} / ${TRIGGER_WORDS_EN.join(", ")})
+- 用户纠正了你的行为或表达了明确偏好
+
+**建议保存 memory 当：**
+- 发现了跨会话有用的模式或约定（想想：如果明天从头开始，这个信息有帮助吗？）
+- 用户描述了目标或背景（"我在做..."、"我们在迁移到..."）
+- 找到了可能再次出现的问题的解决方案
+- 用户的工作流、工具、沟通风格偏好
+
+### 不要保存
+
+- 临时的当前任务细节（只在本次对话有用的信息）
+- AGENTS.md 或 CLAUDE.md 中已有的内容（不得重复或矛盾）
+- 可能不完整或未验证的结论（先查证再记录）
+- 机密信息（密码、API key 等）
+
+### 如何保存
+
+直接使用你的内置 Write 或 Edit 工具操作 memory 文件：
+- 全局 memory：\`${params.globalMemoryDir}/\`
+- 项目 memory：\`${params.projectMemoryDir}/\`
+
+文件按主题分类（如 preferences.md、decisions.md、setup.md、notes.md）。
+写入时保持简洁，用 markdown bullet points，保持原意不扩写。
+
+### 如何更新已有 memory
+
+- 更新已有文件时，使用 Edit 工具追加或修改特定段落，不要用 Write 整体覆盖
+- 内容要具体、信息密集（包含文件路径、函数名、具体命令等）
+- 当某个 memory 文件内容过长时，精简旧条目而不是无限追加
+- 更新时保持已有内容的结构完整，不要破坏其他条目
+
+### 当前 Memory 文件
 **全局**
 ${globalList}
 
 **项目级**
 ${projectList}
 
-### 触发词（优先调用 remember tool）
-- 中文：${TRIGGER_WORDS_CN.join("、")}
-- English: ${TRIGGER_WORDS_EN.join(", ")}
-
-命中触发词后：
-1. 提取要保存的信息
-2. 判断 scope（global / project）
-3. 判断 category（例如 preferences / decisions / setup / notes）
-4. 调用 \`remember\` tool 写入
-
 ### 用户核心 Preferences
-\`\`\`markdown
-${params.preferencesContent}
-\`\`\`
-`
+${injectedContents}`
 }
 
 export const autoMemoryPlugin: Plugin = async ({ directory }) => {
@@ -171,11 +175,27 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
 
         await ensureAutoMemoryInfra(home, projectMemoryDir)
 
-        const [globalFiles, projectFiles, preferencesContent] = await Promise.all([
+        const [globalFiles, projectFiles] = await Promise.all([
           listMarkdownFiles(globalMemoryDir),
           listMarkdownFiles(projectMemoryDir),
-          readPreferences(`${globalMemoryDir}/preferences.md`),
         ])
+
+        const fileContents = new Map<string, string>()
+        const allPaths = [
+          ...globalFiles.map((name) => ({ dir: globalMemoryDir, name })),
+          ...projectFiles.map((name) => ({ dir: projectMemoryDir, name })),
+        ]
+
+        await Promise.all(
+          allPaths.map(async ({ dir, name }) => {
+            try {
+              const content = await Bun.file(`${dir}/${name}`).text()
+              if (content.trim()) fileContents.set(`${dir}/${name}`, content.trim())
+            } catch {
+              // Never disrupt user workflow
+            }
+          }),
+        )
 
         output.system.push(
           buildMemoryGuide({
@@ -183,7 +203,7 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
             projectMemoryDir,
             globalFiles,
             projectFiles,
-            preferencesContent,
+            fileContents,
           }),
         )
       },
@@ -206,45 +226,8 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
 这里写要保存的内容
 \`\`\`
 
-后续对话中应根据该标记调用 write/edit 或 remember tool 写入对应 memory 文件。`)
+后续对话中应根据该标记调用内置 Read/Edit/Write 工具写入对应 memory 文件。`)
       },
     ),
-
-    tool: {
-      remember: tool({
-        description: "Save important session facts into global/project memory markdown files",
-        args: {
-          content: tool.schema.string(),
-          category: tool.schema.string().optional(),
-          scope: tool.schema.string().optional(),
-        },
-        async execute(args, context) {
-          try {
-            const config = await loadOcTweaksConfig()
-            if (!config || config.autoMemory?.enabled !== true) {
-              return "autoMemory is disabled in oc-tweaks config"
-            }
-
-            const scope = resolveScope(args.scope)
-            const category = sanitizeCategory(args.category)
-            const runtimeHome = getHome()
-            await ensureAutoMemoryInfra(runtimeHome, `${context.directory}/.opencode/memory`)
-            const targetDir =
-              scope === "project"
-                ? `${context.directory}/.opencode/memory`
-                : `${runtimeHome}/.config/opencode/memory`
-
-            await mkdir(targetDir, { recursive: true })
-            const targetPath = `${targetDir}/${category}.md`
-            await appendMemoryRecord(targetPath, args.content)
-
-            return `Saved to ${targetPath}\n\nContent preview: ${args.content.slice(0, 150)}${args.content.length > 150 ? '...' : ''}`
-          } catch (error) {
-            const message = error instanceof Error ? error.message : String(error)
-            return `Failed to save memory: ${message}`
-          }
-        },
-      }),
-    },
   }
 }

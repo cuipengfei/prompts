@@ -147,12 +147,13 @@
 
 ## 天工开物篇：OpenCode 仙器
 
-除玉清之开台（Claude Code）之外，本册另藏 `oc-tweaks` 之神器（住 `packages/oc-tweaks/` 内），内含四枚运行时增强之符：
+除玉清之开台（Claude Code）之外，本册另藏 `oc-tweaks` 之神器（住 `packages/oc-tweaks/` 内），内含五枚运行时增强之符：
 
 | 符管 | 功用 |
 |------|------|
 | `notify` | 事毕或有误时，飞符传讯至案前（自辨 Windows、macOS、Linux 三界） |
 | `compaction` | 压缩存照时自注语言偏好，摘要不再独尊英文 |
+| `autoMemory` | 注入有边界之 memory 指引与触发词，维护 `/remember` 命令模板，并引导以内置 Read/Edit/Write 工具行持久化 |
 | `backgroundSubagent` | 强令子代理默认退居幕后，主宫保持响应 |
 | `leaderboard` | 向 claudecount.com 报告 token 用量 |
 
@@ -177,6 +178,7 @@
     "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
   },
   "compaction": { "enabled": true },
+  "autoMemory": { "enabled": true },
   "backgroundSubagent": { "enabled": true },
   "leaderboard": { "enabled": false }
 }

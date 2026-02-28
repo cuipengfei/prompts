@@ -16,7 +16,6 @@
 - Tag 格式：`oc-tweaks-v{x.y.z}`
 - 发布后更新 `~/.config/opencode/opencode.json` 中的 plugin 版本号（如 `"oc-tweaks@0.1.2"`），下次重启 OpenCode 生效
 
-
 ## 监控 CI 发布
 
 - `gh run list --repo cuipengfei/prompts --workflow=publish-oc-tweaks.yml --limit 5` — 查看发布状态
@@ -38,3 +37,4 @@
 - Custom Tool API（官方示例）: `import { type Plugin, tool } from "@opencode-ai/plugin"`
 - omo 命令注册机制参考: oh-my-opencode 通过内置 hook 系统注册 `/start-work` 等命令
 - Slash command 目录: `~/.config/opencode/commands/*.md`（插件可在初始化阶段自动写入）
+  npm publish 通过 GitHub Actions 发布后，应完整测试新版本：确认 npm 版本号（npm view <pkg> version）、在消费方更新依赖版本、重启应用、运行 smoke test 验证实际功能。CI 成功 ≠ 生产可用，务必闭环验证。

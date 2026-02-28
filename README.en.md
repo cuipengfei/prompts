@@ -147,12 +147,13 @@ Users can selectively install any combination:
 
 ## OpenCode Plugins
 
-Beyond Claude Code plugins, this repository also provides the OpenCode plugin package `oc-tweaks` (located in `packages/oc-tweaks/`), containing four runtime enhancement plugins:
+Beyond Claude Code plugins, this repository also provides the OpenCode plugin package `oc-tweaks` (located in `packages/oc-tweaks/`), containing five runtime enhancement plugins:
 
 | Plugin | Description |
 |--------|-------------|
 | `notify` | Sends desktop notifications on task completion or error (auto-detects Windows Toast / macOS / Linux) |
 | `compaction` | Injects user language preference during session compaction, so summaries aren't English-only |
+| `autoMemory` | Injects boundary-aware memory guidance and trigger words, maintains `/remember` command template, and guides persistence via built-in Read/Edit/Write tools |
 | `backgroundSubagent` | Forces sub-agents to run in the background by default, keeping the main conversation responsive |
 | `leaderboard` | Reports token usage to claudecount.com |
 
@@ -177,6 +178,7 @@ Then create `~/.config/opencode/oc-tweaks.json` for configuration (all fields ar
     "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
   },
   "compaction": { "enabled": true },
+  "autoMemory": { "enabled": true },
   "backgroundSubagent": { "enabled": true },
   "leaderboard": { "enabled": false }
 }

@@ -35,7 +35,7 @@ src/
 ├── plugins/
 │   ├── notify.ts         # 桌面通知（WPF/osascript/notify-send）
 │   ├── compaction.ts     # 上下文压缩时注入语言偏好
-│   ├── auto-memory.ts     # 智能记忆注入 + remember tool + /remember command 文件创建
+│   ├── auto-memory.ts     # 智能记忆注入（边界定义 + 全量 memory 文件内容）+ /remember command 文件创建
 │   ├── background-subagent.ts  # 强制子代理后台调度
 │   └── leaderboard.ts   # 向 claudecount.com 上报 token 用量
 ├── utils/
@@ -65,18 +65,23 @@ src/
 
 ### auto-memory 插件架构
 
-`auto-memory.ts` 同时提供被动注入和主动写入两类能力：
+`auto-memory.ts` 提供 memory 边界定义注入与命令模板保障：
 
 1. **被动注入**
-   - `experimental.chat.system.transform`：扫描全局与项目 memory 目录，注入 memory 指引、触发词和 preferences 内容。
-   - `experimental.session.compacting`：注入 `[MEMORY: xxx.md]` 摘要标记格式。
+   - `experimental.chat.system.transform`：扫描全局与项目 memory 目录，注入：
+     - Memory 与 AGENTS.md / CLAUDE.md 的边界关系
+     - What to save / What NOT to save
+     - 如何保存与如何更新已有 memory
+     - 当前所有 `.md` memory 文件内容（非仅 preferences）
+   - `experimental.session.compacting`：注入 `[MEMORY: xxx.md]` 摘要标记格式，并引导使用内置 Read/Edit/Write 工具持久化。
 
-2. **主动写入**
-   - `tool.remember`：提供 `content/category/scope` 参数，写入全局或项目 memory 文件。
-   - 插件初始化时自动创建 `~/.config/opencode/commands/remember.md`（若不存在），支持用户显式 `/remember`。
+2. **命令模板保障**
+   - 插件初始化时自动维护 `~/.config/opencode/commands/remember.md`。
+   - 若文件不存在则创建；若内容与当前模板不一致则覆盖，确保命令文案始终与当前机制一致。
 
 3. **约束**
    - 仅使用 `autoMemory.enabled` 开关。
+   - 不注册自定义 remember 写入工具。
    - 不创建 memory 模板文件，不删除旧 standalone 插件文件。
 
 ### 插件模式
