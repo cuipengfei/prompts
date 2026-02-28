@@ -6,6 +6,8 @@ export interface PositionConfig {
   screenMargin?: number
   screenWidth?: number
   screenHeight?: number
+  screenLeft?: number
+  screenTop?: number
 }
 
 export interface WpfManualPosition {
@@ -105,20 +107,30 @@ export function calculatePosition(
   const gap = config.gap ?? 12
   const margin = config.screenMargin ?? 20
 
+  const screenLeftExpr =
+    typeof config.screenLeft === "number"
+      ? `${config.screenLeft}`
+      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Left)"
+
+  const screenTopExpr =
+    typeof config.screenTop === "number"
+      ? `${config.screenTop}`
+      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Top)"
+
   const screenWidthExpr =
     typeof config.screenWidth === "number"
       ? `${config.screenWidth}`
-      : "[System.Windows.SystemParameters]::PrimaryScreenWidth"
+      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Width)"
 
   const screenHeightExpr =
     typeof config.screenHeight === "number"
       ? `${config.screenHeight}`
-      : "[System.Windows.SystemParameters]::PrimaryScreenHeight"
+      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Height)"
 
-  const leftExpr = `(${screenWidthExpr} - ${width} - ${margin})`
+  const leftExpr = `(${screenLeftExpr} + ${screenWidthExpr} - ${width} - ${margin})`
 
   if (position === "bottom-right") {
-    const topExpr = `(${screenHeightExpr} - ${margin} - ((${slotIndex} + 1) * (${height} + ${gap})))`
+    const topExpr = `(${screenTopExpr} + ${screenHeightExpr} - ${margin} - ((${slotIndex} + 1) * (${height} + ${gap})))`
     return {
       startupLocation: "Manual",
       leftExpr,
@@ -126,7 +138,7 @@ export function calculatePosition(
     }
   }
 
-  const topExpr = `(${margin} + (${slotIndex} * (${height} + ${gap})))`
+  const topExpr = `(${screenTopExpr} + ${margin} + (${slotIndex} * (${height} + ${gap})))`
   return {
     startupLocation: "Manual",
     leftExpr,

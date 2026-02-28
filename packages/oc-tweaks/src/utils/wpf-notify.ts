@@ -197,6 +197,7 @@ export async function runWpfNotification(
   const shadow = style?.shadow !== false
   const idleColor = style?.idleColor ?? "#4ADE80"
   const errorColor = style?.errorColor ?? "#EF4444"
+  const contentMaxWidth = Math.max(160, width - 120)
 
   const accentColor = renderOptions?.accentColor ?? (tag === "Error" ? errorColor : idleColor)
   const icon = renderOptions?.icon ?? (tag === "Error" ? "❌" : "✅")
@@ -244,7 +245,7 @@ export async function runWpfNotification(
     `        WindowStyle="None" AllowsTransparency="True" Background="Transparent"`,
     `        Topmost="True" ShowInTaskbar="False" ShowActivated="False"`,
     `        WindowStartupLocation="${startupLocation}"`,
-    `        Width="${width}" Height="${height}">`,
+    `        SizeToContent="Height" Width="${width}" MinHeight="${height}">`,
     `    <Border CornerRadius="${borderRadius}" Margin="10">`,
     `        <Border.Background>`,
     `            <SolidColorBrush Color="${backgroundColor}" Opacity="${backgroundOpacity}"/>`,
@@ -252,10 +253,10 @@ export async function runWpfNotification(
     `        ${shadowXaml}`,
     `        <Grid>`,
     `            <Border CornerRadius="${borderRadius},0,0,${borderRadius}" Width="${colorBarWidth}" HorizontalAlignment="Left" Name="ColorBar"/>`,
-    `            <StackPanel Orientation="Horizontal" Margin="22,0,16,0" VerticalAlignment="Center">`,
+    `            <StackPanel Orientation="Horizontal" Margin="22,12,16,12" VerticalAlignment="Center">`,
     `                <TextBlock Name="IconText" FontSize="${iconFontSize}" VerticalAlignment="Center" Margin="0,0,15,0" Foreground="White"/>`,
-    `                <StackPanel VerticalAlignment="Center" MaxWidth="320">`,
-    `                    <TextBlock Name="TitleText" FontSize="${titleFontSize}" FontWeight="SemiBold"/>`,
+    `                <StackPanel VerticalAlignment="Center" MaxWidth="${contentMaxWidth}">`,
+    `                    <TextBlock Name="TitleText" FontSize="${titleFontSize}" FontWeight="SemiBold" TextWrapping="Wrap"/>`,
     `                    <TextBlock Name="ContentText" Foreground="${textColor}" FontSize="${contentFontSize}" Margin="0,4,0,0" TextWrapping="Wrap"/>`,
     dismissHintXaml,
     `                </StackPanel>`,
@@ -280,6 +281,7 @@ export async function runWpfNotification(
     "Add-Type -AssemblyName PresentationFramework",
     "Add-Type -AssemblyName PresentationCore",
     "Add-Type -AssemblyName WindowsBase",
+    "Add-Type -AssemblyName System.Windows.Forms",
     "",
     "Add-Type -TypeDefinition @'",
     "using System;",
