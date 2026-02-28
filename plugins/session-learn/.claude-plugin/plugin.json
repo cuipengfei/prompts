@@ -1,6 +1,6 @@
 {
   "name": "session-learn",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "[Command + Skill] 会话学习 - 双模式学习引擎：会话范围（当前会话分析+四层存储）与历史范围（批量日志分析+配置改进），通过 /recall 召回历史学习",
   "author": {
     "name": "cuipengfei",
