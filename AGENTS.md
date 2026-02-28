@@ -56,7 +56,7 @@ plugins/
 ## oc-tweaks 包
 
 - 位置：`packages/oc-tweaks/`
-- 插件（4）：`compaction`（上下文压缩/提示精简）、`background-subagent`（后台子代理守护）、`leaderboard`（使用统计上报）、`notify`（多通道通知派发）
+- 插件（5）：`compaction`（上下文压缩/提示精简）、`autoMemory`（智能记忆注入与命令保障）、`background-subagent`（后台子代理守护）、`leaderboard`（使用统计上报）、`notify`（多通道通知派发）
 - 配置文件：`~/.config/opencode/oc-tweaks.json`
 - 测试：`bun test --cwd packages/oc-tweaks`
 - 发布：推送 tag `oc-tweaks-v*` 触发 GitHub Actions 发布

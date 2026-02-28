@@ -14,7 +14,7 @@
 
 - **绝不直接 `npm publish`**，CI 会处理
 - Tag 格式：`oc-tweaks-v{x.y.z}`
-- 发布后更新 `~/.config/opencode/opencode.json` 中的 plugin 版本号（如 `"oc-tweaks@0.1.2"`），下次重启 OpenCode 生效
+- 发布后更新 `~/.config/opencode/opencode.json` 中的 plugin 版本号（如 `"oc-tweaks@0.3.0"`），下次重启 OpenCode 生效
 
 ## 监控 CI 发布
 
@@ -30,6 +30,12 @@
 2. 运行 `opencode -s <session_id>` 恢复当前 session
 
 这样不需要用户手动操作，插件更新后可以立即验证。
+
+**验证方式**：检查 OpenCode 自己的插件缓存（不是 bun global）：
+```bash
+grep '"version"' ~/.cache/opencode/node_modules/oc-tweaks/package.json
+```
+重启后始终验证此版本号是否与发布版本一致。
 
 ## auto-memory v3 关键参考
 
