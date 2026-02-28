@@ -60,10 +60,32 @@ describe("compactionPlugin", () => {
     expect(output.context.length).toBe(1)
     const prompt = output.context[0]
     expect(prompt).toContain("Language Preference")
-    expect(prompt).toContain("preferred language")
+    expect(prompt).toContain("compaction summary")
   })
 
-  test("prompt includes preferred language phrasing", async () => {
+  test("uses configured language when provided", async () => {
+    const home = "/tmp/oc-home-compaction-lang"
+    const path = `${home}/.config/opencode/oc-tweaks.json`
+
+    setHome(home)
+    mockBunFile({
+      [path]: {
+        compaction: { enabled: true, language: "中文" },
+      },
+    })
+
+    const plugin = await compactionPlugin()
+    const hook = plugin["experimental.session.compacting"]
+    const output = { context: [] as string[] }
+
+    await hook({ sessionID: "s-lang" }, output)
+
+    const prompt = output.context[0]
+    expect(prompt).toContain("中文")
+    expect(prompt).not.toContain("the language the user used most")
+  })
+
+  test("falls back to session language when no language configured", async () => {
     const home = "/tmp/oc-home-compaction-phrase"
     const path = `${home}/.config/opencode/oc-tweaks.json`
 
@@ -81,7 +103,7 @@ describe("compactionPlugin", () => {
     await hook({ sessionID: "s-2" }, output)
 
     const prompt = output.context[0]
-    expect(prompt.toLowerCase()).toContain("preferred language")
+    expect(prompt).toContain("the language the user used most in this session")
   })
 
   test("hook is registered but disabled config makes it no-op", async () => {

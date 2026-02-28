@@ -89,57 +89,51 @@ function buildMemoryGuide(params: {
       ? params.projectFiles.map((name) => `- \`${name}\``).join("\n")
       : "- （暂无项目级 memory 文件）"
 
+  const MAX_LINES_PER_FILE = 200
+
   const injectedContents =
     params.fileContents.size > 0
       ? Array.from(params.fileContents.entries())
           .sort(([a], [b]) => a.localeCompare(b))
-          .map(([path, content]) => `Contents of ${path}:\n${content}`)
+          .map(([path, content]) => {
+            const lines = content.split("\n")
+            const truncated =
+              lines.length > MAX_LINES_PER_FILE
+                ? lines.slice(0, MAX_LINES_PER_FILE).join("\n") +
+                  "\n[...truncated, use Read tool for full content]"
+                : content
+            return `Contents of ${path}:\n${truncated}`
+          })
           .join("\n\n")
       : "（暂无可注入的 memory 内容）"
 
   return `## 🧠 Memory 系统指引
 
-Memory 是 AGENTS.md / CLAUDE.md 的**补充**，用于存储跨会话有价值的信息。
-不要将 AGENTS.md / CLAUDE.md 中已有的内容重复写入 memory。
+Memory 是 AGENTS.md / CLAUDE.md 的**补充**，存储跨会话有价值的信息。
 
-可用记忆层：
-1. 全局 memory：\`${params.globalMemoryDir}\`
-2. 项目 memory：\`${params.projectMemoryDir}\`
+记忆层（直接用 Write / Edit 工具操作）：
+1. 全局：\`${params.globalMemoryDir}/\` — 跨项目偏好
+2. 项目：\`${params.projectMemoryDir}/\` — 项目特定知识
 
-### 何时保存 memory
+文件按主题分类（preferences.md、decisions.md、setup.md 等），写入时保持简洁，用 markdown bullet points，保持原意不扩写。
 
-**你必须（MUST）保存 memory 当：**
-- 用户明确要求记住（触发词：${TRIGGER_WORDS_CN.join("、")} / ${TRIGGER_WORDS_EN.join(", ")})
+### 何时保存
+
+**必须保存：**
+- 用户明确要求记住（触发词：${TRIGGER_WORDS_CN.join("、")} / ${TRIGGER_WORDS_EN.join(", ")}）
 - 用户纠正了你的行为或表达了明确偏好
 
-**建议保存 memory 当：**
-- 发现了跨会话有用的模式或约定（想想：如果明天从头开始，这个信息有帮助吗？）
-- 用户描述了目标或背景（"我在做..."、"我们在迁移到..."）
-- 找到了可能再次出现的问题的解决方案
-- 用户的工作流、工具、沟通风格偏好
+**建议保存（判断标准：如果明天从头开始，这个信息有帮助吗？）：**
+- 架构决策、技术选型及其理由
+- 反复出现问题的根因与解决方案
+- 工作流、工具链、沟通风格等跨会话模式
 
 ### 不要保存
 
-- 临时的当前任务细节（只在本次对话有用的信息）
-- AGENTS.md 或 CLAUDE.md 中已有的内容（不得重复或矛盾）
-- 可能不完整或未验证的结论（先查证再记录）
+- 本次对话的临时细节（具体报错、一次性调试步骤）
+- AGENTS.md / CLAUDE.md 中已有的内容（不得重复或矛盾）
+- 未验证的猜测（先查证再记录）
 - 机密信息（密码、API key 等）
-
-### 如何保存
-
-直接使用你的内置 Write 或 Edit 工具操作 memory 文件：
-- 全局 memory：\`${params.globalMemoryDir}/\`
-- 项目 memory：\`${params.projectMemoryDir}/\`
-
-文件按主题分类（如 preferences.md、decisions.md、setup.md、notes.md）。
-写入时保持简洁，用 markdown bullet points，保持原意不扩写。
-
-### 如何更新已有 memory
-
-- 更新已有文件时，使用 Edit 工具追加或修改特定段落，不要用 Write 整体覆盖
-- 内容要具体、信息密集（包含文件路径、函数名、具体命令等）
-- 当某个 memory 文件内容过长时，精简旧条目而不是无限追加
-- 更新时保持已有内容的结构完整，不要破坏其他条目
 
 ### 当前 Memory 文件
 **全局**
@@ -148,7 +142,7 @@ ${globalList}
 **项目级**
 ${projectList}
 
-### 用户核心 Preferences
+### 已有 Memory 内容
 ${injectedContents}`
 }
 
@@ -221,7 +215,7 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
 
 核心问题：**如果明天开一个全新会话，本轮对话中有哪些信息会让你希望已经记录下来？**
 
-有 → 标记保存。没有 → 标记 none。就这么简单。
+有 → 标记保存。没有 → 标记 none。
 
 ### 值得保存
 - 用户表达的偏好、纠正、或明确要求记住的内容
@@ -232,9 +226,10 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
 ### 不要保存
 - 本次对话的临时细节（具体报错、一次性调试步骤）
 - AGENTS.md / CLAUDE.md 中已有的内容
-- 未验证的猜测 · 机密信息
+- 未验证的猜测
+- 机密信息（密码、API key 等）
 
-### 标记格式
+每次 compaction 最多标记 1-2 条，宁缺毋滥。
 
 有内容：
 \`\`\`
