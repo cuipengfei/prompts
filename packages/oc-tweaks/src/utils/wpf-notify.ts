@@ -282,6 +282,7 @@ export async function runWpfNotification(
     "Add-Type -AssemblyName PresentationCore",
     "Add-Type -AssemblyName WindowsBase",
     "Add-Type -AssemblyName System.Windows.Forms",
+    "$targetScreen = [System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea",
     "",
     "Add-Type -TypeDefinition @'",
     "using System;",

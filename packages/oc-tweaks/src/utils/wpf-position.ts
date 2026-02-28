@@ -110,27 +110,27 @@ export function calculatePosition(
   const screenLeftExpr =
     typeof config.screenLeft === "number"
       ? `${config.screenLeft}`
-      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Left)"
+      : "($targetScreen.Left)"
 
   const screenTopExpr =
     typeof config.screenTop === "number"
       ? `${config.screenTop}`
-      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Top)"
+      : "($targetScreen.Top)"
 
-  const screenWidthExpr =
+  const screenRightExpr =
     typeof config.screenWidth === "number"
-      ? `${config.screenWidth}`
-      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Width)"
+      ? `(${screenLeftExpr} + ${config.screenWidth})`
+      : "($targetScreen.Right)"
 
-  const screenHeightExpr =
+  const screenBottomExpr =
     typeof config.screenHeight === "number"
-      ? `${config.screenHeight}`
-      : "([System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea.Height)"
+      ? `(${screenTopExpr} + ${config.screenHeight})`
+      : "($targetScreen.Bottom)"
 
-  const leftExpr = `(${screenLeftExpr} + ${screenWidthExpr} - ${width} - ${margin})`
+  const leftExpr = `(${screenRightExpr} - ${width} - ${margin})`
 
   if (position === "bottom-right") {
-    const topExpr = `(${screenTopExpr} + ${screenHeightExpr} - ${margin} - ((${slotIndex} + 1) * (${height} + ${gap})))`
+    const topExpr = `(${screenBottomExpr} - ${margin} - ((${slotIndex} + 1) * (${height} + ${gap})))`
     return {
       startupLocation: "Manual",
       leftExpr,
