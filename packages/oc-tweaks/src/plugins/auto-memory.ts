@@ -217,40 +217,37 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
 
         await ensureAutoMemoryInfra(home, projectMemoryDir)
 
-        output.context.push(`## 💾 Memory 保存提示 (Compaction Phase)
+        output.context.push(`## 💾 Memory Checkpoint
 
-回顾本轮对话，判断是否有值得跨会话持久保存的信息。
+核心问题：**如果明天开一个全新会话，本轮对话中有哪些信息会让你希望已经记录下来？**
 
-### 应该保存的（至少一项命中即标记）
-- 用户明确要求记住的偏好、决策或约定
-- 用户纠正了你的行为（隐含偏好）
+有 → 标记保存。没有 → 标记 none。就这么简单。
+
+### 值得保存
+- 用户表达的偏好、纠正、或明确要求记住的内容
 - 架构决策、设计约束、技术选型及其理由
-- 跨会话有价值的模式或约定（问自己：明天从头开始，这个信息有帮助吗？）
 - 反复出现问题的根因与解决方案
-- 用户的工作流、工具链、沟通风格偏好
+- 工作流、工具链、沟通风格等跨会话有价值的模式
 
-### 不应该保存的
-- 仅本次对话有用的临时细节（具体报错、一次性调试命令）
-- AGENTS.md / CLAUDE.md 中已有的内容（不得重复）
-- 未验证的猜测或中间结论
-- 机密信息（密码、API key、token）
+### 不要保存
+- 本次对话的临时细节（具体报错、一次性调试步骤）
+- AGENTS.md / CLAUDE.md 中已有的内容
+- 未验证的猜测 · 机密信息
 
 ### 标记格式
 
-有值得保存的内容时，在摘要中标记：
-
+有内容：
 \`\`\`
 [MEMORY: 文件名.md]
-简洁的 bullet points，保持原意不扩写
+简洁 bullet points，保持原意
 \`\`\`
 
-确实没有值得保存的，标记 \`[MEMORY: none]\`。
+无内容：\`[MEMORY: none]\` 并附一句理由说明为何无需保存
 
 ### Memory 路径
 - 全局：\`${globalMemoryDir}/\`
 - 项目：\`${projectMemoryDir}/\`
-
-后续对话中应根据标记调用内置 Read/Edit/Write 工具写入对应 memory 文件。`)
+`)
       },
     ),
   }
