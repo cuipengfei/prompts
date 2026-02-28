@@ -1,5 +1,5 @@
 ---
-description: 会话学习 - 分析当前会话，将学习分类并持久化到三层存储
+description: 会话学习 - 分析当前会话，将学习分类并持久化到四层存储
 ---
 
 # MANDATORY 2-Step Process

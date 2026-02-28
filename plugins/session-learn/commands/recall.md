@@ -1,5 +1,5 @@
 ---
-description: 会话召回 - 查询 Memory MCP 召回历史学习，用于 Claude Code 似乎忘记了什么的时候
+description: 会话召回 - 从四层存储查询历史知识，用于 Claude Code 似乎忘记了什么的时候
 ---
 
 # MANDATORY 2-Step Process
