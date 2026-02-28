@@ -59,7 +59,7 @@ describe("compactionPlugin", () => {
 
     expect(output.context.length).toBe(1)
     const prompt = output.context[0]
-    expect(prompt).toContain("Language Preference")
+    expect(prompt).toContain("Language & Style Preference")
     expect(prompt).toContain("compaction summary")
   })
 
@@ -83,6 +83,72 @@ describe("compactionPlugin", () => {
     const prompt = output.context[0]
     expect(prompt).toContain("中文")
     expect(prompt).not.toContain("the language the user used most")
+  })
+
+  test("uses configured style when provided", async () => {
+    const home = "/tmp/oc-home-compaction-style"
+    const path = `${home}/.config/opencode/oc-tweaks.json`
+
+    setHome(home)
+    mockBunFile({
+      [path]: {
+        compaction: { enabled: true, style: "毛泽东语言风格" },
+      },
+    })
+
+    const plugin = await compactionPlugin()
+    const hook = plugin["experimental.session.compacting"]
+    const output = { context: [] as string[] }
+
+    await hook({ sessionID: "s-style" }, output)
+
+    const prompt = output.context[0]
+    expect(prompt).toContain("毛泽东语言风格")
+    expect(prompt).toContain("writing style")
+  })
+
+  test("uses both language and style when provided", async () => {
+    const home = "/tmp/oc-home-compaction-both"
+    const path = `${home}/.config/opencode/oc-tweaks.json`
+
+    setHome(home)
+    mockBunFile({
+      [path]: {
+        compaction: { enabled: true, language: "繁体中文", style: "毛泽东语言风格" },
+      },
+    })
+
+    const plugin = await compactionPlugin()
+    const hook = plugin["experimental.session.compacting"]
+    const output = { context: [] as string[] }
+
+    await hook({ sessionID: "s-both" }, output)
+
+    const prompt = output.context[0]
+    expect(prompt).toContain("繁体中文")
+    expect(prompt).toContain("毛泽东语言风格")
+  })
+
+  test("uses sensible defaults when neither language nor style provided", async () => {
+    const home = "/tmp/oc-home-compaction-defaults"
+    const path = `${home}/.config/opencode/oc-tweaks.json`
+
+    setHome(home)
+    mockBunFile({
+      [path]: {
+        compaction: { enabled: true },
+      },
+    })
+
+    const plugin = await compactionPlugin()
+    const hook = plugin["experimental.session.compacting"]
+    const output = { context: [] as string[] }
+
+    await hook({ sessionID: "s-defaults" }, output)
+
+    const prompt = output.context[0]
+    expect(prompt).toContain("the language the user used most in this session")
+    expect(prompt).toContain("concise and well-organized")
   })
 
   test("falls back to session language when no language configured", async () => {

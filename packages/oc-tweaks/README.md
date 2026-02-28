@@ -89,13 +89,15 @@ Customize the appearance of the WPF notification window.
 
 ### `compaction`
 
-This plugin ensures that when OpenCode compacts a session's context, the resulting summary is generated in your preferred language (e.g., Chinese) instead of defaulting to English.
+This plugin ensures that when OpenCode compacts a session's context, the resulting summary is generated in your preferred language and writing style.
 
 **Configuration Options:**
 
 | Property | Type | Default | Description |
 |---|---|---|---|
 | `enabled` | boolean | `true` | Enable or disable the plugin. |
+| `language` | string | session language | Target language for the compaction summary (e.g., `"繁体中文"`, `"French"`). Defaults to the language the user used most in the session. |
+| `style` | string | `"concise and well-organized"` | Writing style for the compaction summary (e.g., `"毛泽东语言风格"`, `"academic"`). |
 
 ### `autoMemory`
 
@@ -163,7 +165,9 @@ Here is an example of a `~/.config/opencode/oc-tweaks.json` file with all option
     }
   },
   "compaction": {
-    "enabled": true
+    "enabled": true,
+    "language": "繁体中文",
+    "style": "毛泽东语言风格"
   },
   "autoMemory": {
     "enabled": true
@@ -275,13 +279,15 @@ bunx oc-tweaks init
 
 ### `compaction`
 
-此插件确保当 OpenCode 压缩会话上下文时，生成的摘要使用你的首选语言（例如中文），而不是默认为英文。
+此插件确保当 OpenCode 压缩会话上下文时，生成的摘要使用你的首选语言和写作风格。
 
 **配置选项:**
 
 | 属性 | 类型 | 默认值 | 描述 |
 |---|---|---|---|
 | `enabled` | boolean | `true` | 启用或禁用此插件。 |
+| `language` | string | 会话语言 | 压缩摘要的目标语言（如 `"繁体中文"`、`"French"`）。默认使用会话中用户最常使用的语言。 |
+| `style` | string | `"concise and well-organized"` | 压缩摘要的写作风格（如 `"毛泽东语言风格"`、`"academic"`）。 |
 
 ### `autoMemory`
 
@@ -349,7 +355,9 @@ bunx oc-tweaks init
     }
   },
   "compaction": {
-    "enabled": true
+    "enabled": true,
+    "language": "繁体中文",
+    "style": "毛泽东语言风格"
   },
   "autoMemory": {
     "enabled": true

@@ -152,7 +152,7 @@ Beyond Claude Code plugins, this repository also provides the OpenCode plugin pa
 | Plugin | Description |
 |--------|-------------|
 | `notify` | Sends desktop notifications on task completion or error (auto-detects Windows Toast / macOS / Linux) |
-| `compaction` | Injects user language preference during session compaction, so summaries aren't English-only |
+| `compaction` | Injects user language and style preferences during session compaction, so summaries match your preferred language and tone |
 | `autoMemory` | Injects boundary-aware memory guidance and trigger words, maintains `/remember` command template, and guides persistence via built-in Read/Edit/Write tools |
 | `backgroundSubagent` | Forces sub-agents to run in the background by default, keeping the main conversation responsive |
 | `leaderboard` | Reports token usage to claudecount.com |
@@ -177,7 +177,7 @@ Then create `~/.config/opencode/oc-tweaks.json` for configuration (all fields ar
     "notifyOnError": true,
     "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
   },
-  "compaction": { "enabled": true },
+  "compaction": { "enabled": true, "language": "繁体中文", "style": "毛泽东语言风格" },
   "autoMemory": { "enabled": true },
   "backgroundSubagent": { "enabled": true },
   "leaderboard": { "enabled": false }
