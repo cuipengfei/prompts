@@ -7,6 +7,7 @@ import { notifyPlugin } from "../plugins/notify"
 const originalBunFile = Bun.file
 const originalHome = Bun.env?.HOME
 const originalBunWhich = Bun.which
+const WPF_COMMAND = (globalThis as any)?.process?.platform === "win32" ? "pwsh" : "powershell.exe"
 
 function mockBunWhich(availableCommands: string[]) {
   const available = new Set(availableCommands)
@@ -236,14 +237,14 @@ describe("notifyPlugin", () => {
   })
 })
 
-  test("detects pwsh and uses wpf sender", async () => {
+  test("detects WPF-capable sender and uses wpf flow", async () => {
     const home = "/tmp/oc-notify-wpf-detect"
     ;(Bun.env as any).HOME = home
     const path = `${home}/.config/opencode/oc-tweaks.json`
     mockBunFile({ [path]: { notify: { enabled: true } } })
 
-    mockBunWhich(["pwsh"])
-    const { $, calls } = createShellMock({ availableCommands: ["pwsh"] })
+    mockBunWhich([WPF_COMMAND])
+    const { $, calls } = createShellMock({ availableCommands: [WPF_COMMAND] })
     const client = {
       session: {
         messages: async () => ({
@@ -255,8 +256,8 @@ describe("notifyPlugin", () => {
     const hooks = await notifyPlugin({ $, directory: "/tmp/demo", client })
     await hooks.event({ event: { type: "session.idle", properties: { sessionID: "s4" } } })
 
-    const pwshCalls = calls.filter((entry) => entry.command.includes("pwsh"))
-    expect(pwshCalls.length).toBeGreaterThan(0)
+    const wpfCalls = calls.filter((entry) => entry.command.includes(WPF_COMMAND))
+    expect(wpfCalls.length).toBeGreaterThan(0)
 
     const bun_e_calls = calls.filter((entry) => entry.command.includes("bun -e"))
     expect(bun_e_calls.length).toBeGreaterThan(0)
@@ -272,8 +273,8 @@ describe("notifyPlugin", () => {
     const path = `${home}/.config/opencode/oc-tweaks.json`
     mockBunFile({ [path]: { notify: { enabled: true } } })
 
-    mockBunWhich(["pwsh"])
-    const { $, calls } = createShellMock({ availableCommands: ["pwsh"] })
+    mockBunWhich([WPF_COMMAND])
+    const { $, calls } = createShellMock({ availableCommands: [WPF_COMMAND] })
     const client = {
       session: {
         messages: async () => ({
@@ -308,8 +309,8 @@ describe("notifyPlugin", () => {
       },
     })
 
-    mockBunWhich(["pwsh"])
-    const { $, calls } = createShellMock({ availableCommands: ["pwsh"] })
+    mockBunWhich([WPF_COMMAND])
+    const { $, calls } = createShellMock({ availableCommands: [WPF_COMMAND] })
     const client = {
       session: {
         messages: async () => ({

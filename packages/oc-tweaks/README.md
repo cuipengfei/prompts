@@ -9,7 +9,7 @@ A collection of runtime enhancement plugins for [OpenCode](https://opencode.ai/)
 `oc-tweaks` provides a set of plugins to enhance your OpenCode experience. These plugins are activated at runtime and can modify OpenCode's behavior, such as sending notifications, improving multi-language support, and enforcing best practices for sub-agent usage.
 
 The currently available plugins are:
-- **`notify`**: Sends desktop notifications when a task is completed or an error occurs.
+- **`notify`**: Sends desktop notifications when a task is completed or an error occurs, and can show WPF tool call transparency toasts (stack + queue).
 - **`compaction`**: Injects a language preference prompt during session compaction to ensure summaries are in your preferred language.
 - **`autoMemory`**: Smart memory assistant that injects memory context, detects memory trigger phrases, and supports active memory writes via `remember` tool and `/remember` command.
 - **`backgroundSubagent`**: Adds a system prompt to encourage using background sub-agents for better responsiveness.
@@ -50,6 +50,8 @@ All configurations are optional. By default, most plugins are enabled after runn
 
 This plugin sends desktop notifications upon task completion (session idle) or error.
 
+It can also show **tool call transparency notifications** (WPF only) for each model tool invocation, including tool name and arguments, with vertical stacking and queueing (no drop).
+
 - **Windows**: Uses a custom, non-intrusive WPF window that works across virtual desktops.
 - **macOS**: Uses `osascript`.
 - **Linux**: Uses `notify-send`.
@@ -64,6 +66,7 @@ This plugin sends desktop notifications upon task completion (session idle) or e
 | `notifyOnError` | boolean | `true` | Notify on session errors. |
 | `command` | string | `null` | A custom command to run for notifications. `$TITLE` and `$MESSAGE` are available as placeholders. |
 | `style` | object | `{...}` | Custom styles for the Windows WPF notification window. See below. |
+| `toolCall` | object | `{...}` | Tool call transparency notification settings. See below. |
 
 #### `notify.style` (Windows WPF)
 
@@ -80,12 +83,25 @@ Customize the appearance of the WPF notification window.
 | `height` | `105` | Window height in pixels. |
 | `titleFontSize` | `14` | Font size for the title in points. |
 | `contentFontSize` | `11` | Font size for the content in points. |
-| `iconFontSize` | `13` | Font size for the icon (✅/❌) in points. |
+| `iconFontSize` | `30` | Font size for the icon (✅/❌) in points. |
 | `duration` | `10000` | Time in milliseconds before the notification auto-closes. |
 | `position` | `"center"` | Window position: `"center"`, `"top-right"`, or `"bottom-right"`. |
 | `shadow` | `true` | Enable or disable the drop shadow effect. |
 | `idleColor` | `"#4ADE80"` | Accent color for idle (success) notifications. |
 | `errorColor` | `"#EF4444"` | Accent color for error notifications. |
+
+#### `notify.toolCall` (Windows WPF)
+
+Configure tool call transparency notifications. This feature is designed for visibility: every queued event is eventually shown.
+
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `enabled` | boolean | `false` | Enable tool call notifications. |
+| `duration` | number | `3000` | Auto-close delay for each tool call toast (ms). |
+| `position` | string | `"top-right"` | Window position: `"top-right"`, `"bottom-right"`, or `"center"`. |
+| `maxVisible` | number | `3` | Maximum number of visible tool call toasts at the same time. |
+| `maxArgLength` | number | `300` | Max characters for formatted argument JSON before truncation. |
+| `filter.exclude` | string[] | `[]` | Tool names to skip (exact match). |
 
 ### `compaction`
 
@@ -162,6 +178,16 @@ Here is an example of a `~/.config/opencode/oc-tweaks.json` file with all option
     "style": {
       "backgroundColor": "#101018",
       "duration": 8000
+    },
+    "toolCall": {
+      "enabled": true,
+      "duration": 3000,
+      "position": "top-right",
+      "maxVisible": 3,
+      "maxArgLength": 300,
+      "filter": {
+        "exclude": ["think_sequentialthinking"]
+      }
     }
   },
   "compaction": {
@@ -199,7 +225,7 @@ Here is an example of a `~/.config/opencode/oc-tweaks.json` file with all option
 `oc-tweaks` 提供了一系列插件来增强你的 OpenCode 使用体验。这些插件在运行时激活，可以调整 OpenCode 的行为，例如发送桌面通知、改善多语言支持以及强制执行子代理使用的最佳实践。
 
 目前可用的插件包括：
-- **`notify`**: 在任务完成或发生错误时发送桌面通知。
+- **`notify`**: 在任务完成或发生错误时发送桌面通知，并支持 WPF 工具调用透明度弹窗（堆叠 + 排队）。
 - **`compaction`**: 在会话上下文压缩期间注入语言偏好提示，以确保摘要使用你的首选语言。
 - **`autoMemory`**: 智能记忆助手——自动注入 memory 上下文、识别触发词，并支持 `remember` tool 与 `/remember` 命令主动写入。
 - **`backgroundSubagent`**: 添加系统提示，鼓励使用后台子代理以获得更好的响应性。
@@ -240,6 +266,8 @@ bunx oc-tweaks init
 
 此插件在任务完成（会话空闲）或出错时发送桌面通知。
 
+它也支持**工具调用透明度通知**（仅 WPF）：每次模型调用工具都会显示工具名与参数，并支持垂直堆叠和排队（不丢通知）。
+
 - **Windows**: 使用一个自定义的、无侵入性的 WPF 窗口，该窗口可跨虚拟桌面工作。
 - **macOS**: 使用 `osascript`。
 - **Linux**: 使用 `notify-send`。
@@ -254,6 +282,7 @@ bunx oc-tweaks init
 | `notifyOnError` | boolean | `true` | 在会话出错时通知。 |
 | `command` | string | `null` | 用于发送通知的自定义命令。`$TITLE` 和 `$MESSAGE` 可作为占位符。 |
 | `style` | object | `{...}` | 用于 Windows WPF 通知窗口的自定义样式。详见下文。 |
+| `toolCall` | object | `{...}` | 工具调用透明度通知配置。详见下文。 |
 
 #### `notify.style` (Windows WPF)
 
@@ -270,12 +299,25 @@ bunx oc-tweaks init
 | `height` | `105` | 窗口高度 (像素)。 |
 | `titleFontSize` | `14` | 标题的字体大小 (pt)。 |
 | `contentFontSize` | `11` | 内容的字体大小 (pt)。 |
-| `iconFontSize` | `13` | 图标 (✅/❌) 的字体大小 (pt)。 |
+| `iconFontSize` | `30` | 图标 (✅/❌) 的字体大小 (pt)。 |
 | `duration` | `10000` | 通知自动关闭前的延迟时间 (毫秒)。 |
 | `position` | `"center"` | 窗口位置: `"center"`, `"top-right"`, 或 `"bottom-right"`。 |
 | `shadow` | `true` | 启用或禁用下拉阴影效果。 |
 | `idleColor` | `"#4ADE80"` | 空闲 (成功) 通知的强调色。 |
 | `errorColor` | `"#EF4444"` | 错误通知的强调色。 |
+
+#### `notify.toolCall` (Windows WPF)
+
+配置工具调用透明度通知。该能力以“可见性优先”为目标：进入队列的事件最终都会显示。
+
+| 属性 | 类型 | 默认值 | 描述 |
+|---|---|---|---|
+| `enabled` | boolean | `false` | 启用工具调用通知。 |
+| `duration` | number | `3000` | 每条工具调用弹窗自动关闭延迟（毫秒）。 |
+| `position` | string | `"top-right"` | 窗口位置：`"top-right"`、`"bottom-right"` 或 `"center"`。 |
+| `maxVisible` | number | `3` | 同时可见的工具调用弹窗最大数量。 |
+| `maxArgLength` | number | `300` | 参数 JSON 格式化后截断前的最大字符数。 |
+| `filter.exclude` | string[] | `[]` | 要跳过的工具名（精确匹配）。 |
 
 ### `compaction`
 
@@ -352,6 +394,16 @@ bunx oc-tweaks init
     "style": {
       "backgroundColor": "#101018",
       "duration": 8000
+    },
+    "toolCall": {
+      "enabled": true,
+      "duration": 3000,
+      "position": "top-right",
+      "maxVisible": 3,
+      "maxArgLength": 300,
+      "filter": {
+        "exclude": ["think_sequentialthinking"]
+      }
     }
   },
   "compaction": {

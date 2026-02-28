@@ -47,6 +47,16 @@ export interface OcTweaksConfig extends Record<string, unknown> {
     notifyOnError?: boolean
     command?: string | null
     style?: NotifyStyle
+    toolCall?: {
+      enabled?: boolean      // default: false
+      duration?: number      // default: 3000
+      position?: string      // default: "top-right"
+      maxVisible?: number    // default: 3
+      maxArgLength?: number  // default: 300
+      filter?: {
+        exclude?: string[]   // excluded tool names
+      }
+    }
   }
 }
 
@@ -55,7 +65,9 @@ const DEFAULT_CONFIG: OcTweaksConfig = {
   autoMemory: {},
   backgroundSubagent: {},
   leaderboard: {},
-  notify: {},
+  notify: {
+    toolCall: {},
+  },
 }
 
 export async function loadOcTweaksConfig(): Promise<OcTweaksConfig | null> {

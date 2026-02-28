@@ -8,6 +8,7 @@ import {
   compactionPlugin,
   leaderboardPlugin,
   notifyPlugin,
+  toolCallNotifyPlugin,
 } from "../index"
 
 const originalBunFile = Bun.file
@@ -65,12 +66,13 @@ afterEach(() => {
 })
 
 describe("index exports", () => {
-  test("all five named exports are functions", () => {
+  test("all named exports are functions", () => {
     expect(typeof autoMemoryPlugin).toBe("function")
     expect(typeof backgroundSubagentPlugin).toBe("function")
     expect(typeof compactionPlugin).toBe("function")
     expect(typeof leaderboardPlugin).toBe("function")
     expect(typeof notifyPlugin).toBe("function")
+    expect(typeof toolCallNotifyPlugin).toBe("function")
   })
 
   test("leaderboardPlugin with default config returns object with event hook", async () => {
