@@ -59,7 +59,7 @@ describe("compactionPlugin", () => {
 
     expect(output.context.length).toBe(1)
     const prompt = output.context[0]
-    expect(prompt).toContain("Language & Style Preference")
+    expect(prompt).toContain("MANDATORY: Language & Writing Style")
     expect(prompt).toContain("compaction summary")
   })
 
