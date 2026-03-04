@@ -89,6 +89,11 @@ Customize the appearance of the WPF notification window.
 | `shadow` | `true` | Enable or disable the drop shadow effect. |
 | `idleColor` | `"#4ADE80"` | Accent color for idle (success) notifications. |
 | `errorColor` | `"#EF4444"` | Accent color for error notifications. |
+| `fadeOut` | `true` | Animate opacity from `initialOpacity` to `finalOpacity` over `duration`. |
+| `initialOpacity` | `0.85` | Window opacity at start (0–1). |
+| `finalOpacity` | `0.05` | Window opacity at end before auto-close (0–1). |
+| `clickThrough` | `true` | Mouse clicks pass through the window (WS_EX_TRANSPARENT). Hover over the ✕ zone to dismiss. |
+| `hoverDismissMs` | `400` | Milliseconds the cursor must dwell on the ✕ zone to dismiss the notification. |
 
 #### `notify.toolCall` (Windows WPF)
 
@@ -305,6 +310,11 @@ bunx oc-tweaks init
 | `shadow` | `true` | 启用或禁用下拉阴影效果。 |
 | `idleColor` | `"#4ADE80"` | 空闲 (成功) 通知的强调色。 |
 | `errorColor` | `"#EF4444"` | 错误通知的强调色。 |
+| `fadeOut` | `true` | 在 `duration` 时间内从 `initialOpacity` 渐隐到 `finalOpacity`。 |
+| `initialOpacity` | `0.85` | 窗口初始不透明度 (0–1)。 |
+| `finalOpacity` | `0.05` | 自动关闭前的最终不透明度 (0–1)。 |
+| `clickThrough` | `true` | 鼠标点击穿透窗口 (WS_EX_TRANSPARENT)。将鼠标悬停在 ✕ 区域即可关闭。 |
+| `hoverDismissMs` | `400` | 光标在 ✕ 区域停留多少毫秒后关闭通知。 |
 
 #### `notify.toolCall` (Windows WPF)
 

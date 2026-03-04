@@ -197,6 +197,11 @@ export async function runWpfNotification(
   const shadow = style?.shadow !== false
   const idleColor = style?.idleColor ?? "#4ADE80"
   const errorColor = style?.errorColor ?? "#EF4444"
+  const fadeOut = style?.fadeOut !== false
+  const initialOpacity = style?.initialOpacity ?? 0.85
+  const finalOpacity = style?.finalOpacity ?? 0.05
+  const clickThrough = style?.clickThrough !== false
+  const hoverDismissMs = style?.hoverDismissMs ?? 400
   const contentMaxWidth = Math.max(160, width - 120)
 
   const accentColor = renderOptions?.accentColor ?? (tag === "Error" ? errorColor : idleColor)
@@ -232,10 +237,25 @@ export async function runWpfNotification(
   const textB64 = escapeForPowerShell(truncateText(normalizedMessage, messageLimit))
 
   const shadowXaml = shadow
-    ? '<Border.Effect><DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.7" Color="Black"/></Border.Effect>'
+    ? '<Border.Effect><DropShadowEffect BlurRadius="16" ShadowDepth="0" Opacity="0.4" Color="Black"/></Border.Effect>'
     : ""
 
-  const dismissHintXaml = showDismissHint
+  // Close button: visible only when clickThrough is enabled (hover-to-dismiss)
+  const closeBtnXaml = clickThrough
+    ? [
+        `            <Border Name="CloseBg" CornerRadius="4" Width="22" Height="22"`,
+        `                    HorizontalAlignment="Right" VerticalAlignment="Top"`,
+        `                    Margin="0,6,6,0" Background="Transparent">`,
+        `                <TextBlock Name="CloseBtn" Text="&#x2715;" FontSize="13"`,
+        `                           Foreground="#2A2A3A"`,
+        `                           HorizontalAlignment="Center" VerticalAlignment="Center"`,
+        `                           Margin="0,-1,0,0"/>`,
+        `            </Border>`,
+      ].join("\n")
+    : ""
+
+  // When clickThrough is on, no dismiss hint (hover-to-dismiss replaces it)
+  const dismissHintXaml = showDismissHint && !clickThrough
     ? `                    <TextBlock Text="Click to dismiss" Foreground="#555555" FontSize="9" Margin="0,4,0,0"/>`
     : ""
 
@@ -253,7 +273,7 @@ export async function runWpfNotification(
     `        ${shadowXaml}`,
     `        <Grid>`,
     `            <Border CornerRadius="${borderRadius},0,0,${borderRadius}" Width="${colorBarWidth}" HorizontalAlignment="Left" Name="ColorBar"/>`,
-    `            <StackPanel Orientation="Horizontal" Margin="22,12,16,12" VerticalAlignment="Center">`,
+    `            <StackPanel Orientation="Horizontal" Margin="22,12,${clickThrough ? 50 : 16},12" VerticalAlignment="Center">`,
     `                <TextBlock Name="IconText" FontSize="${iconFontSize}" VerticalAlignment="Center" Margin="0,0,15,0" Foreground="White"/>`,
     `                <StackPanel VerticalAlignment="Center" MaxWidth="${contentMaxWidth}">`,
     `                    <TextBlock Name="TitleText" FontSize="${titleFontSize}" FontWeight="SemiBold" TextWrapping="Wrap"/>`,
@@ -261,6 +281,7 @@ export async function runWpfNotification(
     dismissHintXaml,
     `                </StackPanel>`,
     `            </StackPanel>`,
+    closeBtnXaml,
     `        </Grid>`,
     `    </Border>`,
     `</Window>`,
@@ -277,6 +298,177 @@ export async function runWpfNotification(
         ]
       : []
 
+  // Win32 interop: extended for click-through + hover detection
+  const win32TypeDef = clickThrough
+    ? [
+        "Add-Type -TypeDefinition @'",
+        "using System;",
+        "using System.Runtime.InteropServices;",
+        "",
+        "[StructLayout(LayoutKind.Sequential)]",
+        "public struct RECT { public int Left, Top, Right, Bottom; }",
+        "",
+        "[StructLayout(LayoutKind.Sequential)]",
+        "public struct POINT { public int X, Y; }",
+        "",
+        "public static class VDesktop {",
+        '    [DllImport("user32.dll", SetLastError = true)]',
+        "    public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);",
+        "",
+        '    [DllImport("user32.dll", SetLastError = true)]',
+        "    public static extern int GetWindowLong(IntPtr hWnd, int nIndex);",
+        "",
+        '    [DllImport("user32.dll")]',
+        "    public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);",
+        "",
+        '    [DllImport("user32.dll")]',
+        "    public static extern bool GetCursorPos(out POINT lpPoint);",
+        "",
+        "    public const int GWL_EXSTYLE = -20;",
+        "    public const int WS_EX_TOOLWINDOW = 0x00000080;",
+        "    public const int WS_EX_NOACTIVATE = 0x08000000;",
+        "    public const int WS_EX_APPWINDOW = 0x00040000;",
+        "    public const int WS_EX_TRANSPARENT = 0x00000020;",
+        "",
+        "    public static void MakeGlobalWindow(IntPtr hwnd, bool transparent) {",
+        "        int style = GetWindowLong(hwnd, GWL_EXSTYLE);",
+        "        style = style | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE;",
+        "        style = style & ~WS_EX_APPWINDOW;",
+        "        if (transparent) { style = style | WS_EX_TRANSPARENT; }",
+        "        else { style = style & ~WS_EX_TRANSPARENT; }",
+        "        SetWindowLong(hwnd, GWL_EXSTYLE, style);",
+        "    }",
+        "",
+        "    public static bool IsCursorInTopRight(IntPtr hwnd, int zoneW, int zoneH) {",
+        "        RECT r; POINT p;",
+        "        if (!GetWindowRect(hwnd, out r)) return false;",
+        "        if (!GetCursorPos(out p)) return false;",
+        "        return (p.X >= r.Right - zoneW && p.X <= r.Right &&",
+        "                p.Y >= r.Top && p.Y <= r.Top + zoneH);",
+        "    }",
+        "}",
+        "'@ -ErrorAction SilentlyContinue",
+      ]
+    : [
+        "Add-Type -TypeDefinition @'",
+        "using System;",
+        "using System.Runtime.InteropServices;",
+        "",
+        "public static class VDesktop {",
+        '    [DllImport("user32.dll", SetLastError = true)]',
+        "    public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);",
+        "",
+        '    [DllImport("user32.dll", SetLastError = true)]',
+        "    public static extern int GetWindowLong(IntPtr hWnd, int nIndex);",
+        "",
+        "    public const int GWL_EXSTYLE = -20;",
+        "    public const int WS_EX_TOOLWINDOW = 0x00000080;",
+        "    public const int WS_EX_NOACTIVATE = 0x08000000;",
+        "    public const int WS_EX_APPWINDOW = 0x00040000;",
+        "",
+        "    public static void MakeGlobalWindow(IntPtr hwnd, bool transparent) {",
+        "        int style = GetWindowLong(hwnd, GWL_EXSTYLE);",
+        "        style = style | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE;",
+        "        style = style & ~WS_EX_APPWINDOW;",
+        "        SetWindowLong(hwnd, GWL_EXSTYLE, style);",
+        "    }",
+        "}",
+        "'@ -ErrorAction SilentlyContinue",
+      ]
+
+  const hoverThreshold = Math.max(1, Math.round(hoverDismissMs / 100))
+
+  // Hover-to-dismiss timer logic (only when clickThrough is enabled)
+  const hoverDismissLines = clickThrough
+    ? [
+        "",
+        "$script:hoverTicks = 0",
+        `$hoverThreshold = ${hoverThreshold}`,
+        "$brushConv = [System.Windows.Media.BrushConverter]::new()",
+        "$closeBtnEl = $window.FindName('CloseBtn')",
+        "$closeBgEl = $window.FindName('CloseBg')",
+        "",
+        "$hitTimer = New-Object System.Windows.Threading.DispatcherTimer",
+        "$hitTimer.Interval = [TimeSpan]::FromMilliseconds(100)",
+        "$hitTimer.Add_Tick({",
+        "    if ($script:hwnd -eq [IntPtr]::Zero) { return }",
+        "    $inZone = [VDesktop]::IsCursorInTopRight($script:hwnd, 80, 50)",
+        "    if ($inZone) {",
+        "        $script:hoverTicks++",
+        "        $closeBtnEl.Foreground = $brushConv.ConvertFromString('#FFFFFF')",
+        "        $closeBgEl.Background = $brushConv.ConvertFromString('#CC3344')",
+        "        if ($script:hoverTicks -ge $hoverThreshold) {",
+        "            $hitTimer.Stop()",
+        "            $window.Close()",
+        "        }",
+        "    } else {",
+        "        $script:hoverTicks = 0",
+        "        $closeBtnEl.Foreground = $brushConv.ConvertFromString('#2A2A3A')",
+        "        $closeBgEl.Background = $brushConv.ConvertFromString('Transparent')",
+        "    }",
+        "})",
+      ]
+    : []
+
+  // Window loaded handler: set click-through, start fade and hover timer
+  const loadedLines = clickThrough
+    ? [
+        "$window.Add_Loaded({",
+        "    $script:hwnd = (New-Object System.Windows.Interop.WindowInteropHelper($window)).Handle",
+        "    [VDesktop]::MakeGlobalWindow($script:hwnd, $true)",
+        ...(fadeOut
+          ? [
+              `    $fadeAnim = New-Object System.Windows.Media.Animation.DoubleAnimation`,
+              `    $fadeAnim.From = ${initialOpacity}`,
+              `    $fadeAnim.To = ${finalOpacity}`,
+              `    $fadeAnim.Duration = [System.Windows.Duration]::new([TimeSpan]::FromMilliseconds($duration))`,
+              `    $fadeAnim.Add_Completed({ $window.Close() })`,
+              `    $window.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $fadeAnim)`,
+            ]
+          : []),
+        "    $hitTimer.Start()",
+        "})",
+        "",
+        "$window.Add_Closed({ $hitTimer.Stop() })",
+      ]
+    : [
+        "$window.Add_Loaded({",
+        "    $script:hwnd = (New-Object System.Windows.Interop.WindowInteropHelper($window)).Handle",
+        "    [VDesktop]::MakeGlobalWindow($script:hwnd, $false)",
+        ...(fadeOut
+          ? [
+              `    $fadeAnim = New-Object System.Windows.Media.Animation.DoubleAnimation`,
+              `    $fadeAnim.From = ${initialOpacity}`,
+              `    $fadeAnim.To = ${finalOpacity}`,
+              `    $fadeAnim.Duration = [System.Windows.Duration]::new([TimeSpan]::FromMilliseconds($duration))`,
+              `    $fadeAnim.Add_Completed({ $window.Close() })`,
+              `    $window.BeginAnimation([System.Windows.UIElement]::OpacityProperty, $fadeAnim)`,
+            ]
+          : []),
+        "})",
+      ]
+
+  // Fallback timer: only needed when fadeOut is disabled (fade handles close otherwise)
+  const timerLines = !fadeOut
+    ? [
+        "",
+        "if ($duration -gt 0) {",
+        "    $timer = New-Object System.Windows.Threading.DispatcherTimer",
+        "    $timer.Interval = [TimeSpan]::FromMilliseconds($duration)",
+        "    $timer.Add_Tick({",
+        "        $window.Close()",
+        "        $timer.Stop()",
+        "    })",
+        "    $timer.Start()",
+        "}",
+      ]
+    : []
+
+  // Click-to-dismiss fallback (only when not click-through)
+  const clickDismissLine = !clickThrough
+    ? "$window.Add_MouseLeftButtonDown({ $window.Close() })"
+    : ""
+
   const psScript = [
     "Add-Type -AssemblyName PresentationFramework",
     "Add-Type -AssemblyName PresentationCore",
@@ -284,30 +476,7 @@ export async function runWpfNotification(
     "Add-Type -AssemblyName System.Windows.Forms",
     "$targetScreen = [System.Windows.Forms.Screen]::FromPoint([System.Windows.Forms.Cursor]::Position).WorkingArea",
     "",
-    "Add-Type -TypeDefinition @'",
-    "using System;",
-    "using System.Runtime.InteropServices;",
-    "",
-    "public static class VDesktop {",
-    '    [DllImport("user32.dll", SetLastError = true)]',
-    "    public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);",
-    "",
-    '    [DllImport("user32.dll", SetLastError = true)]',
-    "    public static extern int GetWindowLong(IntPtr hWnd, int nIndex);",
-    "",
-    "    public const int GWL_EXSTYLE = -20;",
-    "    public const int WS_EX_TOOLWINDOW = 0x00000080;",
-    "    public const int WS_EX_NOACTIVATE = 0x08000000;",
-    "    public const int WS_EX_APPWINDOW = 0x00040000;",
-    "",
-    "    public static void MakeGlobalWindow(IntPtr hwnd) {",
-    "        int style = GetWindowLong(hwnd, GWL_EXSTYLE);",
-    "        style = style | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE;",
-    "        style = style & ~WS_EX_APPWINDOW;",
-    "        SetWindowLong(hwnd, GWL_EXSTYLE, style);",
-    "    }",
-    "}",
-    "'@ -ErrorAction SilentlyContinue",
+    ...win32TypeDef,
     "",
     `$title = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${titleB64}'))`,
     `$text = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${textB64}'))`,
@@ -322,6 +491,7 @@ export async function runWpfNotification(
     "$reader = New-Object System.Xml.XmlNodeReader $xaml",
     "$window = [Windows.Markup.XamlReader]::Load($reader)",
     ...manualPositionLines,
+    ...(fadeOut ? [`$window.Opacity = ${initialOpacity}`] : []),
     "",
     "$colorBar = $window.FindName('ColorBar')",
     "$iconText = $window.FindName('IconText')",
@@ -334,22 +504,11 @@ export async function runWpfNotification(
     "$titleText.Foreground = [System.Windows.Media.BrushConverter]::new().ConvertFromString($accentColor)",
     "$contentText.Text = $text",
     "",
-    "$window.Add_MouseLeftButtonDown({ $window.Close() })",
+    clickDismissLine,
+    ...hoverDismissLines,
     "",
-    "$window.Add_Loaded({",
-    "    $hwnd = (New-Object System.Windows.Interop.WindowInteropHelper($window)).Handle",
-    "    [VDesktop]::MakeGlobalWindow($hwnd)",
-    "})",
-    "",
-    "if ($duration -gt 0) {",
-    "    $timer = New-Object System.Windows.Threading.DispatcherTimer",
-    "    $timer.Interval = [TimeSpan]::FromMilliseconds($duration)",
-    "    $timer.Add_Tick({",
-    "        $window.Close()",
-    "        $timer.Stop()",
-    "    })",
-    "    $timer.Start()",
-    "}",
+    ...loadedLines,
+    ...timerLines,
     "",
     "$window.ShowActivated = $false",
     "$window.Show()",

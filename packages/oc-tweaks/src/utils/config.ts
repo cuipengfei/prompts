@@ -30,6 +30,11 @@ export interface NotifyStyle {
   shadow?: boolean              // default: true
   idleColor?: string            // default: "#4ADE80"
   errorColor?: string           // default: "#EF4444"
+  fadeOut?: boolean              // default: true — animate opacity from initial to final over duration
+  initialOpacity?: number       // default: 0.85 — window opacity at start (0-1)
+  finalOpacity?: number         // default: 0.05 — window opacity at end before close (0-1)
+  clickThrough?: boolean        // default: true — mouse clicks pass through the window
+  hoverDismissMs?: number       // default: 400 — ms cursor must dwell on ✕ zone to dismiss
 }
 
 export interface OcTweaksConfig extends Record<string, unknown> {
