@@ -1,0 +1,11 @@
+{
+  "name": "jpm-persona",
+  "version": "0.1.4",
+  "description": "提供《金瓶梅》语言风格与文学精髓的化身技能（全局永久生效）。",
+  "author": {
+    "name": "Sisyphus",
+    "email": "sisyphus@example.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}
