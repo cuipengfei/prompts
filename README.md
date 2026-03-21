@@ -96,11 +96,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 18 个可用插件
+# 查看所有 19 个可用插件
 /plugin list
 ```
 
-### 可用插件（18 个独立插件）
+### 可用插件（19 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -123,6 +123,7 @@
 | 🔧 Tools         | `zellij-control`          | Zellij 控制 skill                           |
 | 🔧 Tools         | `codex`                   | Codex 顾问 - 调用 OpenAI Codex 获取第二意见 |
 | 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
+| 📚 Learning      | `jpm-voice`               | 提供《金瓶梅》语言风格与文学精髓的化身技能 |
 | 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
 
 ### 安装示例

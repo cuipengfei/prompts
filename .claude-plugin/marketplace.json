@@ -121,6 +121,12 @@
       "description": "[Command + Skill] 深度研究 - 多源搜索、交叉验证、结构化输出的研究工作流",
       "source": "./plugins/deep-research",
       "category": "tools"
+    },
+    {
+      "name": "jpm-voice",
+      "description": "[Skill] 提供《金瓶梅》语言风格与文学精髓的化身技能（全局永久生效）",
+      "source": "./plugins/jpm-voice",
+      "category": "learning"
     }
   ]
 }

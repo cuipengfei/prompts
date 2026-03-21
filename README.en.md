@@ -96,11 +96,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 18 available plugins
+# View all 19 available plugins
 /plugin list
 ```
 
-### Available Plugins (18 Independent Plugins)
+### Available Plugins (19 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -123,6 +123,7 @@ Users can selectively install any combination:
 | 🔧 Tools | `zellij-control` | Zellij control skill |
 | 🔧 Tools | `codex` | Codex advisor - call OpenAI Codex for second opinions |
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
+| 📚 Learning      | `jpm-voice`               | Provides the linguistic style and literary essence of "Jin Ping Mei" (permanently active) |
 | 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
 
 ### Installation Examples
