@@ -1,0 +1,5 @@
+{
+  "name": "cline-kanban",
+  "description": "Cline Kanban CLI skill for local orchestration board — task management, hooks, configuration and data storage",
+  "version": "0.3.0"
+}
