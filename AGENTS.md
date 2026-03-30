@@ -23,13 +23,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Claude Code 插件市场项目 - 19 个独立可选安装的插件，每个插件包含单一功能组件。
+Claude Code 插件市场项目 - 21 个独立可选安装的插件，每个插件包含单一功能组件。
 
 ## Project Structure
 
 ```
 .claude-plugin/
-└── marketplace.json       # 19 个独立插件条目
+└── marketplace.json       # 21 个独立插件条目
 
 plugins/
 ├── improve-prompt/         # Command: 提示词优化

@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -127,6 +127,12 @@
       "description": "[Skill] 提供《金瓶梅》语言风格与文学精髓的化身技能（全局永久生效）",
       "source": "./plugins/jpm-voice",
       "category": "learning"
+    },
+    {
+      "name": "cline-kanban",
+      "description": "[Skill] Cline Kanban - 通过 kanban CLI 管理本地编排看板任务、依赖、hooks、配置与数据存储",
+      "source": "./plugins/cline-kanban",
+      "category": "tools"
     }
   ]
 }

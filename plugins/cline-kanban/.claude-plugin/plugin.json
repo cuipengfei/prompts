@@ -1,5 +1,11 @@
 {
   "name": "cline-kanban",
-  "description": "Cline Kanban CLI skill for local orchestration board — task management, hooks, configuration and data storage",
-  "version": "0.3.0"
+  "version": "0.3.1",
+  "description": "[Skill] Cline Kanban - 通过 kanban CLI 管理本地编排看板任务、依赖、hooks、配置与数据存储",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
 }
