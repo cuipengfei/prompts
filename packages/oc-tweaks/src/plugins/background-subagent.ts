@@ -17,17 +17,21 @@ When in doubt → background. Use \`background_output()\` to collect results lat
 
 ## Description Transparency Rule
 
-Every \`task()\` call MUST include an agent label in the \`description\` field so the user can see which mode you used.
+Every \`task()\` call MUST include a compact transparency summary in the \`description\` field so the user can see how the sub-agent was dispatched.
 
 Required formats:
 - \`[category:xxx]\` when using \`category\`
 - \`[subagent:xxx]\` when using \`subagent_type\`
+- \`[skills:skill-a,skill-b]\` or \`[skills:none]\`
+- \`[background]\` or \`[foreground]\`
+- \`[resume:session-id]\` when using \`session_id\`
 
 Examples:
-- \`description="[category:quick] Fix typo in config"\`
-- \`description="[subagent:explore] Inspect auth flow"\`
+- \`description="[category:quick] [skills:none] [background] Fix typo in config"\`
+- \`description="[subagent:explore] [skills:none] [background] Inspect auth flow"\`
+- \`description="[category:deep] [skills:refactor,test-driven-development] [foreground] [resume:ses_123] Continue auth refactor"\`
 
-Do NOT omit the tag.
+Do NOT omit any required transparency tag.
 `
 
 const VIOLATION_WARNING = `💡 [Reminder] Consider using background mode for better responsiveness.
@@ -38,6 +42,9 @@ function getMissingTransparencyTags(args?: {
   description?: string
   category?: string
   subagent_type?: string
+  load_skills?: string[]
+  run_in_background?: boolean
+  session_id?: string
 }): string[] {
   const description = args?.description ?? ""
   const missingTags: string[] = []
@@ -52,16 +59,32 @@ function getMissingTransparencyTags(args?: {
     if (!description.includes(tag)) missingTags.push(tag)
   }
 
+  const skillsTag = args?.load_skills && args.load_skills.length > 0
+    ? `[skills:${args.load_skills.join(",")}]`
+    : `[skills:none]`
+  if (!description.includes(skillsTag)) missingTags.push(skillsTag)
+
+  const modeTag = args?.run_in_background === false ? `[foreground]` : `[background]`
+  if (!description.includes(modeTag)) missingTags.push(modeTag)
+
+  if (args?.session_id) {
+    const tag = `[resume:${args.session_id}]`
+    if (!description.includes(tag)) missingTags.push(tag)
+  }
+
   return missingTags
 }
 
 function buildTransparencyWarning(missingTags: string[]): string {
   const plural = missingTags.length > 1 ? "s" : ""
   return `⚠️ [Transparency] Your task description is missing the required transparency tag${plural}: ${missingTags.join(", ")}
-Add the tag directly to \`description\` so the user can see which agent mode you used.
+Add the tag directly to \`description\` so the user can see the dispatch mode, loaded skills, and resume status.
 Required formats:
 - \`[category:xxx]\`
-- \`[subagent:xxx]\``
+- \`[subagent:xxx]\`
+- \`[skills:skill-a,skill-b]\` or \`[skills:none]\`
+- \`[background]\` or \`[foreground]\`
+- \`[resume:session-id]\` when applicable`
 }
 
 export const backgroundSubagentPlugin: Plugin = async () => {
@@ -88,6 +111,8 @@ export const backgroundSubagentPlugin: Plugin = async () => {
             description?: string
             category?: string
             subagent_type?: string
+            load_skills?: string[]
+            session_id?: string
           }
         },
       ) => {

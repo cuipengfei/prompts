@@ -78,14 +78,79 @@ describe("backgroundSubagentPlugin", () => {
     const { backgroundSubagentPlugin } = await import("../plugins/background-subagent")
     const hooks = await backgroundSubagentPlugin()
 
-    const beforeOutput = { args: { run_in_background: false } }
+    const beforeOutput = {
+      args: {
+        run_in_background: false,
+        description: "Refactor auth flow",
+        subagent_type: "explore",
+        load_skills: [],
+      },
+    }
     await hooks["tool.execute.before"]({ callID: "c2", tool: "task" }, beforeOutput)
 
     const afterOutput = { output: "result" }
     await hooks["tool.execute.after"]({ callID: "c2" }, afterOutput)
 
     expect(afterOutput.output).toContain("[Reminder]")
+    expect(afterOutput.output).toContain("[skills:none]")
+    expect(afterOutput.output).toContain("[foreground]")
     expect(afterOutput.output).not.toMatch(/[\u4e00-\u9fff]/)
+  })
+
+  test("accepts fully transparent descriptions without warning", async () => {
+    const home = "/tmp/oc-background-transparent"
+    ;(Bun.env as any).HOME = home
+    const path = `${home}/.config/opencode/oc-tweaks.json`
+    mockBunFile({
+      [path]: { backgroundSubagent: { enabled: true } },
+    })
+
+    const { backgroundSubagentPlugin } = await import("../plugins/background-subagent")
+    const hooks = await backgroundSubagentPlugin()
+
+    const beforeOutput = {
+      args: {
+        run_in_background: true,
+        description:
+          "[subagent:explore] [skills:none] [background] Inspect auth flow",
+        subagent_type: "explore",
+        load_skills: [],
+      },
+    }
+    await hooks["tool.execute.before"]({ callID: "c3", tool: "task" }, beforeOutput)
+
+    const afterOutput = { output: "result" }
+    await hooks["tool.execute.after"]({ callID: "c3" }, afterOutput)
+
+    expect(afterOutput.output).toBe("result")
+  })
+
+  test("requires resume tag when session_id is present", async () => {
+    const home = "/tmp/oc-background-resume"
+    ;(Bun.env as any).HOME = home
+    const path = `${home}/.config/opencode/oc-tweaks.json`
+    mockBunFile({
+      [path]: { backgroundSubagent: { enabled: true } },
+    })
+
+    const { backgroundSubagentPlugin } = await import("../plugins/background-subagent")
+    const hooks = await backgroundSubagentPlugin()
+
+    const beforeOutput = {
+      args: {
+        run_in_background: true,
+        description: "[category:deep] [skills:refactor] [background] Continue auth refactor",
+        category: "deep",
+        load_skills: ["refactor"],
+        session_id: "ses_123",
+      },
+    }
+    await hooks["tool.execute.before"]({ callID: "c4", tool: "task" }, beforeOutput)
+
+    const afterOutput = { output: "result" }
+    await hooks["tool.execute.after"]({ callID: "c4" }, afterOutput)
+
+    expect(afterOutput.output).toContain("[resume:ses_123]")
   })
 
   test("hooks are registered but disabled config makes them no-op", async () => {
@@ -108,4 +173,3 @@ describe("backgroundSubagentPlugin", () => {
     expect(output.system.length).toBe(0)
   })
 })
-

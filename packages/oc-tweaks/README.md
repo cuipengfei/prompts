@@ -136,7 +136,7 @@ This plugin provides an intelligent memory workflow:
 
 ### `backgroundSubagent`
 
-This plugin injects a policy into the system prompt, reminding the AI agent to use `run_in_background=true` by default when dispatching sub-agents. It helps maintain a responsive main conversation. If a foreground task is dispatched, a friendly reminder is shown.
+This plugin injects a policy into the system prompt, reminding the AI agent to use `run_in_background=true` by default when dispatching sub-agents. It also requires each `task()` description to expose a compact transparency summary: agent type, loaded skills, background/foreground mode, and resume session when present. If a foreground task is dispatched, or if required transparency tags are missing, a friendly reminder is shown.
 
 **Configuration Options:**
 
@@ -357,7 +357,7 @@ bunx oc-tweaks init
 
 ### `backgroundSubagent`
 
-此插件向系统提示中注入一项策略，提醒 AI 代理在派发子代理时默认使用 `run_in_background=true`。这有助于保持主对话的响应性。如果派发了前台任务，则会显示一个友好的提醒。
+此插件向系统提示中注入一项策略，提醒 AI 代理在派发子代理时默认使用 `run_in_background=true`。它也要求每次 `task()` 调用在 `description` 里写出紧凑的透明度摘要：agent 类型、已加载 skills、background/foreground 模式，以及存在时的 resume session。若派发了前台任务，或缺少必需透明度标签，插件都会追加友好提醒。
 
 **配置选项:**
 
