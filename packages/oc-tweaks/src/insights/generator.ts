@@ -1,6 +1,11 @@
+import type { Plugin } from "@opencode-ai/plugin"
+
 import { AT_A_GLANCE_PROMPT } from "./prompts/at-a-glance"
 import { INSIGHT_SECTIONS } from "./prompts/sections"
 import type { AggregatedData, InsightResults, InsightSection, SessionFacets } from "./types"
+
+type InsightsClient = Parameters<Plugin>[0]["client"]
+type ProgressMetadata = { stage: string; section?: string; completed?: number; total?: number }
 
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
@@ -130,10 +135,9 @@ function pickSuggestionsField(
 }
 
 async function promptWithInternalSession(
-  client: any,
+  client: InsightsClient,
   title: string,
   promptText: string,
-  maxTokens?: number,
 ): Promise<string> {
   let promptSessionId = `insights-internal-${Date.now()}`
 
@@ -150,7 +154,6 @@ async function promptWithInternalSession(
     path: { id: promptSessionId },
     body: {
       parts: [{ type: "text", text: promptText }],
-      ...(typeof maxTokens === "number" ? { maxTokens } : {}),
     },
   })
 
@@ -158,14 +161,13 @@ async function promptWithInternalSession(
 }
 
 async function generateInsightFromPrompt(
-  client: any,
+  client: InsightsClient,
   sectionName: InsightSection["name"],
   promptText: string,
-  maxTokens?: number,
 ): Promise<Record<string, unknown> | null> {
   try {
     const title = `[insights-internal] section ${sectionName}`
-    const responseText = await promptWithInternalSession(client, title, promptText, maxTokens)
+    const responseText = await promptWithInternalSession(client, title, promptText)
     return parseJsonObjectFromText(responseText)
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error)
@@ -175,18 +177,19 @@ async function generateInsightFromPrompt(
 }
 
 export async function generateSectionInsight(
-  client: any,
+  client: InsightsClient,
   section: InsightSection,
   fullContext: string,
 ): Promise<Record<string, unknown> | null> {
   const promptText = `${section.prompt}\n\nSESSION DATA (JSON):\n${fullContext}`
-  return generateInsightFromPrompt(client, section.name, promptText, section.maxTokens)
+  return generateInsightFromPrompt(client, section.name, promptText)
 }
 
 export async function generateParallelInsights(
-  client: any,
+  client: InsightsClient,
   data: AggregatedData,
   facets: Map<string, SessionFacets>,
+  onProgress?: (metadata: ProgressMetadata) => void,
 ): Promise<InsightResults> {
   // 1) dataContext
   const dataContext = buildDataContext(data)
@@ -196,6 +199,7 @@ export async function generateParallelInsights(
 
   // 3) 7 regular sections in parallel
   const regularSections = INSIGHT_SECTIONS.filter((section) => section.name !== "at_a_glance")
+  onProgress?.({ stage: "sections-start", completed: 0, total: regularSections.length + 1 })
   const sectionResults = await Promise.all(
     regularSections.map(async (section) => ({
       name: section.name,
@@ -207,9 +211,17 @@ export async function generateParallelInsights(
   const insights: InsightResults = {}
   const sectionMap: Record<string, Record<string, unknown> | null> = {}
 
+  let completedSections = 0
   for (const { name, insight } of sectionResults) {
     sectionMap[name] = insight
     ;(insights as Record<string, unknown>)[name] = insight
+    completedSections += 1
+    onProgress?.({
+      stage: "section-complete",
+      section: name,
+      completed: completedSections,
+      total: regularSections.length + 1,
+    })
   }
 
   // 5) serially generate at_a_glance after all sections
@@ -230,6 +242,12 @@ export async function generateParallelInsights(
 
   const atAGlance = await generateInsightFromPrompt(client, "at_a_glance", atAGlancePrompt)
   ;(insights as Record<string, unknown>).at_a_glance = atAGlance
+  onProgress?.({
+    stage: "section-complete",
+    section: "at_a_glance",
+    completed: regularSections.length + 1,
+    total: regularSections.length + 1,
+  })
 
   return insights
 }

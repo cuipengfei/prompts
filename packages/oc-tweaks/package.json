@@ -1,13 +1,13 @@
 {
   "name": "oc-tweaks",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
   },
   "main": "./dist/index.js",
   "peerDependencies": {
-    "@opencode-ai/plugin": ">=1.0.0"
+    "@opencode-ai/plugin": ">=1.2.0"
   },
   "devDependencies": {
     "@opencode-ai/plugin": "^1.4.3"

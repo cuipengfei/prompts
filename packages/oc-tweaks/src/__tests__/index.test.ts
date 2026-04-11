@@ -6,6 +6,7 @@ import {
   autoMemoryPlugin,
   backgroundSubagentPlugin,
   compactionPlugin,
+  insightsPlugin,
   leaderboardPlugin,
   notifyPlugin,
   toolCallNotifyPlugin,
@@ -70,9 +71,135 @@ describe("index exports", () => {
     expect(typeof autoMemoryPlugin).toBe("function")
     expect(typeof backgroundSubagentPlugin).toBe("function")
     expect(typeof compactionPlugin).toBe("function")
+    expect(typeof insightsPlugin).toBe("function")
     expect(typeof leaderboardPlugin).toBe("function")
     expect(typeof notifyPlugin).toBe("function")
     expect(typeof toolCallNotifyPlugin).toBe("function")
+  })
+
+  test("insightsPlugin returns insights_generate tool registration", async () => {
+    const hooks = await insightsPlugin({ client: {} as any })
+
+    expect(typeof hooks).toBe("object")
+    expect(typeof hooks.tool).toBe("object")
+    expect(typeof hooks.tool.insights_generate).toBe("object")
+    expect(hooks.tool.insights_generate.description).toContain("usage insights report")
+    expect(typeof hooks.tool.insights_generate.execute).toBe("function")
+  })
+
+  test("insightsPlugin execute reports metadata progress while preserving prompt output contract", async () => {
+    const metadataCalls: any[] = []
+    let createCount = 0
+    const titleById = new Map<string, string>()
+
+    const mockClient = {
+      session: {
+        create: async ({ body }: { body: { title: string } }) => {
+          createCount += 1
+          const id = `mock-${createCount}`
+          titleById.set(id, body.title)
+          return { data: { id } }
+        },
+        prompt: async ({ path, body }: any) => {
+          const title = titleById.get(path.id) ?? ""
+          const text = body.parts?.[0]?.text ?? ""
+
+          if (title.includes("facets")) {
+            return {
+              data: {
+                parts: [{
+                  type: "text",
+                  text: JSON.stringify({
+                    session_id: "ses-1",
+                    underlying_goal: "Ship feature",
+                    goal_categories: { implement_feature: 1 },
+                    outcome: "fully_achieved",
+                    user_satisfaction_counts: { satisfied: 1 },
+                    claude_helpfulness: "very_helpful",
+                    session_type: "single_task",
+                    friction_counts: {},
+                    friction_detail: "",
+                    primary_success: "correct_code_edits",
+                    brief_summary: "Done",
+                  }),
+                }],
+              },
+            }
+          }
+
+          if (title.includes("section at_a_glance")) {
+            return {
+              data: {
+                parts: [{
+                  type: "text",
+                  text: JSON.stringify({
+                    whats_working: "Good",
+                    whats_hindering: "Low",
+                    quick_wins: "Try X",
+                    ambitious_workflows: "Try Y",
+                  }),
+                }],
+              },
+            }
+          }
+
+          const sectionMap: Record<string, unknown> = {
+            project_areas: { areas: [{ name: "Proj", session_count: 1, description: "Desc" }] },
+            interaction_style: { narrative: "Narrative", key_pattern: "Pattern" },
+            what_works: { intro: "Works", impressive_workflows: [{ title: "WF", description: "Desc" }] },
+            friction_analysis: { intro: "Friction", categories: [{ category: "Cat", description: "Desc", examples: ["ex"] }] },
+            suggestions: {
+              claude_md_additions: [{ addition: "Add this", why: "Because" }],
+              features_to_try: [{ feature: "Feature", one_liner: "One", why_for_you: "Why", example_code: "code" }],
+              usage_patterns: [{ title: "Pattern", suggestion: "Try", detail: "Detail", copyable_prompt: "Prompt" }],
+            },
+            on_the_horizon: { intro: "Future", opportunities: [{ title: "Opp", whats_possible: "Possible", how_to_try: "Try", copyable_prompt: "Prompt" }] },
+            fun_ending: { headline: "Fun", detail: "End" },
+          }
+
+          for (const [name, value] of Object.entries(sectionMap)) {
+            if (title.includes(`section ${name}`)) {
+              return { data: { parts: [{ type: "text", text: JSON.stringify(value) }] } }
+            }
+          }
+
+          expect(text).toContain("SESSION DATA")
+          return { data: { parts: [{ type: "text", text: "{}" }] } }
+        },
+      },
+    }
+
+    const originalBunFileImpl = Bun.file
+    const originalBunWriteImpl = Bun.write
+    const home = "/tmp/oc-index-insights-execute"
+    ;(Bun.env as any).HOME = home
+
+    const files = new Map<string, string>()
+    ;(globalThis as any).Bun.file = (path: string) => ({
+      exists: async () => files.has(path),
+      text: async () => files.get(path) ?? "",
+      json: async () => JSON.parse(files.get(path) ?? "{}"),
+      stat: async () => ({ mtimeMs: Date.now() }),
+    })
+    ;(globalThis as any).Bun.write = async (path: string, content: string) => {
+      files.set(path, typeof content === "string" ? content : String(content))
+    }
+
+    try {
+      const hooks = await insightsPlugin({ client: mockClient as any })
+      const result = await hooks.tool.insights_generate.execute(
+        { days: 1 },
+        { metadata: (input: any) => metadataCalls.push(input) } as any,
+      )
+
+      expect(String(result)).toContain("The user just ran /insights")
+      expect(metadataCalls.length).toBeGreaterThan(0)
+      expect(metadataCalls[0]?.metadata?.stage).toBe("pipeline:start")
+      expect(metadataCalls.some((call) => call?.metadata?.stage === "section-complete")).toBe(true)
+    } finally {
+      ;(globalThis as any).Bun.file = originalBunFileImpl
+      ;(globalThis as any).Bun.write = originalBunWriteImpl
+    }
   })
 
   test("leaderboardPlugin with default config returns object with event hook", async () => {

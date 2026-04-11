@@ -23,7 +23,12 @@ import { buildExportData, buildPromptForCommand } from "./export"
 import { extractAllFacets, isMinimalSession, isSubstantiveSession } from "./facets"
 import { generateParallelInsights } from "./generator"
 import { generateHtmlReport } from "./renderer"
+import type { Plugin } from "@opencode-ai/plugin"
+
 import type { AggregatedData, InsightResults, SessionFacets, SessionMeta } from "./types"
+
+type InsightsClient = Parameters<Plugin>[0]["client"]
+type ProgressMetadata = { stage: string; section?: string; completed?: number; total?: number }
 
 const DEFAULT_DB_PATH = `${Bun.env?.HOME ?? ""}/.local/share/opencode/opencode.db`
 const MAX_SESSION_SUMMARIES = 50
@@ -38,6 +43,7 @@ export type GenerateUsageReportOptions = {
   dbPath?: string
   days?: number
   project?: string
+  onProgress?: (metadata: ProgressMetadata) => void
 }
 
 export type GenerateUsageReportResult = {
@@ -353,12 +359,13 @@ async function collectSessionArtifacts(
 }
 
 export async function generateUsageReport(
-  client: any,
+  client: InsightsClient,
   options: GenerateUsageReportOptions = {},
 ): Promise<GenerateUsageReportResult> {
   const htmlPath = getReportPath()
 
   if (await isReportFresh(options?.dbPath)) {
+    options.onProgress?.({ stage: "cache-hit" })
     const cached = await restoreCachedResult(htmlPath)
 
     // 保持 export/prompt contract 可复用，即使缓存命中也执行构建。
@@ -382,6 +389,11 @@ export async function generateUsageReport(
   const dedupedSessions = dedupSessionsById(sessions)
   const substantiveSessions = dedupedSessions.filter(isSubstantiveSession)
   const analyzedSessions = substantiveSessions.slice(0, MAX_SESSIONS)
+  options.onProgress?.({
+    stage: "sessions-collected",
+    completed: analyzedSessions.length,
+    total: dedupedSessions.length,
+  })
 
   const { messages, parts } = await collectSessionArtifacts(
     analyzedSessions,
@@ -400,7 +412,12 @@ export async function generateUsageReport(
   const data = aggregateData(filtered.sessions, filtered.facets)
   data.total_sessions_scanned = dedupedSessions.length
 
-  const insights = await generateParallelInsights(client, data, filtered.facets)
+  const insights = await generateParallelInsights(
+    client,
+    data,
+    filtered.facets,
+    options.onProgress,
+  )
   const html = generateHtmlReport(data, insights)
 
   await mkdir(dirname(htmlPath), { recursive: true })
