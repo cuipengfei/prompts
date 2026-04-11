@@ -1,6 +1,10 @@
 // @ts-nocheck
 
+declare const Bun: any
+
 import { afterEach, describe, expect, test } from "bun:test"
+import { Database } from "bun:sqlite"
+import { mkdir, rm } from "node:fs/promises"
 
 import {
   autoMemoryPlugin,
@@ -16,6 +20,66 @@ const originalBunFile = Bun.file
 const originalBunWrite = Bun.write
 const originalFetch = globalThis.fetch
 const originalHome = Bun.env?.HOME
+
+const createdDbPaths = new Set<string>()
+
+function createTestDbPath(name: string) {
+  const dbPath = `/tmp/oc-index-${name}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}.sqlite`
+  createdDbPaths.add(dbPath)
+  return dbPath
+}
+
+async function cleanupSqliteArtifacts(dbPath: string) {
+  await rm(dbPath, { force: true }).catch(() => {})
+  await rm(`${dbPath}-wal`, { force: true }).catch(() => {})
+  await rm(`${dbPath}-shm`, { force: true }).catch(() => {})
+  await rm(`${dbPath}-journal`, { force: true }).catch(() => {})
+}
+
+function createInsightsDatabase(dbPath: string) {
+  const db = new Database(dbPath)
+  db.exec(`
+    CREATE TABLE project (
+      id TEXT PRIMARY KEY,
+      worktree TEXT NOT NULL
+    );
+
+    CREATE TABLE session (
+      id TEXT PRIMARY KEY,
+      project_id TEXT NOT NULL,
+      parent_id TEXT,
+      slug TEXT NOT NULL,
+      directory TEXT NOT NULL,
+      title TEXT NOT NULL,
+      version TEXT NOT NULL,
+      share_url TEXT,
+      summary_additions INTEGER NOT NULL,
+      summary_deletions INTEGER NOT NULL,
+      summary_files INTEGER NOT NULL,
+      summary_diffs TEXT,
+      time_created INTEGER NOT NULL,
+      time_updated INTEGER NOT NULL,
+      time_compacting INTEGER,
+      time_archived INTEGER,
+      workspace_id TEXT
+    );
+
+    CREATE TABLE message (
+      id TEXT PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      time_created INTEGER NOT NULL,
+      data TEXT NOT NULL
+    );
+
+    CREATE TABLE part (
+      id TEXT PRIMARY KEY,
+      message_id TEXT,
+      session_id TEXT NOT NULL,
+      data TEXT NOT NULL
+    );
+  `)
+  return db
+}
 
 function mockBunFile(mockData: Record<string, any>) {
   ;(globalThis as any).Bun.file = (path: string) => ({
@@ -64,6 +128,11 @@ afterEach(() => {
   } else {
     ;(Bun.env as any).HOME = originalHome
   }
+})
+
+afterEach(async () => {
+  await Promise.all(Array.from(createdDbPaths).map((dbPath) => cleanupSqliteArtifacts(dbPath)))
+  createdDbPaths.clear()
 })
 
 describe("index exports", () => {
@@ -172,7 +241,40 @@ describe("index exports", () => {
     const originalBunFileImpl = Bun.file
     const originalBunWriteImpl = Bun.write
     const home = "/tmp/oc-index-insights-execute"
+    const dbHomeDir = `${home}/.local/share/opencode`
+    const runtimeDbPath = `${dbHomeDir}/opencode.db`
     ;(Bun.env as any).HOME = home
+
+    await mkdir(dbHomeDir, { recursive: true })
+    await cleanupSqliteArtifacts(runtimeDbPath)
+
+    const db = createInsightsDatabase(runtimeDbPath)
+    const now = Date.now()
+    db.query("INSERT INTO session (id, project_id, parent_id, slug, directory, title, version, share_url, summary_additions, summary_deletions, summary_files, summary_diffs, time_created, time_updated, time_compacting, time_archived, workspace_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      .run(
+        "ses-1",
+        "project-a",
+        null,
+        "ses-1",
+        "/repo/a",
+        "Test session",
+        "0.8.2",
+        null,
+        0,
+        0,
+        0,
+        null,
+        now - 120_000,
+        now,
+        null,
+        null,
+        null,
+      )
+    db.query("INSERT INTO message (id, session_id, time_created, data) VALUES (?, ?, ?, ?)")
+      .run("msg-1", "ses-1", now - 110_000, JSON.stringify({ role: "user", content: "Help me ship this" }))
+    db.query("INSERT INTO message (id, session_id, time_created, data) VALUES (?, ?, ?, ?)")
+      .run("msg-2", "ses-1", now - 100_000, JSON.stringify({ role: "user", content: "Please continue" }))
+    db.close()
 
     const files = new Map<string, string>()
     ;(globalThis as any).Bun.file = (path: string) => ({
