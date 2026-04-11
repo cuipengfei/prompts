@@ -1,6 +1,6 @@
 {
   "name": "oc-tweaks",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "type": "module",
   "exports": {
     ".": "./dist/index.js"
@@ -10,7 +10,7 @@
     "@opencode-ai/plugin": ">=1.0.0"
   },
   "devDependencies": {
-    "@opencode-ai/plugin": "^1.2.15"
+    "@opencode-ai/plugin": "^1.4.3"
   },
   "bin": {
     "oc-tweaks": "./dist/cli/init.js"
