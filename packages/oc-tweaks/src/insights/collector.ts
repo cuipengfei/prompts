@@ -103,6 +103,16 @@ function getDbPath(dbPath?: string): string {
   return dbPath || DEFAULT_DB_PATH
 }
 
+export function resolveProjectId(db: Database, project: string): string {
+  // If it looks like a path (contains /), look up the project table by worktree
+  if (project.includes("/")) {
+    const row = db.query("SELECT id FROM project WHERE worktree = ?").get(project) as { id: string } | null
+    if (row) return row.id
+  }
+  // Otherwise assume it's already a project_id hash
+  return project
+}
+
 function mapSessionRow(row: Record<string, unknown>): SessionBaseMeta {
   return {
     id: String(row.id),
@@ -189,7 +199,7 @@ function getTimeValue(message: MessageData): number | null {
   return null
 }
 
-function hasHumanTextContent(content: unknown): boolean {
+export function hasHumanTextContent(content: unknown): boolean {
   if (typeof content === "string") return content.trim().length > 0
   if (!Array.isArray(content)) return false
   return content.some((block) => isObject(block) && block.type === "text" && typeof block.text === "string" && block.text.trim().length > 0)
@@ -207,8 +217,8 @@ function hasInterruptedContent(content: unknown): boolean {
   )
 }
 
-function countHumanUserMessages(messages: MessageData[]): number {
-  return messages.filter((message) => message.role === "user" && hasHumanTextContent(message.content)).length
+export function countHumanUserMessages(messages: MessageData[]): number {
+  return messages.filter((message) => message.role === "user").length
 }
 
 function parseJsonBlob<T>(value: unknown): T {
@@ -351,12 +361,16 @@ export async function collectSessions(options: CollectSessionsOptions = {}): Pro
     }
 
     if (options.project) {
+      const projectId = resolveProjectId(db, options.project)
       conditions.push("project_id = ?")
-      params.push(options.project)
+      params.push(projectId)
     }
 
     conditions.push("title NOT LIKE ?")
     params.push("%[insights-internal]%")
+
+    // Exclude sub-agent sessions (those spawned by a parent session)
+    conditions.push("(parent_id IS NULL OR parent_id = '')")
 
     if (conditions.length > 0) {
       sql += ` WHERE ${conditions.join(" AND ")}`
@@ -432,9 +446,8 @@ export function extractToolStats(messages: MessageData[], parts: PartData[]): To
     if (message.role !== "user") continue
 
     const messageTime = getTimeValue(message)
-    const isHumanMessage = hasHumanTextContent(message.content)
 
-    if (isHumanMessage && messageTime !== null) {
+    if (messageTime !== null) {
       const createdAt = new Date(messageTime)
       messageHours.push(createdAt.getHours())
       userMessageTimestamps.push(messageTime)

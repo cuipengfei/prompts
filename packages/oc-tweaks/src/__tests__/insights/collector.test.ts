@@ -9,6 +9,7 @@ import {
   collectParts,
   collectSessions,
   extractToolStats,
+  resolveProjectId,
 } from "../../insights/collector"
 
 const originalDatabaseQuery = Database.prototype.query
@@ -31,6 +32,11 @@ async function cleanupSqliteArtifacts(dbPath: string) {
 function createDatabase(dbUri: string) {
   const db = new Database(dbUri)
   db.exec(`
+    CREATE TABLE project (
+      id TEXT PRIMARY KEY,
+      worktree TEXT NOT NULL
+    );
+
     CREATE TABLE session (
       id TEXT PRIMARY KEY,
       project_id TEXT NOT NULL,
@@ -66,6 +72,10 @@ function createDatabase(dbUri: string) {
     );
   `)
   return db
+}
+
+function insertProject(db: any, row: { id: string; worktree: string }) {
+  db.query("INSERT INTO project (id, worktree) VALUES (?, ?)").run(row.id, row.worktree)
 }
 
 function insertSession(db: any, session: Record<string, unknown>) {
@@ -118,6 +128,40 @@ afterEach(async () => {
   Database.prototype.query = originalDatabaseQuery
   await Promise.all(Array.from(createdDbPaths).map((dbPath) => cleanupSqliteArtifacts(dbPath)))
   createdDbPaths.clear()
+})
+
+describe("resolveProjectId", () => {
+  test("maps project worktree path to id", () => {
+    const db = new Database(":memory:")
+    db.exec("CREATE TABLE project (id TEXT PRIMARY KEY, worktree TEXT NOT NULL)")
+    db.query("INSERT INTO project (id, worktree) VALUES (?, ?)").run(
+      "7a3e867d3f4463cfbaa9e0866ee3fd5d279668d0",
+      "/some/path",
+    )
+
+    expect(resolveProjectId(db, "/some/path")).toBe("7a3e867d3f4463cfbaa9e0866ee3fd5d279668d0")
+
+    db.close()
+  })
+
+  test("returns hash unchanged when project looks like id", () => {
+    const db = new Database(":memory:")
+    db.exec("CREATE TABLE project (id TEXT PRIMARY KEY, worktree TEXT NOT NULL)")
+
+    const projectId = "7a3e867d3f4463cfbaa9e0866ee3fd5d279668d0"
+    expect(resolveProjectId(db, projectId)).toBe(projectId)
+
+    db.close()
+  })
+
+  test("falls back to original path when worktree has no match", () => {
+    const db = new Database(":memory:")
+    db.exec("CREATE TABLE project (id TEXT PRIMARY KEY, worktree TEXT NOT NULL)")
+
+    expect(resolveProjectId(db, "/not/exist")).toBe("/not/exist")
+
+    db.close()
+  })
 })
 
 describe("collectSessions", () => {
@@ -518,6 +562,94 @@ describe("collectSessions", () => {
 
     expect(sessions.map((session) => session.id)).toEqual(["eligible-1", "eligible-2"])
     expect(sessions.every((session) => session.project_id === "project-a")).toBe(true)
+  })
+
+  test("resolves project path to project_id before filtering sessions", async () => {
+    const dbPath = `file:oc-insights-project-path-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}?mode=memory&cache=shared`
+    const db = createDatabase(dbPath)
+    const now = Date.now()
+    const projectId = "7a3e867d3f4463cfbaa9e0866ee3fd5d279668d0"
+
+    insertProject(db, { id: projectId, worktree: "/some/path" })
+
+    insertSession(db, {
+      id: "path-match",
+      project_id: projectId,
+      slug: "path-match",
+      directory: "/repo/a",
+      title: "Path Match",
+      version: "0.7.1",
+      time_created: now - 1_000,
+      time_updated: now - 500,
+    })
+    insertSession(db, {
+      id: "path-no-match",
+      project_id: "another-project-hash",
+      slug: "path-no-match",
+      directory: "/repo/b",
+      title: "Path No Match",
+      version: "0.7.1",
+      time_created: now - 2_000,
+      time_updated: now - 100,
+    })
+
+    const sessions = await collectSessions({ dbPath, project: "/some/path" })
+
+    expect(sessions.map((session) => session.id)).toEqual(["path-match"])
+    expect(sessions[0]?.project_id).toBe(projectId)
+
+    db.close()
+  })
+
+  test("excludes sub-agent sessions (those with parent_id)", async () => {
+    const dbPath = createTestDbPath("sessions-subagent")
+    const db = createDatabase(dbPath)
+    const now = Date.now()
+
+    // Main session — no parent_id
+    insertSession(db, {
+      id: "main-session",
+      project_id: "project-a",
+      slug: "main-session",
+      directory: "/repo/a",
+      title: "Main Session",
+      version: "0.7.1",
+      time_created: now - 2 * 60 * 60 * 1000,
+      time_updated: now - 1_000,
+    })
+
+    // Sub-agent session — has parent_id
+    insertSession(db, {
+      id: "sub-session",
+      project_id: "project-a",
+      parent_id: "main-session",
+      slug: "sub-session",
+      directory: "/repo/a",
+      title: "Find auth patterns (@explore subagent)",
+      version: "0.7.1",
+      time_created: now - 1.5 * 60 * 60 * 1000,
+      time_updated: now - 500,
+    })
+
+    // Another sub-agent — parent_id set but title doesn't contain 'subagent'
+    insertSession(db, {
+      id: "sub-session-no-title",
+      project_id: "project-a",
+      parent_id: "main-session",
+      slug: "sub-session-no-title",
+      directory: "/repo/a",
+      title: "look_at: Describe this file",
+      version: "0.7.1",
+      time_created: now - 1 * 60 * 60 * 1000,
+      time_updated: now - 200,
+    })
+
+    db.close()
+
+    const sessions = await collectSessions({ dbPath })
+
+    expect(sessions.map((s) => s.id)).toEqual(["main-session"])
+    expect(sessions.every((s) => s.parent_id === undefined)).toBe(true)
   })
 })
 
