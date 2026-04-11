@@ -1,6 +1,7 @@
 export { autoMemoryPlugin } from "./plugins/auto-memory"
 export { backgroundSubagentPlugin } from "./plugins/background-subagent"
 export { compactionPlugin } from "./plugins/compaction"
+export { insightsPlugin } from "./plugins/insights"
 export { leaderboardPlugin } from "./plugins/leaderboard"
 export { notifyPlugin } from "./plugins/notify"
 export { toolCallNotifyPlugin } from "./plugins/tool-call-notify"
