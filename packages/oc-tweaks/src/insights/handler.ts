@@ -30,8 +30,11 @@ import type { AggregatedData, InsightResults, SessionFacets, SessionMeta } from 
 type InsightsClient = Parameters<Plugin>[0]["client"]
 type ProgressMetadata = { stage: string; section?: string; completed?: number; total?: number }
 
-const DEFAULT_DB_PATH = `${Bun.env?.HOME ?? ""}/.local/share/opencode/opencode.db`
 const MAX_SESSION_SUMMARIES = 50
+
+function getDefaultDbPath(): string {
+  return `${Bun.env?.HOME ?? ""}/.local/share/opencode/opencode.db`
+}
 
 type CachedReportPayload = {
   insights: InsightResults
@@ -341,7 +344,7 @@ async function collectSessionArtifacts(
 ): Promise<{ messages: Map<string, MessageData[]>; parts: Map<string, PartData[]> }> {
   const messages = new Map<string, MessageData[]>()
   const parts = new Map<string, PartData[]>()
-  const path = dbPath ?? DEFAULT_DB_PATH
+  const path = dbPath ?? getDefaultDbPath()
 
   await Promise.all(
     sessions.map(async (session) => {

@@ -5,7 +5,6 @@ import { Database } from "bun:sqlite"
 import { EXTENSION_TO_LANGUAGE } from "./constants"
 import type { SessionMeta } from "./types"
 
-const DEFAULT_DB_PATH = `${Bun.env?.HOME ?? ""}/.local/share/opencode/opencode.db`
 const REQUEST_INTERRUPTED_MARKER = "[Request interrupted by user"
 
 type CollectSessionsOptions = {
@@ -95,12 +94,16 @@ type SessionStatsFields = Pick<
 
 type SessionBaseMeta = Omit<SessionMeta, keyof SessionStatsFields>
 
+function getDefaultDbPath(): string {
+  return `${Bun.env?.HOME ?? ""}/.local/share/opencode/opencode.db`
+}
+
 function openDatabase(dbPath: string) {
   return new Database(dbPath, { readonly: true })
 }
 
 function getDbPath(dbPath?: string): string {
-  return dbPath || DEFAULT_DB_PATH
+  return dbPath || getDefaultDbPath()
 }
 
 export function resolveProjectId(db: Database, project: string): string {
