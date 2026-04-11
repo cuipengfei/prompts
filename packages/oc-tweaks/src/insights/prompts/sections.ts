@@ -13,7 +13,6 @@ RESPOND WITH ONLY A VALID JSON OBJECT:
 }
 
 Include 4-5 areas. Skip internal tool operations.`,
-    maxTokens: 8192,
   },
   {
     name: "interaction_style",
@@ -24,7 +23,6 @@ RESPOND WITH ONLY A VALID JSON OBJECT:
   "narrative": "2-3 paragraphs analyzing HOW the user interacts with OpenCode. Use second person 'you'. Describe patterns: iterate quickly vs detailed upfront specs? Interrupt often or let the AI run? Include specific examples. Use **bold** for key insights.",
   "key_pattern": "One sentence summary of most distinctive interaction style"
 }`,
-    maxTokens: 8192,
   },
   {
     name: "what_works",
@@ -39,7 +37,6 @@ RESPOND WITH ONLY A VALID JSON OBJECT:
 }
 
 Include 3 impressive workflows.`,
-    maxTokens: 8192,
   },
   {
     name: "friction_analysis",
@@ -54,7 +51,6 @@ RESPOND WITH ONLY A VALID JSON OBJECT:
 }
 
 Include 3 friction categories with 2 examples each.`,
-    maxTokens: 8192,
   },
   {
     name: "suggestions",
@@ -96,7 +92,6 @@ RESPOND WITH ONLY A VALID JSON OBJECT:
 IMPORTANT for claude_md_additions: PRIORITIZE instructions that appear MULTIPLE TIMES in the user data. If the user told the AI the same thing in 2+ sessions (e.g., 'always run tests', 'use TypeScript'), that's a PRIME candidate - they shouldn't have to repeat themselves.
 
 IMPORTANT for features_to_try: Pick 2-3 from the FEATURES REFERENCE above. Include 2-3 items for each category.`,
-    maxTokens: 8192,
   },
   {
     name: "on_the_horizon",
@@ -111,7 +106,6 @@ RESPOND WITH ONLY A VALID JSON OBJECT:
 }
 
 Include 3 opportunities. Think BIG - autonomous workflows, parallel agents, iterating against tests.`,
-    maxTokens: 8192,
   },
   {
     name: "fun_ending",
@@ -124,6 +118,5 @@ RESPOND WITH ONLY A VALID JSON OBJECT:
 }
 
 Find something genuinely interesting or amusing from the session summaries.`,
-    maxTokens: 8192,
   },
 ]

@@ -216,9 +216,8 @@ export type InsightSection = {
     | "interaction_style"
     | "what_works"
     | "friction_analysis"
-    | "suggestions"
-    | "on_the_horizon"
-    | "fun_ending"
+      | "suggestions"
+      | "on_the_horizon"
+      | "fun_ending"
   prompt: string
-  maxTokens: number
 }
