@@ -141,6 +141,39 @@ describe("insights facets extractor", () => {
     )
   })
 
+  test("extractFacetsFromAPI sends prompt body without legacy maxTokens field", async () => {
+    const promptCalls: any[] = []
+
+    const client = {
+      session: {
+        create: async () => ({ data: { id: "internal-insights-session" } }),
+        prompt: async (options: any) => {
+          promptCalls.push(options)
+          return {
+            data: {
+              parts: [{
+                type: "text",
+                text: JSON.stringify(createFacet("ses-typed")),
+              }],
+            },
+          }
+        },
+      },
+    }
+
+    const result = await extractFacetsFromAPI(
+      client,
+      "ses-typed",
+      [{ role: "user", content: "Please fix bug in parser" }],
+      [],
+    )
+
+    expect(result?.session_id).toBe("ses-typed")
+    expect(promptCalls.length).toBe(1)
+    expect(promptCalls[0]?.body?.parts?.length).toBe(1)
+    expect("maxTokens" in (promptCalls[0]?.body ?? {})).toBe(false)
+  })
+
   test("extractAllFacets skips LLM when cached facets map hits", async () => {
     const promptCalls: any[] = []
     const createCalls: any[] = []

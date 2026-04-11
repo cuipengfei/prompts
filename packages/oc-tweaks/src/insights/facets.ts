@@ -1,8 +1,12 @@
+import type { Plugin } from "@opencode-ai/plugin"
+
 import { CONCURRENCY, MAX_FACET_EXTRACTIONS } from "./constants"
 import { isValidSessionFacets, loadCachedFacets, saveFacets } from "./cache"
 import { FACET_EXTRACTION_PROMPT } from "./prompts/facets-extraction"
 import type { PartData, MessageData } from "./collector"
 import type { SessionFacets, SessionMeta } from "./types"
+
+type InsightsClient = Parameters<Plugin>[0]["client"]
 
 type SessionDataIndex<T> = Map<string, T[]> | Record<string, T[]> | null | undefined
 
@@ -185,7 +189,7 @@ export function isMinimalSession(facets: SessionFacets): boolean {
 }
 
 export async function extractFacetsFromAPI(
-  client: any,
+  client: InsightsClient,
   sessionId: string,
   messages: MessageData[],
   parts: PartData[],
@@ -233,7 +237,7 @@ export async function extractFacetsFromAPI(
 }
 
 export async function extractAllFacets(
-  client: any,
+  client: InsightsClient,
   sessions: SessionMeta[],
   messages: SessionDataIndex<MessageData>,
   parts: SessionDataIndex<PartData>,
