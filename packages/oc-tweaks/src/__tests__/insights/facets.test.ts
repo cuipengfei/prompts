@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import {
   extractAllFacets,
   extractFacetsFromAPI,
+  formatTranscript,
   isMinimalSession,
   isSubstantiveSession,
 } from "../../insights/facets"
@@ -280,5 +281,96 @@ describe("insights facets extractor", () => {
         }),
       ),
     ).toBe(false)
+  })
+})
+
+describe("formatTranscript compatibility", () => {
+  test("legacy session: extracts text from message.content when no text/reasoning parts exist", () => {
+    const messages = [
+      { _messageId: "msg-1", role: "user", content: "Please fix the bug" },
+      { _messageId: "msg-2", role: "assistant", content: [{ type: "text", text: "Working on it" }] },
+    ]
+    const parts = [
+      {
+        _messageId: "msg-2",
+        type: "tool",
+        tool: "Edit",
+        state: { input: { file_path: "/repo/src/parser.ts" }, output: "ok" },
+      },
+    ]
+
+    const transcript = formatTranscript("ses-legacy", messages, parts)
+
+    expect(transcript).toContain("[User] Please fix the bug")
+    expect(transcript).toContain("[Assistant] Working on it")
+    expect(transcript).toContain("[Tool: Edit]")
+    // Should NOT contain part-based markers
+    expect(transcript).not.toContain("[Reasoning]")
+  })
+
+  test("part-based session: extracts text from parts when message.content is empty", () => {
+    const messages = [
+      { _messageId: "msg-1", role: "user", content: "" },
+      { _messageId: "msg-2", role: "assistant", content: "" },
+    ]
+    const parts = [
+      { _messageId: "msg-1", type: "text", text: "Please fix the bug" },
+      { _messageId: "msg-2", type: "reasoning", reasoning: "Let me think about the approach" },
+      { _messageId: "msg-2", type: "text", text: "I will fix it now" },
+      {
+        _messageId: "msg-2",
+        type: "tool",
+        tool: "Edit",
+        state: { input: { file_path: "/repo/src/parser.ts" }, output: "ok" },
+      },
+    ]
+
+    const transcript = formatTranscript("ses-part-based", messages, parts)
+
+    expect(transcript).toContain("[User] Please fix the bug")
+    expect(transcript).toContain("[Reasoning] Let me think about the approach")
+    expect(transcript).toContain("[Assistant] I will fix it now")
+    expect(transcript).toContain("[Tool: Edit]")
+    // Should NOT fall back to message.content (which is empty string)
+    const userLines = transcript.split("\n").filter((l) => l.startsWith("[User]"))
+    expect(userLines.length).toBe(1)
+  })
+
+  test("mixed session: uses part-based text and does NOT concatenate message.content", () => {
+    const messages = [
+      { _messageId: "msg-1", role: "user", content: "Some old content that should be ignored" },
+      { _messageId: "msg-2", role: "assistant", content: "Old assistant content" },
+    ]
+    const parts = [
+      { _messageId: "msg-1", type: "text", text: "Real user text from parts" },
+      { _messageId: "msg-2", type: "text", text: "Real assistant text from parts" },
+    ]
+
+    const transcript = formatTranscript("ses-mixed", messages, parts)
+
+    // Part-based text should appear
+    expect(transcript).toContain("[User] Real user text from parts")
+    expect(transcript).toContain("[Assistant] Real assistant text from parts")
+    // Legacy message.content should NOT appear (no blind concatenation)
+    expect(transcript).not.toContain("Some old content that should be ignored")
+    expect(transcript).not.toContain("Old assistant content")
+  })
+
+  test("part-based session: assigns correct role via _messageId mapping", () => {
+    const messages = [
+      { _messageId: "msg-u1", role: "user" },
+      { _messageId: "msg-a1", role: "assistant" },
+    ]
+    const parts = [
+      { _messageId: "msg-u1", type: "text", text: "User question" },
+      { _messageId: "msg-a1", type: "text", text: "Assistant answer" },
+      { type: "text", text: "Orphan text without messageId" },
+    ]
+
+    const transcript = formatTranscript("ses-roles", messages, parts)
+
+    expect(transcript).toContain("[User] User question")
+    expect(transcript).toContain("[Assistant] Assistant answer")
+    expect(transcript).toContain("[Message] Orphan text without messageId")
   })
 })

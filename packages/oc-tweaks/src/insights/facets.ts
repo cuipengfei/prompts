@@ -60,37 +60,74 @@ function getMessageText(content: unknown, maxChars: number): string {
   return toLimitedText(pieces.join("\n"), maxChars)
 }
 
-function formatTranscript(sessionId: string, messages: MessageData[], parts: PartData[]): string {
+export function formatTranscript(sessionId: string, messages: MessageData[], parts: PartData[]): string {
   const lines: string[] = []
   lines.push(`Session: ${sessionId}`)
   lines.push(`Messages: ${messages.length}`)
   lines.push(`Parts: ${parts.length}`)
   lines.push("")
 
-  for (const message of messages) {
-    const role = typeof message?.role === "string" ? message.role : "unknown"
-    const text = getMessageText(message?.content, role === "assistant" ? 320 : 520)
-    if (text) {
-      lines.push(`[${role === "user" ? "User" : role === "assistant" ? "Assistant" : "Message"}] ${text}`)
+  // Detect whether parts contain substantive text/reasoning content (new schema)
+  const hasPartBasedText = parts.some(
+    (part) =>
+      (part.type === "text" && typeof part.text === "string" && part.text.trim().length > 0) ||
+      (part.type === "reasoning" && typeof part.reasoning === "string" && part.reasoning.trim().length > 0),
+  )
+
+  if (hasPartBasedText) {
+    // Part-first: build messageId → role mapping from messages
+    const roleByMessageId = new Map<string, string>()
+    for (const message of messages) {
+      if (message._messageId && typeof message.role === "string") {
+        roleByMessageId.set(message._messageId, message.role)
+      }
     }
-  }
 
-  if (parts.length > 0) {
-    lines.push("")
-    lines.push("[Tool Parts]")
-  }
+    for (const part of parts) {
+      if (part.type === "text" && typeof part.text === "string" && part.text.trim().length > 0) {
+        const role = part._messageId ? (roleByMessageId.get(part._messageId) ?? "unknown") : "unknown"
+        const label = role === "user" ? "User" : role === "assistant" ? "Assistant" : "Message"
+        const maxChars = role === "assistant" ? 320 : 520
+        lines.push(`[${label}] ${toLimitedText(part.text, maxChars)}`)
+      } else if (part.type === "reasoning" && typeof part.reasoning === "string" && part.reasoning.trim().length > 0) {
+        lines.push(`[Reasoning] ${toLimitedText(part.reasoning, 320)}`)
+      } else if (part.type === "tool" && part.tool) {
+        const toolName = typeof part.tool === "string" ? part.tool : "unknown"
+        const inputText = safeStringify(part.state?.input, 260)
+        const outputText = safeStringify(part.state?.output, 260)
+        const errorText = safeStringify(part.state?.error, 180)
+        lines.push(`[Tool: ${toolName}]`)
+        if (inputText) lines.push(`  input: ${inputText}`)
+        if (outputText) lines.push(`  output: ${outputText}`)
+        if (errorText) lines.push(`  error: ${errorText}`)
+      }
+    }
+  } else {
+    // Legacy fallback: extract transcript from message.content
+    for (const message of messages) {
+      const role = typeof message?.role === "string" ? message.role : "unknown"
+      const text = getMessageText(message?.content, role === "assistant" ? 320 : 520)
+      if (text) {
+        lines.push(`[${role === "user" ? "User" : role === "assistant" ? "Assistant" : "Message"}] ${text}`)
+      }
+    }
 
-  for (const part of parts) {
-    if (part?.type !== "tool") continue
-    const toolName = typeof part.tool === "string" ? part.tool : "unknown"
-    const inputText = safeStringify(part.state?.input, 260)
-    const outputText = safeStringify(part.state?.output, 260)
-    const errorText = safeStringify(part.state?.error, 180)
-
-    lines.push(`[Tool: ${toolName}]`)
-    if (inputText) lines.push(`  input: ${inputText}`)
-    if (outputText) lines.push(`  output: ${outputText}`)
-    if (errorText) lines.push(`  error: ${errorText}`)
+    // Tool parts (legacy path only)
+    const toolParts = parts.filter((p) => p?.type === "tool")
+    if (toolParts.length > 0) {
+      lines.push("")
+      lines.push("[Tool Parts]")
+      for (const part of toolParts) {
+        const toolName = typeof part.tool === "string" ? part.tool : "unknown"
+        const inputText = safeStringify(part.state?.input, 260)
+        const outputText = safeStringify(part.state?.output, 260)
+        const errorText = safeStringify(part.state?.error, 180)
+        lines.push(`[Tool: ${toolName}]`)
+        if (inputText) lines.push(`  input: ${inputText}`)
+        if (outputText) lines.push(`  output: ${outputText}`)
+        if (errorText) lines.push(`  error: ${errorText}`)
+      }
+    }
   }
 
   return lines.join("\n")

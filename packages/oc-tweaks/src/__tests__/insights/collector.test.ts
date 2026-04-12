@@ -379,7 +379,7 @@ describe("collectSessions", () => {
     db.close()
 
     Database.prototype.query = function (sql: string) {
-      if (sql === "SELECT data FROM part WHERE session_id = ? ORDER BY id ASC") {
+      if (sql === "SELECT data, message_id FROM part WHERE session_id = ? ORDER BY id ASC") {
         return {
           all() {
             const error = new Error("database disk image is malformed") as Error & { code?: string }
@@ -466,7 +466,7 @@ describe("collectSessions", () => {
     db.close()
 
     Database.prototype.query = function (sql: string) {
-      if (sql === "SELECT data FROM message WHERE session_id = ? ORDER BY time_created ASC") {
+      if (sql === "SELECT id, data FROM message WHERE session_id = ? ORDER BY time_created ASC") {
         return {
           all() {
             const error = new Error("database disk image is malformed") as Error & { code?: string }
@@ -699,7 +699,9 @@ describe("collectMessages and collectParts", () => {
     const parts = await collectParts(dbPath, "ses-order")
 
     expect(messages.map((message) => message.role)).toEqual(["user", "assistant"])
+    expect(messages.map((message) => message._messageId)).toEqual(["msg-1", "msg-2"])
     expect(parts.map((part) => part.tool)).toEqual(["Read", "Write"])
+    expect(parts.map((part) => part._messageId)).toEqual(["msg-2", "msg-2"])
   })
 })
 

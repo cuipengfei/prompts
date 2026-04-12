@@ -24,6 +24,7 @@ type MessageTime = {
 }
 
 export type MessageData = {
+  _messageId?: string
   role?: string
   content?: unknown
   tokens?: MessageTokens
@@ -38,7 +39,10 @@ type ToolState = {
 }
 
 export type PartData = {
+  _messageId?: string
   type?: string
+  text?: string
+  reasoning?: string
   tool?: string
   callID?: string
   state?: ToolState
@@ -230,18 +234,26 @@ function parseJsonBlob<T>(value: unknown): T {
 
 function queryMessages(db: Database, sessionId: string): MessageData[] {
   const rows = db
-    .query("SELECT data FROM message WHERE session_id = ? ORDER BY time_created ASC")
-    .all(sessionId) as Array<{ data: string }>
+    .query("SELECT id, data FROM message WHERE session_id = ? ORDER BY time_created ASC")
+    .all(sessionId) as Array<{ id: string; data: string }>
 
-  return rows.map((row) => parseJsonBlob<MessageData>(row.data))
+  return rows.map((row) => {
+    const parsed = parseJsonBlob<MessageData>(row.data)
+    parsed._messageId = row.id
+    return parsed
+  })
 }
 
 function queryParts(db: Database, sessionId: string): PartData[] {
   const rows = db
-    .query("SELECT data FROM part WHERE session_id = ? ORDER BY id ASC")
-    .all(sessionId) as Array<{ data: string }>
+    .query("SELECT data, message_id FROM part WHERE session_id = ? ORDER BY id ASC")
+    .all(sessionId) as Array<{ data: string; message_id: string | null }>
 
-  return rows.map((row) => parseJsonBlob<PartData>(row.data))
+  return rows.map((row) => {
+    const parsed = parseJsonBlob<PartData>(row.data)
+    if (row.message_id) parsed._messageId = row.message_id
+    return parsed
+  })
 }
 
 function isRecoverableBlobError(error: unknown): boolean {
