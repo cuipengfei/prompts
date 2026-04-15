@@ -86,6 +86,12 @@ After deployment, create separate PR to:
   - Change: `openspec show <change-id> --json --deltas-only`
 - Full-text search (use ripgrep): `rg -n "Requirement:|Scenario:" openspec/specs`
 
+### Requirement Formatting Pitfalls
+- `### Requirement:` 标题使用简短名称，不要把 `SHALL` 直接写进标题。
+- `SHALL` 应写在标题下第一行描述里；验证器检查描述行，不检查标题行。
+- 如果目标 spec 里还没有该 requirement，用 `ADDED`，不要误写成 `MODIFIED`。
+- 只有在目标 spec 已存在同名 requirement 时，才用 `MODIFIED`；否则后续 archive / validate 容易失败。
+
 ## Quick Start
 
 ### CLI Commands

@@ -32,6 +32,7 @@ src/
 ├── types.ts              # 统一导出共享类型
 ├── cli/
 │   └── init.ts           # `bunx oc-tweaks init` CLI 入口
+├── insights/AGENTS.md     # insights 子域规则（pipeline / tests / boundaries）
 ├── plugins/
 │   ├── notify.ts         # 桌面通知（WPF/osascript/notify-send）
 │   ├── compaction.ts     # 上下文压缩时注入语言偏好
@@ -56,6 +57,11 @@ src/
 ```
 
 ## 架构
+
+### 分层说明
+
+- 包级共享规则留在本文件。
+- `src/insights/` 已有独立 `AGENTS.md`；涉及报告采集、聚合、渲染、导出时，优先读取该子文件，避免把局部规则继续堆回包级说明。
 
 ### 配置热重载
 
