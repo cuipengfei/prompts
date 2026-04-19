@@ -1,0 +1,613 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "prompts",
+    "languages": ["json", "markdown", "shell", "toml", "typescript", "unknown"],
+    "frameworks": ["Claude Code Plugin", "OpenCode Plugin"],
+    "description": "这是一个面向 Claude Code、GitHub Copilot 等 AI 助手的提示词、插件与运行时增强仓库，核心业务包括指令规范沉淀、插件市场分发、会话洞察分析与 OpenCode 运行时增强。",
+    "analyzedAt": "2026-04-19T11:48:05.058Z",
+    "gitCommitHash": "6f9290a2edd01edc18af52788f479debf64f36f0"
+  },
+  "nodes": [
+    {
+      "id": "domain:ai-assistant-instruction-specification",
+      "type": "domain",
+      "name": "AI 助手指令规范",
+      "summary": "该领域沉淀面向 AI 助手的技能文档、命令文档与 AGENTS 约束，用来定义助手在不同任务中的行为边界、输出格式与执行流程。它不是业务应用中的交易域，而是 prompt engineering 的规范域。",
+      "tags": ["提示词", "技能文档", "AGENTS", "命令技能"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entities": ["SKILL.md", "AGENTS.md", "命令文档", "提示词模板"],
+        "businessRules": [
+          "技能行为通过文档而非代码接口优先定义",
+          "命令文档需要体现执行约束与适用场景",
+          "技能文档、命令入口与插件元数据之间需要保持一致"
+        ],
+        "crossDomainInteractions": [
+          "由插件分发域将技能与命令暴露给 Claude Code",
+          "接收会话洞察域的分析结果以反哺提示词优化"
+        ]
+      }
+    },
+    {
+      "id": "domain:plugin-distribution-and-composition",
+      "type": "domain",
+      "name": "Claude Code 插件分发与组合",
+      "summary": "该领域负责插件目录、插件元数据、技能注册与安装入口，使仓库中的多个插件能够被市场发现、被 Claude Code 安装，并以统一形式组合。它承接了从文档能力到可分发插件包的映射。",
+      "tags": ["插件", "插件市场", "plugin.json", "marketplace"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entities": ["marketplace.json", "plugin.json", "README.md", "setup.sh"],
+        "businessRules": [
+          "插件必须通过元数据声明自身能力与入口",
+          "市场目录需要维护可安装插件的清单与描述",
+          "安装脚本与文档需要对齐实际分发方式"
+        ],
+        "crossDomainInteractions": [
+          "引用指令规范域中的技能文档与命令文档",
+          "决定运行时增强域的加载入口与初始化方式"
+        ]
+      }
+    },
+    {
+      "id": "domain:session-insights-analysis-pipeline",
+      "type": "domain",
+      "name": "会话洞察分析流水线",
+      "summary": "该领域围绕 Insights 管线组织会话采集、SQLite 只读查询、统计聚合、facets 提取、缓存与报告生成。它把原始会话数据转换成可理解的摘要、指标与结构化洞察。",
+      "tags": ["Insights 管线", "会话分析", "facets", "报告"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entities": ["collector.ts", "aggregator.ts", "facets.ts", "generator.ts", "cache.ts"],
+        "businessRules": [
+          "会话读取以只读方式访问 SQLite 数据源",
+          "统计、facets 与摘要需要经过聚合和容错处理",
+          "缓存用于降低重复分析的成本并稳定输出结构"
+        ],
+        "crossDomainInteractions": [
+          "为指令规范域提供 prompt 优化与学习素材",
+          "消费运行时增强域产出的会话与行为信号"
+        ]
+      }
+    },
+    {
+      "id": "domain:runtime-behavior-enhancement",
+      "type": "domain",
+      "name": "运行时行为增强",
+      "summary": "该领域聚焦 oc-tweaks 与相关增强组件，包括运行时初始化、hooks 集成、后台子代理调度、自动记忆与看板存储。它直接影响 OpenCode 或 Claude Code 在执行期的行为，而不是静态文档定义。",
+      "tags": ["oc-tweaks", "运行时增强", "hooks", "子代理"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entities": ["init.ts", "background-subagent.ts", "auto-memory.ts", "config-and-storage.md"],
+        "businessRules": [
+          "运行时增强需要先完成配置初始化与路径构造",
+          "hooks 触发后的调度需要遵守受控执行流程",
+          "自动记忆与看板状态需要写入统一存储位置"
+        ],
+        "crossDomainInteractions": [
+          "通过插件分发域被安装和加载",
+          "将执行期信号输送给会话洞察分析流水线"
+        ]
+      }
+    },
+
+    {
+      "id": "flow:instruction-skill-authoring",
+      "type": "flow",
+      "name": "提示词技能编写",
+      "summary": "该流程把某个能力场景整理成可复用的技能文档，形成明确的任务范围、输出方式与约束。其核心载体是 SKILL.md 一类技能文档。",
+      "tags": ["技能-文档", "SKILL.md", "提示词"],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "SKILL.md",
+        "entryType": "manual"
+      }
+    },
+    {
+      "id": "flow:instruction-command-activation",
+      "type": "flow",
+      "name": "命令技能激活",
+      "summary": "该流程将 codex、debate、research 等命令文档映射到具体技能，使用户通过命令入口触发受控流程。它强调命令入口与技能行为的一致性。",
+      "tags": ["命令-文档", "技能-激活", "两步-流程"],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "codex.md / debate.md / research.md",
+        "entryType": "manual"
+      }
+    },
+    {
+      "id": "flow:instruction-prompt-optimization",
+      "type": "flow",
+      "name": "提示词优化与特化",
+      "summary": "该流程围绕 improve-prompt、natural-writing、learn 等场景，对基础提示词进行专项优化与能力特化。输出通常表现为更聚焦的文档规则与执行约束。",
+      "tags": ["提示词-优化", "自然-写作", "会话-学习"],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "improve-prompt.md / natural-writing.md / learn.md",
+        "entryType": "manual"
+      }
+    },
+
+    {
+      "id": "flow:plugin-marketplace-curation",
+      "type": "flow",
+      "name": "插件市场目录维护",
+      "summary": "该流程维护 marketplace 中的插件安装入口与目录信息，让仓库中的插件能够被发现与索引。它属于分发前的编目流程。",
+      "tags": ["市场-配置", "插件-目录", "安装入口"],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "marketplace.json",
+        "entryType": "manual"
+      }
+    },
+    {
+      "id": "flow:plugin-skill-registration",
+      "type": "flow",
+      "name": "插件技能注册",
+      "summary": "该流程通过 plugin.json 声明插件元数据、技能注册与命令能力，把文档化能力包装成可被宿主识别的插件。它是插件组合的核心装配流程。",
+      "tags": ["插件-配置", "技能-注册", "插件-元数据"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entryPoint": "plugin.json",
+        "entryType": "manual"
+      }
+    },
+    {
+      "id": "flow:plugin-installation-bootstrap",
+      "type": "flow",
+      "name": "安装与初始化引导",
+      "summary": "该流程借助 setup.sh 与 README 文档完成环境初始化、配置校验与使用指引生成，让插件或增强包能够被正确启用。它连接了分发与实际落地使用。",
+      "tags": ["安装脚本", "环境初始化", "安装-指南"],
+      "complexity": "moderate",
+      "domainMeta": {
+        "entryPoint": "setup.sh / README.md",
+        "entryType": "cli"
+      }
+    },
+
+    {
+      "id": "flow:session-collection-and-stats",
+      "type": "flow",
+      "name": "会话采集与统计",
+      "summary": "该流程从 SQLite 中只读提取会话、消息与分片数据，并生成基础统计结果。它是整个 Insights 管线的输入端。",
+      "tags": ["SQLite 只读", "会话统计", "消息加载"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entryPoint": "collector.ts",
+        "entryType": "cli"
+      }
+    },
+    {
+      "id": "flow:facets-extraction-and-cache",
+      "type": "flow",
+      "name": "Facets 提取与缓存",
+      "summary": "该流程把会话统计进一步加工为 facets，并结合缓存避免重复计算。它为后续报告和面板提供结构化的分析中间层。",
+      "tags": ["Facets 数据", "洞察分析", "cache.ts"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entryPoint": "facets.ts / cache.ts",
+        "entryType": "cli"
+      }
+    },
+    {
+      "id": "flow:insight-report-generation",
+      "type": "flow",
+      "name": "洞察摘要与报告生成",
+      "summary": "该流程把统计线、at-a-glance 摘要与 sections 模板组合成最终报告输出。它是分析结果面向用户或看板消费的出口。",
+      "tags": ["摘要生成", "报告数据", "sections.ts"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entryPoint": "generator.ts / at-a-glance.ts / sections.ts",
+        "entryType": "cli"
+      }
+    },
+
+    {
+      "id": "flow:runtime-init-and-config",
+      "type": "flow",
+      "name": "运行时初始化与配置",
+      "summary": "该流程在 oc-tweaks 中初始化配置、构造运行路径并建立增强包的执行上下文。它是后续 hook、记忆与洞察能力能够生效的前置流程。",
+      "tags": ["运行时增强", "配置初始化", "路径构造"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entryPoint": "init.ts",
+        "entryType": "cli"
+      }
+    },
+    {
+      "id": "flow:hook-subagent-dispatch",
+      "type": "flow",
+      "name": "Hooks 与子代理调度",
+      "summary": "该流程在 hooks 触发后调度 background subagent 或相关执行单元，使运行时能够把异步能力接入主会话。它体现了增强包对执行期行为的编排能力。",
+      "tags": ["hooks", "background-subagent", "子代理"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entryPoint": "background-subagent.ts / hooks-integration.md",
+        "entryType": "event"
+      }
+    },
+    {
+      "id": "flow:auto-memory-and-dashboard",
+      "type": "flow",
+      "name": "自动记忆与看板管理",
+      "summary": "该流程负责自动记忆写入、会话学习沉淀与看板相关状态管理。它将会话中的长期价值信息保存为后续分析或交互可复用的资产。",
+      "tags": ["auto-memory", "会话-学习", "看板-管理"],
+      "complexity": "complex",
+      "domainMeta": {
+        "entryPoint": "auto-memory.ts / config-and-storage.md",
+        "entryType": "event"
+      }
+    },
+
+    {
+      "id": "step:instruction-skill-authoring:scope-task-scenario",
+      "type": "step",
+      "name": "界定任务场景",
+      "summary": "明确技能面向的任务类型、输入上下文与适用边界。",
+      "tags": ["技能-文档", "场景定义"],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:instruction-skill-authoring:write-skill-rules",
+      "type": "step",
+      "name": "编写技能规则",
+      "summary": "把输出格式、执行要求与文风约束写入技能文档。",
+      "tags": ["SKILL.md", "执行-约束"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:instruction-skill-authoring:align-skill-metadata",
+      "type": "step",
+      "name": "对齐技能元数据",
+      "summary": "确保技能名称、描述与后续插件注册信息能够一致映射。",
+      "tags": ["技能-元数据", "一致性"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:instruction-command-activation:declare-command-entry",
+      "type": "step",
+      "name": "声明命令入口",
+      "summary": "在命令文档中明确命令用途、触发方式与适用前提。",
+      "tags": ["命令-文档", "命令入口"],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:instruction-command-activation:bind-command-to-skill",
+      "type": "step",
+      "name": "绑定命令与技能",
+      "summary": "将命令入口连接到具体技能或两步执行流程。",
+      "tags": ["技能-激活", "命令-技能"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:instruction-command-activation:enforce-execution-constraints",
+      "type": "step",
+      "name": "限定执行约束",
+      "summary": "把流程限制、输出规范与协作边界固定为可复用约束。",
+      "tags": ["两步-流程", "执行-约束"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:instruction-prompt-optimization:identify-specialized-goal",
+      "type": "step",
+      "name": "识别特化目标",
+      "summary": "区分提示词是服务于优化、自然写作还是会话学习等专项目标。",
+      "tags": ["提示词-优化", "自然-写作"],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:instruction-prompt-optimization:refine-prompt-structure",
+      "type": "step",
+      "name": "细化提示词结构",
+      "summary": "围绕目标场景调整提示词结构、语气与产出要求。",
+      "tags": ["提示词", "结构调整"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:instruction-prompt-optimization:publish-specialized-docs",
+      "type": "step",
+      "name": "发布专项文档",
+      "summary": "将优化后的规则落入专门文档，供后续插件与命令复用。",
+      "tags": ["会话-学习", "专项文档"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:plugin-marketplace-curation:collect-installation-entries",
+      "type": "step",
+      "name": "收集安装入口",
+      "summary": "整理各插件的安装位置与市场入口信息。",
+      "tags": ["安装入口", "市场-配置"],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:plugin-marketplace-curation:curate-marketplace-metadata",
+      "type": "step",
+      "name": "整理市场元数据",
+      "summary": "补充目录展示所需的名称、说明与分类信息。",
+      "tags": ["插件-目录", "插件-元数据"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:plugin-marketplace-curation:publish-plugin-catalog",
+      "type": "step",
+      "name": "发布插件目录",
+      "summary": "输出面向市场消费的插件目录清单。",
+      "tags": ["marketplace", "目录发布"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:plugin-skill-registration:declare-plugin-manifest",
+      "type": "step",
+      "name": "声明插件清单",
+      "summary": "在 plugin.json 中声明插件基础元数据与能力范围。",
+      "tags": ["plugin.json", "插件-配置"],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:plugin-skill-registration:register-skills-and-commands",
+      "type": "step",
+      "name": "注册技能与命令",
+      "summary": "把技能文档、命令入口与插件能力正式绑定。",
+      "tags": ["技能-注册", "命令-技能"],
+      "complexity": "complex"
+    },
+    {
+      "id": "step:plugin-skill-registration:expose-market-capabilities",
+      "type": "step",
+      "name": "暴露市场能力",
+      "summary": "把可分发能力转换为宿主和市场都能识别的形式。",
+      "tags": ["市场-配置", "Claude Code"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:plugin-installation-bootstrap:initialize-environment",
+      "type": "step",
+      "name": "初始化环境",
+      "summary": "准备安装所需的本地环境与基础配置。",
+      "tags": ["环境初始化", "setup.sh"],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:plugin-installation-bootstrap:validate-install-config",
+      "type": "step",
+      "name": "校验安装配置",
+      "summary": "检查安装过程所依赖的配置是否完整且可用。",
+      "tags": ["配置校验", "validate_setup"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:plugin-installation-bootstrap:generate-usage-guide",
+      "type": "step",
+      "name": "生成使用指引",
+      "summary": "输出安装后的使用说明与初始化结果说明。",
+      "tags": ["安装-指南", "generate_usage_guide"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:session-collection-and-stats:resolve-session-scope",
+      "type": "step",
+      "name": "解析会话范围",
+      "summary": "确定需要纳入分析的项目、会话或时间范围。",
+      "tags": ["会话统计", "范围解析"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:session-collection-and-stats:query-sqlite-readonly",
+      "type": "step",
+      "name": "执行 SQLite 只读查询",
+      "summary": "从 SQLite 中读取会话、消息与分片数据，并保持只读访问方式。",
+      "tags": ["SQLite 只读", "消息加载"],
+      "complexity": "complex"
+    },
+    {
+      "id": "step:session-collection-and-stats:aggregate-session-stats",
+      "type": "step",
+      "name": "汇总会话统计",
+      "summary": "把原始查询结果汇总成可供后续分析使用的基础统计。",
+      "tags": ["会话统计", "报告数据"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:facets-extraction-and-cache:load-facets-cache",
+      "type": "step",
+      "name": "加载 facets 缓存",
+      "summary": "在重新分析前优先检查已有缓存，减少重复计算。",
+      "tags": ["Facets 数据", "缓存读取"],
+      "complexity": "simple"
+    },
+    {
+      "id": "step:facets-extraction-and-cache:extract-facets",
+      "type": "step",
+      "name": "提取 facets",
+      "summary": "把会话统计加工为结构化洞察维度与标签集合。",
+      "tags": ["洞察分析", "facets.ts"],
+      "complexity": "complex"
+    },
+    {
+      "id": "step:facets-extraction-and-cache:save-facets-cache",
+      "type": "step",
+      "name": "保存 facets 缓存",
+      "summary": "将新的 facets 结果持久化，供后续报告和重复执行复用。",
+      "tags": ["cache.ts", "缓存写入"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:insight-report-generation:build-stats-line",
+      "type": "step",
+      "name": "构建统计线",
+      "summary": "把分析结果整理为报告可直接引用的统计行。",
+      "tags": ["摘要生成", "统计线"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:insight-report-generation:compose-at-a-glance-summary",
+      "type": "step",
+      "name": "组装一览摘要",
+      "summary": "生成 at-a-glance 级别的概览摘要，提炼主要洞察。",
+      "tags": ["at-a-glance", "摘要生成"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:insight-report-generation:render-report-sections",
+      "type": "step",
+      "name": "渲染报告章节",
+      "summary": "将统计、摘要与 sections 模板组合成最终报告结构。",
+      "tags": ["sections.ts", "报告数据"],
+      "complexity": "complex"
+    },
+
+    {
+      "id": "step:runtime-init-and-config:initialize-runtime-config",
+      "type": "step",
+      "name": "初始化运行时配置",
+      "summary": "建立 oc-tweaks 运行所需的基础配置与默认值。",
+      "tags": ["配置初始化", "init.ts"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:runtime-init-and-config:construct-runtime-paths",
+      "type": "step",
+      "name": "构造运行路径",
+      "summary": "生成报告目录、facets 目录等增强功能依赖的路径。",
+      "tags": ["路径构造", "运行时增强"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:runtime-init-and-config:mount-enhancement-context",
+      "type": "step",
+      "name": "挂载增强上下文",
+      "summary": "把初始化后的配置与路径装配到可供后续流程调用的运行上下文中。",
+      "tags": ["oc-tweaks", "上下文装配"],
+      "complexity": "complex"
+    },
+
+    {
+      "id": "step:hook-subagent-dispatch:receive-hook-trigger",
+      "type": "step",
+      "name": "接收 hook 触发",
+      "summary": "捕获来自运行时或宿主的 hook 事件作为调度起点。",
+      "tags": ["hooks", "事件触发"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:hook-subagent-dispatch:dispatch-background-subagent",
+      "type": "step",
+      "name": "调度后台子代理",
+      "summary": "根据 hook 上下文启动后台子代理或异步执行流程。",
+      "tags": ["background-subagent", "子代理"],
+      "complexity": "complex"
+    },
+    {
+      "id": "step:hook-subagent-dispatch:return-execution-feedback",
+      "type": "step",
+      "name": "回传执行反馈",
+      "summary": "将调度结果、状态或后续信号反馈给主流程或调用方。",
+      "tags": ["执行反馈", "hooks"],
+      "complexity": "moderate"
+    },
+
+    {
+      "id": "step:auto-memory-and-dashboard:load-storage-config",
+      "type": "step",
+      "name": "读取存储配置",
+      "summary": "确定自动记忆与看板管理所使用的配置和存储位置。",
+      "tags": ["config-and-storage", "看板-管理"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "step:auto-memory-and-dashboard:persist-memory-signals",
+      "type": "step",
+      "name": "持久化记忆信号",
+      "summary": "把会话学习或长期可复用信息写入自动记忆存储。",
+      "tags": ["auto-memory", "会话-学习"],
+      "complexity": "complex"
+    },
+    {
+      "id": "step:auto-memory-and-dashboard:update-dashboard-state",
+      "type": "step",
+      "name": "更新看板状态",
+      "summary": "把记忆或分析结果同步到看板相关状态，以支持后续浏览与管理。",
+      "tags": ["看板-管理", "状态更新"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    { "source": "domain:ai-assistant-instruction-specification", "target": "flow:instruction-skill-authoring", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:ai-assistant-instruction-specification", "target": "flow:instruction-command-activation", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:ai-assistant-instruction-specification", "target": "flow:instruction-prompt-optimization", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+
+    { "source": "domain:plugin-distribution-and-composition", "target": "flow:plugin-marketplace-curation", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:plugin-distribution-and-composition", "target": "flow:plugin-skill-registration", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:plugin-distribution-and-composition", "target": "flow:plugin-installation-bootstrap", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+
+    { "source": "domain:session-insights-analysis-pipeline", "target": "flow:session-collection-and-stats", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:session-insights-analysis-pipeline", "target": "flow:facets-extraction-and-cache", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:session-insights-analysis-pipeline", "target": "flow:insight-report-generation", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+
+    { "source": "domain:runtime-behavior-enhancement", "target": "flow:runtime-init-and-config", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:runtime-behavior-enhancement", "target": "flow:hook-subagent-dispatch", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+    { "source": "domain:runtime-behavior-enhancement", "target": "flow:auto-memory-and-dashboard", "type": "contains_flow", "direction": "forward", "weight": 1.0 },
+
+    { "source": "flow:instruction-skill-authoring", "target": "step:instruction-skill-authoring:scope-task-scenario", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:instruction-skill-authoring", "target": "step:instruction-skill-authoring:write-skill-rules", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:instruction-skill-authoring", "target": "step:instruction-skill-authoring:align-skill-metadata", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:instruction-command-activation", "target": "step:instruction-command-activation:declare-command-entry", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:instruction-command-activation", "target": "step:instruction-command-activation:bind-command-to-skill", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:instruction-command-activation", "target": "step:instruction-command-activation:enforce-execution-constraints", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:instruction-prompt-optimization", "target": "step:instruction-prompt-optimization:identify-specialized-goal", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:instruction-prompt-optimization", "target": "step:instruction-prompt-optimization:refine-prompt-structure", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:instruction-prompt-optimization", "target": "step:instruction-prompt-optimization:publish-specialized-docs", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:plugin-marketplace-curation", "target": "step:plugin-marketplace-curation:collect-installation-entries", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:plugin-marketplace-curation", "target": "step:plugin-marketplace-curation:curate-marketplace-metadata", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:plugin-marketplace-curation", "target": "step:plugin-marketplace-curation:publish-plugin-catalog", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:plugin-skill-registration", "target": "step:plugin-skill-registration:declare-plugin-manifest", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:plugin-skill-registration", "target": "step:plugin-skill-registration:register-skills-and-commands", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:plugin-skill-registration", "target": "step:plugin-skill-registration:expose-market-capabilities", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:plugin-installation-bootstrap", "target": "step:plugin-installation-bootstrap:initialize-environment", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:plugin-installation-bootstrap", "target": "step:plugin-installation-bootstrap:validate-install-config", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:plugin-installation-bootstrap", "target": "step:plugin-installation-bootstrap:generate-usage-guide", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:session-collection-and-stats", "target": "step:session-collection-and-stats:resolve-session-scope", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:session-collection-and-stats", "target": "step:session-collection-and-stats:query-sqlite-readonly", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:session-collection-and-stats", "target": "step:session-collection-and-stats:aggregate-session-stats", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:facets-extraction-and-cache", "target": "step:facets-extraction-and-cache:load-facets-cache", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:facets-extraction-and-cache", "target": "step:facets-extraction-and-cache:extract-facets", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:facets-extraction-and-cache", "target": "step:facets-extraction-and-cache:save-facets-cache", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:insight-report-generation", "target": "step:insight-report-generation:build-stats-line", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:insight-report-generation", "target": "step:insight-report-generation:compose-at-a-glance-summary", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:insight-report-generation", "target": "step:insight-report-generation:render-report-sections", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:runtime-init-and-config", "target": "step:runtime-init-and-config:initialize-runtime-config", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:runtime-init-and-config", "target": "step:runtime-init-and-config:construct-runtime-paths", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:runtime-init-and-config", "target": "step:runtime-init-and-config:mount-enhancement-context", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:hook-subagent-dispatch", "target": "step:hook-subagent-dispatch:receive-hook-trigger", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:hook-subagent-dispatch", "target": "step:hook-subagent-dispatch:dispatch-background-subagent", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:hook-subagent-dispatch", "target": "step:hook-subagent-dispatch:return-execution-feedback", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "flow:auto-memory-and-dashboard", "target": "step:auto-memory-and-dashboard:load-storage-config", "type": "flow_step", "direction": "forward", "weight": 0.3 },
+    { "source": "flow:auto-memory-and-dashboard", "target": "step:auto-memory-and-dashboard:persist-memory-signals", "type": "flow_step", "direction": "forward", "weight": 0.6 },
+    { "source": "flow:auto-memory-and-dashboard", "target": "step:auto-memory-and-dashboard:update-dashboard-state", "type": "flow_step", "direction": "forward", "weight": 0.9 },
+
+    { "source": "domain:ai-assistant-instruction-specification", "target": "domain:plugin-distribution-and-composition", "type": "cross_domain", "direction": "forward", "description": "插件分发域把技能文档与命令文档包装成可安装插件。", "weight": 0.6 },
+    { "source": "domain:plugin-distribution-and-composition", "target": "domain:runtime-behavior-enhancement", "type": "cross_domain", "direction": "forward", "description": "插件元数据、安装脚本与目录分发决定运行时增强包如何被加载和启用。", "weight": 0.6 },
+    { "source": "domain:runtime-behavior-enhancement", "target": "domain:session-insights-analysis-pipeline", "type": "cross_domain", "direction": "forward", "description": "hooks、自动记忆与子代理调度产生的执行期信号会进入洞察分析流水线。", "weight": 0.6 },
+    { "source": "domain:session-insights-analysis-pipeline", "target": "domain:ai-assistant-instruction-specification", "type": "cross_domain", "direction": "forward", "description": "会话洞察结果可反哺提示词优化、学习类技能和规则迭代。", "weight": 0.6 }
+  ],
+  "layers": [],
+  "tour": []
+}

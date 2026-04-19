@@ -1,0 +1,23 @@
+# .understandignore — 排除分析的文件/目录模式
+# 用户指定：仅 git-tracked 文件
+# 排除：openspec/  .sisyphus/  .claude/  .debates/  .github/  .opencode/  + 测试代码
+
+openspec/
+.sisyphus/
+.claude/
+.debates/
+.github/
+.opencode/
+.gemini/
+
+# 测试代码
+__tests__/
+tests/
+test/
+*.test.*
+*.spec.*
+**/smoke-test.*
+
+# git-ignored 兜底
+node_modules/
+dist/
