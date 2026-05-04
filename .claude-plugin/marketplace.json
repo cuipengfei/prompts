@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "improve-prompt",
-      "description": "[Command] 优化提示词命令 - 结构化改写后立即执行，禁止扩展范围",
+      "description": "[Command] 优化提示词命令 - 识别真实意图并结构化改写，防止执行方向跑偏",
       "source": "./plugins/improve-prompt",
       "category": "productivity"
     },
