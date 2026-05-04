@@ -96,11 +96,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 19 个可用插件
+# 查看所有 22 个可用插件
 /plugin list
 ```
 
-### 可用插件（19 个独立插件）
+### 可用插件（22 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -112,6 +112,7 @@
 | 📚 Learning      | `structured-responder`    | 结构化响应输出风格                          |
 | 📚 Learning      | `response-guidelines`     | 响应指南 skill                              |
 | 📚 Learning      | `session-learn`           | 会话学习 - 三层存储分类 + Memory MCP 召回   |
+| 📚 Learning      | `help-me-read`            | 读取 URL 全文，按段落提供原文、必要译文与轻量 commentary |
 | 🏗 Development   | `foundational-principles` | 基础原则 skill                              |
 | 🏗 Development   | `quality-standards`       | 质量标准 skill                              |
 | 🏗 Development   | `programming-workflow`    | TDD 工作流 skill                            |
@@ -122,6 +123,8 @@
 | 🔧 Tools         | `shortcut-system`         | 快捷命令 skill                              |
 | 🔧 Tools         | `zellij-control`          | Zellij 控制 skill                           |
 | 🔧 Tools         | `codex`                   | Codex 顾问 - 调用 OpenAI Codex 获取第二意见 |
+| 🔧 Tools         | `deep-research`           | 深度研究 - 多源搜索、交叉验证、结构化输出   |
+| 🔧 Tools         | `cline-kanban`            | Cline Kanban - 管理本地编排看板任务         |
 | 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
 | 📚 Learning      | `jpm-voice`               | 提供《金瓶梅》语言风格与文学精髓的化身技能 |
 | 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
@@ -143,7 +146,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read
 ```
 
 ## OpenCode 插件

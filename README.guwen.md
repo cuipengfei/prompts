@@ -96,11 +96,11 @@
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览十八宝
+# 览二十二宝
 /plugin list
 ```
 
-### 仙器目录（十八件独立仙器）
+### 仙器目录（二十二件独立仙器）
 
 觅者可择需而取，勿须尽纳：
 
@@ -112,6 +112,7 @@
 | 📚 启智 | `structured-responder` | 结构化应答体例 |
 | 📚 启智 | `response-guidelines` | 应答准则心法 |
 | 📚 启智 | `session-learn` | 会话学习 - 三层藏经 + 忆念召唤 |
+| 📚 启智 | `help-me-read` | 取 URL 全文，逐段陈原文、必要译文与轻点评注 |
 | 🏗 筑基 | `foundational-principles` | 根基要诀 |
 | 🏗 筑基 | `quality-standards` | 质量法度 |
 | 🏗 筑基 | `programming-workflow` | TDD 工作流 |
@@ -122,7 +123,10 @@
 | 🔧 神通 | `shortcut-system` | 快捷符咒 |
 | 🔧 神通 | `zellij-control` | Zellij 御器术 |
 | 🔧 神通 | `codex` | Codex 顾问 - 唤 OpenAI Codex 为参谋 |
+| 🔧 神通 | `deep-research` | 深研之法 - 多源搜采、交叉验真、结构化成文 |
+| 🔧 神通 | `cline-kanban` | Cline Kanban - 统驭本地看板诸务 |
 | 🤝 协同 | `ba-collaboration` | BA 共工之法 |
+| 📚 启智 | `jpm-voice` | 《金瓶梅》文气化身之技 |
 | 🤝 协同 | `debate` | 辩论仙器 - 主从代理结构化论道 |
 
 ### 使用示例
@@ -141,8 +145,8 @@
 # 用法: /learn 或 /learn 代码风格
 # 用法: /recall 或 /recall 认证模式
 
-# 尽收十八宝
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
+# 尽收二十二宝
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read
 ```
 
 ## 天工开物篇：OpenCode 仙器

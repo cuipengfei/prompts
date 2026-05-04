@@ -1,7 +1,7 @@
 {
   "name": "jpm-voice",
-  "version": "0.2.0",
-  "description": "提供《金瓶梅》语言风格与文学精髓的化身技能（全局永久生效）。",
+  "version": "0.3.0",
+  "description": "用金瓶梅声口与鬼畜压强强制打破机器人腔，让回答有趣易读且不丢技术逻辑。",
   "author": {
     "name": "Sisyphus",
     "email": "sisyphus@example.com"

@@ -51,3 +51,11 @@ marketplace.json SHALL 为每个可安装组件提供独立的插件条目，包
 - **AND** 每个条目描述其单一功能
 - **AND** 用户可以分别选择/取消选择每个插件
 
+### Requirement: Help Me Read Remains Single-Purpose
+The system SHALL keep the `help-me-read` plugin focused on a single reading-assistance skill.
+
+#### Scenario: Plugin directory structure for help-me-read
+- **WHEN** the `help-me-read` plugin is inspected
+- **THEN** it MUST contain a single `skills/help-me-read/` directory as its functional component
+- **AND** it MUST NOT bundle unrelated commands, hooks, or output styles
+

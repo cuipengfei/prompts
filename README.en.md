@@ -96,11 +96,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 19 available plugins
+# View all 22 available plugins
 /plugin list
 ```
 
-### Available Plugins (19 Independent Plugins)
+### Available Plugins (22 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -112,6 +112,7 @@ Users can selectively install any combination:
 | 📚 Learning | `structured-responder` | Structured response output style |
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
 | 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
+| 📚 Learning | `help-me-read` | Read full URL content with original paragraphs, optional translation, and light commentary |
 | 🏗 Development | `foundational-principles` | Foundational principles skill |
 | 🏗 Development | `quality-standards` | Quality standards skill |
 | 🏗 Development | `programming-workflow` | TDD workflow skill |
@@ -122,6 +123,8 @@ Users can selectively install any combination:
 | 🔧 Tools | `shortcut-system` | Shortcut system skill |
 | 🔧 Tools | `zellij-control` | Zellij control skill |
 | 🔧 Tools | `codex` | Codex advisor - call OpenAI Codex for second opinions |
+| 🔧 Tools | `deep-research` | Deep research workflow with multi-source search and structured synthesis |
+| 🔧 Tools | `cline-kanban` | Manage local orchestration kanban tasks with the kanban CLI |
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
 | 📚 Learning      | `jpm-voice`               | Provides the linguistic style and literary essence of "Jin Ping Mei" (permanently active) |
 | 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
@@ -143,7 +146,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read
 ```
 
 ## OpenCode Plugins
