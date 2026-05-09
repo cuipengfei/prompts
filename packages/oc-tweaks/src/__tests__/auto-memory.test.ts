@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, describe, expect, mock, test } from "bun:test"
 import { mkdir } from "node:fs/promises"
 
 import { autoMemoryPlugin } from "../plugins/auto-memory"
@@ -8,6 +8,7 @@ import { autoMemoryPlugin } from "../plugins/auto-memory"
 const originalBunFile = Bun.file
 const originalBunWrite = Bun.write
 const originalHome = Bun.env?.HOME
+const originalBunWhich = Bun.which
 
 function setHome(home: string | undefined) {
   if (home === undefined) {
@@ -38,11 +39,12 @@ function mockBunFile(mockData: Record<string, any>) {
 afterEach(() => {
   ;(globalThis as any).Bun.file = originalBunFile
   ;(globalThis as any).Bun.write = originalBunWrite
+  ;(globalThis as any).Bun.which = originalBunWhich
   setHome(originalHome)
 })
 
 describe("autoMemoryPlugin", () => {
-  test("registers hooks without remember tool", async () => {
+  test("registers hooks plus recall tool and memory migrate command", async () => {
     const home = "/tmp/oc-auto-register"
     setHome(home)
 
@@ -62,8 +64,37 @@ describe("autoMemoryPlugin", () => {
     const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-register-project" })
     expect(typeof hooks["experimental.chat.system.transform"]).toBe("function")
     expect(hooks["experimental.session.compacting"]).toBeUndefined()
-    expect(hooks.tool).toBeUndefined()
+    expect(typeof hooks.tool?.memory_recall?.execute).toBe("function")
     expect(writes.some((path) => path.endsWith("/commands/remember.md"))).toBe(true)
+    expect(writes.some((path) => path.endsWith("/commands/memory/migrate.md"))).toBe(true)
+  })
+
+  test("wires toast sender during plugin init", async () => {
+    const home = "/tmp/oc-auto-toast"
+    setHome(home)
+    const configPath = `${home}/.config/opencode/oc-tweaks.json`
+    mockBunFile({ [configPath]: { autoMemory: { enabled: true }, notify: { enabled: true } } })
+    ;(globalThis as any).Bun.write = async () => {}
+    ;(globalThis as any).Bun.which = () => null
+
+    const calls: any[] = []
+    const client = { tui: { showToast: (...args: any[]) => calls.push(args) } }
+    const dollar = async () => ({ stdout: "" })
+
+    let originalStderrWrite: typeof process.stderr.write | undefined
+    try {
+      await autoMemoryPlugin({ directory: "/tmp/oc-auto-toast-project", client, $: dollar })
+      ;(globalThis as any).Bun.file = originalBunFile
+      originalStderrWrite = process.stderr.write
+      process.stderr.write = mock(() => true) as unknown as typeof process.stderr.write
+      const { notifyWrite } = await import("../plugins/auto-memory/notify")
+      notifyWrite({ scope: "project", relPath: "preferences.md", action: "created", willAffectRecall: true })
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    } finally {
+      if (originalStderrWrite) process.stderr.write = originalStderrWrite
+    }
+
+    expect(calls.length).toBeGreaterThan(0)
   })
 
   test("disabled config makes hooks no-op", async () => {
@@ -130,6 +161,7 @@ describe("autoMemoryPlugin", () => {
     expect(output.system[0]).toContain("Write")
     expect(output.system[0]).toContain("Edit")
     expect(output.system[0]).not.toContain("remember tool")
+    expect(output.system[0]).not.toContain("recall:no-match")
   })
 
   test("injects all memory files, not just preferences", async () => {

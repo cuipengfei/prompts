@@ -16,6 +16,7 @@ export interface MemoryMeta {
   /** Always false at rest; agents may promote during a session but must not persist true. */
   trusted_as_instruction: false
   summary?: string
+  disabled?: boolean
   usage_count?: number
   last_usage?: string
   tags?: string[]
@@ -153,6 +154,7 @@ export function parseFrontmatter(raw: string): { meta: MemoryMeta; body: string 
     ...(parsed.updated_at !== undefined && { updated_at: String(parsed.updated_at) }),
     trusted_as_instruction: false, // always false — never trust what's on disk
     ...(parsed.summary !== undefined && { summary: String(parsed.summary) }),
+    ...(parsed.disabled !== undefined && { disabled: Boolean(parsed.disabled) }),
     ...(parsed.usage_count !== undefined && { usage_count: Number(parsed.usage_count) }),
     ...(parsed.last_usage !== undefined && { last_usage: String(parsed.last_usage) }),
   }
@@ -174,6 +176,7 @@ export function serializeFrontmatter(meta: MemoryMeta, body: string): string {
   if (meta.updated_at) lines.push(`updated_at: ${meta.updated_at}`)
   lines.push(`trusted_as_instruction: false`)
   if (meta.summary !== undefined) lines.push(`summary: "${meta.summary}"`)
+  if (meta.disabled !== undefined) lines.push(`disabled: ${meta.disabled ? "true" : "false"}`)
   if (meta.usage_count !== undefined) lines.push(`usage_count: ${meta.usage_count}`)
   if (meta.last_usage !== undefined) lines.push(`last_usage: ${meta.last_usage}`)
 

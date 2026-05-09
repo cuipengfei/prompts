@@ -12,6 +12,10 @@ export type WriteResult =
   | { skipped: false; absPath: string; action: WriteAction; bytesWritten: number }
   | { skipped: true; reason: "off" | "throttled" | "unchanged" }
 
+export type RewriteResult =
+  | { skipped: false; absPath: string; bytesWritten: number }
+  | { skipped: true; reason: "throttled" | "unchanged" }
+
 export class MemoryWriteError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options)
@@ -68,21 +72,7 @@ export async function writeMemory(
   const maxDiffLines = autoMemory?.maxDiffLines ?? DEFAULT_CONFIG.autoMemory?.maxDiffLines ?? 500
   assertDiffLines(diffStr, maxDiffLines)
 
-  const tmpfile = `${absPath}.tmp.${randomSuffix()}`
-  let tmpfileCreated = false
-  try {
-    await mkdir(dirname(absPath), { recursive: true })
-    await writeAndFsync(tmpfile, finalContent)
-    tmpfileCreated = true
-    await rename(tmpfile, absPath)
-    tmpfileCreated = false
-  } catch (err) {
-    throw new MemoryWriteError(`Failed to write memory file: ${absPath}`, { cause: err })
-  } finally {
-    if (tmpfileCreated) {
-      await unlink(tmpfile).catch(() => {})
-    }
-  }
+  await atomicRewrite(absPath, finalContent)
 
   recordWrite(absPath)
   notifyWrite(
@@ -99,6 +89,36 @@ export async function writeMemory(
     skipped: false,
     absPath,
     action: payload.action,
+    bytesWritten: Buffer.byteLength(finalContent, "utf8"),
+  }
+}
+
+export async function rewriteMemoryFileWithGuards(
+  absPath: string,
+  finalContent: string,
+): Promise<RewriteResult> {
+  const config = await loadOcTweaksConfig()
+  const autoMemory = config?.autoMemory ?? DEFAULT_CONFIG.autoMemory
+
+  if (isThrottled(absPath, autoMemory?.maxWritesPerSession ?? DEFAULT_CONFIG.autoMemory?.maxWritesPerSession ?? 5)) {
+    return { skipped: true, reason: "throttled" }
+  }
+
+  const existing = await readExisting(absPath)
+  if (existing === finalContent) {
+    return { skipped: true, reason: "unchanged" }
+  }
+
+  const diffStr = computeDiffStr(existing, finalContent)
+  const maxDiffLines = autoMemory?.maxDiffLines ?? DEFAULT_CONFIG.autoMemory?.maxDiffLines ?? 500
+  assertDiffLines(diffStr, maxDiffLines)
+
+  await atomicRewrite(absPath, finalContent)
+  recordWrite(absPath)
+
+  return {
+    skipped: false,
+    absPath,
     bytesWritten: Buffer.byteLength(finalContent, "utf8"),
   }
 }
@@ -164,6 +184,24 @@ function computeDiffStr(existing: string | null, finalContent: string): string {
     if (!finalLines.has(line)) removed.push("-" + line)
   }
   return [...added, ...removed].join("\n")
+}
+
+async function atomicRewrite(absPath: string, finalContent: string): Promise<void> {
+  const tmpfile = `${absPath}.tmp.${randomSuffix()}`
+  let tmpfileCreated = false
+  try {
+    await mkdir(dirname(absPath), { recursive: true })
+    await writeAndFsync(tmpfile, finalContent)
+    tmpfileCreated = true
+    await rename(tmpfile, absPath)
+    tmpfileCreated = false
+  } catch (err) {
+    throw new MemoryWriteError(`Failed to write memory file: ${absPath}`, { cause: err })
+  } finally {
+    if (tmpfileCreated) {
+      await unlink(tmpfile).catch(() => {})
+    }
+  }
 }
 
 async function writeAndFsync(path: string, content: string): Promise<void> {

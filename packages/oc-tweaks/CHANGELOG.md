@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.1] - 2026-05-09
+
+### Fixed
+
+- **F1/F4 final audit gaps**：补齐 plan 验收剩余问题（Must Have 15/15、Must NOT Have 16/16、Tasks 18/18 全部 APPROVE）。
+- **collector test pollution**：`__tests__/insights/collector.test.ts` 修复测试间状态污染，确保独立运行通过。
+- **writer usage writeback**：`auto-memory/writer.ts` 在写入成功后更新使用计数，避免 `maxWritesPerSession` 计数失真。
+- **notify toast wire**：`auto-memory/notify.ts` 接通 toast → notify 退化链，与 T10 setToastSender 注册机制对齐。
+- **recall robustness**：`auto-memory/recall.ts` 增加 disabled frontmatter 跳过、降级日志与边界保护。
+- **injector / frontmatter**：`auto-memory/injector.ts`、`auto-memory/frontmatter.ts` 处理 disabled frontmatter 与 system-reminder 注入边界。
+
+### Added
+
+- **`recall` 自定义工具**：`auto-memory.ts` 通过 `@opencode-ai/plugin` 的 `tool()` 注册 memory recall tool，模型可按需召回 memory。
+- **`oc-tweaks memory diag` CLI 子命令**：`cli/init.ts` 新增 `memory diag` 子命令（支持 `--root` / `--global-root` / `--project-root`），输出 memory 配置与文件健康报告。
+- **disabled frontmatter 支持**：memory 文件可通过 frontmatter 标记 `disabled` 跳过注入与召回。
+- **system-reminder 注入路径**：auto-memory 注入新增 system-reminder 通道，统一退化体验。
+
+
 ## [0.11.0] - 2026-05-09
 
 ### Fixed

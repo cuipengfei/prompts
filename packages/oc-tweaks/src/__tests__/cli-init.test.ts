@@ -67,4 +67,17 @@ describe("CLI init", () => {
     expect(writeCount).toBe(0)
     expect(written[configPath]).toBe(existingContent) // unchanged
   })
+
+  test("routes memory diag command to runDiag and formatDiagReport", async () => {
+    const { parseCliArgs } = await import("../cli/init")
+
+    expect(parseCliArgs(["memory", "diag", "--root", "/tmp/mem"])).toEqual({
+      command: "memory-diag",
+      opts: { root: "/tmp/mem" },
+    })
+    expect(parseCliArgs(["tweaks", "memory", "diag", "--global-root", "/g"])).toEqual({
+      command: "memory-diag",
+      opts: { globalRoot: "/g" },
+    })
+  })
 })

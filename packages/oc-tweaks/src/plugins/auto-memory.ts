@@ -1,8 +1,11 @@
-import type { Plugin } from "@opencode-ai/plugin"
+import { tool, type Plugin } from "@opencode-ai/plugin"
 import { mkdir } from "node:fs/promises"
 
 import { loadOcTweaksConfig, safeHook } from "../utils"
+import { detectNotifySender, notifyWithSender } from "../utils/wpf-notify"
+import type { NotifySender, ShellExecutor } from "../utils/wpf-notify"
 import { buildSystemInjection } from "./auto-memory/injector"
+import { setToastSender } from "./auto-memory/notify"
 import { recallMemory } from "./auto-memory/recall"
 import type { MemoryEntry } from "./auto-memory/registry"
 import { scanMemoryRoots } from "./auto-memory/registry"
@@ -39,6 +42,19 @@ description: 记忆助手 - 将关键信息写入 memory 文件
 如有参数，则优先围绕参数提取重点：$ARGUMENTS
 `
 
+const MEMORY_MIGRATE_COMMAND_CONTENT = `---
+description: 显式迁移 legacy memory frontmatter
+---
+
+运行只读确认后，显式调用 auto-memory migration，为没有 frontmatter 的 memory markdown 补写最小 frontmatter。
+
+建议命令：
+
+\`\`\`bash
+oc-tweaks memory migrate --root "$ARGUMENTS"
+\`\`\`
+`
+
 function getHome(): string {
   return Bun.env?.HOME ?? process.env.HOME ?? ""
 }
@@ -61,10 +77,29 @@ async function ensureRememberCommand(home: string): Promise<void> {
   await Bun.write(commandPath, REMEMBER_COMMAND_CONTENT)
 }
 
+async function ensureMemoryMigrateCommand(home: string): Promise<void> {
+  const commandDir = `${home}/.config/opencode/commands/memory`
+  const commandPath = `${commandDir}/migrate.md`
+  const commandFile = Bun.file(commandPath)
+
+  if (await commandFile.exists()) {
+    try {
+      const existing = await commandFile.text()
+      if (existing.trim() === MEMORY_MIGRATE_COMMAND_CONTENT.trim()) return
+    } catch {
+      // Never disrupt user workflow
+    }
+  }
+
+  await mkdir(commandDir, { recursive: true })
+  await Bun.write(commandPath, MEMORY_MIGRATE_COMMAND_CONTENT)
+}
+
 async function ensureAutoMemoryInfra(home: string, projectMemoryDir: string): Promise<void> {
   await mkdir(`${home}/.config/opencode/memory`, { recursive: true })
   await mkdir(projectMemoryDir, { recursive: true })
   await ensureRememberCommand(home)
+  await ensureMemoryMigrateCommand(home)
 }
 
 function buildMemoryGuide(params: {
@@ -144,21 +179,47 @@ function buildSummaryPathHints(entries: MemoryEntry[]): string {
     .join("\n")
 }
 
-export const autoMemoryPlugin: Plugin = async ({ directory }) => {
+export const autoMemoryPlugin: Plugin = async ({ directory, $, client }) => {
   const home = getHome()
   const globalMemoryDir = `${home}/.config/opencode/memory`
   const projectMemoryDir = `${directory}/.opencode/memory`
+  let cachedSender: NotifySender | null = null
 
   try {
     const config = await loadOcTweaksConfig()
     if (config?.autoMemory?.enabled === true) {
       await ensureAutoMemoryInfra(home, projectMemoryDir)
+      setToastSender((msg) => {
+        void (async () => {
+          try {
+            const shell = $ as ShellExecutor
+            cachedSender ??= await detectNotifySender(shell, client, config.logging)
+            await notifyWithSender(shell, cachedSender, "oc: auto-memory", msg, "Memory", config.notify?.style, config.logging)
+          } catch {
+            // toast is best-effort only
+          }
+        })()
+      })
     }
   } catch {
     // Never disrupt user workflow
   }
 
   return {
+    tool: {
+      memory_recall: tool({
+        description: "Recall memory body by literal query from OpenCode memory files",
+        args: {
+          query: tool.schema.string(),
+          type: tool.schema.string().optional(),
+        },
+        execute: async ({ query, type }) => {
+          const entries = scanMemoryRoots(globalMemoryDir, projectMemoryDir)
+          const results = await recallMemory(query, entries, { filterType: type })
+          return results.map((result) => result.content).join("\n")
+        },
+      }),
+    },
     "experimental.chat.system.transform": safeHook(
       "auto-memory:system.transform",
       async (_input: unknown, output: { system: string[] }) => {
@@ -168,13 +229,7 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
         await ensureAutoMemoryInfra(home, projectMemoryDir)
 
         const entries = scanMemoryRoots(globalMemoryDir, projectMemoryDir)
-        const recalled = await recallMemory("", entries, {
-          onHit: (id) => {
-            process.stderr.write(`T9-onHit: ${id}\n`)
-          },
-        })
         const injection = buildMemoryInjection(entries, config.autoMemory.summaryTokenBudget ?? 4000)
-        const recallInjection = recalled.map((result) => result.content).join("\n")
         const summaryPathHints = buildSummaryPathHints(entries)
 
         output.system.push(
@@ -182,7 +237,7 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
             globalMemoryDir,
             projectMemoryDir,
             entries,
-            injection: [injection, recallInjection].filter(Boolean).join("\n"),
+            injection,
             summaryPathHints,
           }),
         )

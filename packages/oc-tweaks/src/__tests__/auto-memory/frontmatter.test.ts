@@ -105,6 +105,9 @@ source: user
 created_at: 2026-01-01T00:00:00Z
 updated_at: 2026-01-02T00:00:00Z
 trusted_as_instruction: false
+disabled: true
+last_usage: 2026-01-03T00:00:00Z
+usage_count: 7
 ---
 body content`
 
@@ -115,6 +118,9 @@ body content`
     expect(reparsed.meta.id).toBe(meta.id)
     expect(reparsed.meta.scope).toBe(meta.scope)
     expect(reparsed.meta.trusted_as_instruction).toBe(false)
+    expect(reparsed.meta.disabled).toBe(true)
+    expect(reparsed.meta.usage_count).toBe(7)
+    expect(reparsed.meta.last_usage).toBe("2026-01-03T00:00:00Z")
     expect(reparsed.body).toBe(body)
   })
 })

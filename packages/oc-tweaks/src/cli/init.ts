@@ -2,6 +2,7 @@
 
 import { mkdir } from "node:fs/promises"
 import { dirname } from "node:path"
+import { formatDiagReport, runDiag, type DiagOpts } from "../plugins/auto-memory/diag"
 declare const Bun: any
 
 export const DEFAULT_CONFIG = {
@@ -29,17 +30,49 @@ export async function initConfig(): Promise<{ created: boolean; path: string }> 
   return { created: true, path: configPath }
 }
 
+export type CliCommand =
+  | { command: "init" }
+  | { command: "memory-diag"; opts: DiagOpts }
+
+export function parseCliArgs(argv: string[]): CliCommand {
+  const args = argv[0] === "tweaks" ? argv.slice(1) : argv
+  if (args.length === 0 || args[0] === "init") return { command: "init" }
+
+  if (args[0] === "memory" && args[1] === "diag") {
+    return { command: "memory-diag", opts: parseDiagOpts(args.slice(2)) }
+  }
+
+  return { command: "init" }
+}
+
+function parseDiagOpts(args: string[]): DiagOpts {
+  const opts: DiagOpts = {}
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i]
+    if (arg === "--root" && args[i + 1]) opts.root = args[++i]
+    else if (arg === "--global-root" && args[i + 1]) opts.globalRoot = args[++i]
+    else if (arg === "--project-root" && args[i + 1]) opts.projectRoot = args[++i]
+  }
+  return opts
+}
+
 // Only run when executed directly
 const isMain = typeof Bun !== "undefined" && 
   Bun.main === import.meta.path
 
 if (isMain) {
-  const result = await initConfig()
-  if (result.created) {
-    console.log(`Created: ${result.path}`)
-    console.log("All plugins configured. Edit the file to customize.")
+  const parsed = parseCliArgs(process.argv.slice(2))
+  if (parsed.command === "memory-diag") {
+    const report = await runDiag(parsed.opts)
+    console.log(formatDiagReport(report))
   } else {
-    console.log(`Config already exists: ${result.path}`)
-    console.log("Nothing changed. Edit the file manually to update your configuration.")
+    const result = await initConfig()
+    if (result.created) {
+      console.log(`Created: ${result.path}`)
+      console.log("All plugins configured. Edit the file to customize.")
+    } else {
+      console.log(`Config already exists: ${result.path}`)
+      console.log("Nothing changed. Edit the file manually to update your configuration.")
+    }
   }
 }

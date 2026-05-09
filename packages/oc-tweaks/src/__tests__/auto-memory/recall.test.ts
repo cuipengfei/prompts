@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test"
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 
 import { recallMemory } from "../../plugins/auto-memory/recall"
+import { parseFrontmatter } from "../../plugins/auto-memory/frontmatter"
 import type { MemoryEntry } from "../../plugins/auto-memory/registry"
 import type { MemoryMeta } from "../../plugins/auto-memory/frontmatter"
 
@@ -105,6 +107,57 @@ describe("recallMemory", () => {
     })
     expect(results).toHaveLength(1)
     expect(calls).toContain("u1")
+  })
+
+  test("hit persists usage_count increment and last_usage without changing body", async () => {
+    const raw = `---
+id: tracked
+scope: global
+type: note
+source: user
+created_at: 2026-05-09T00:00:00Z
+updated_at: 2026-05-09T00:00:00Z
+trusted_as_instruction: false
+usage_count: 2
+---
+body match-token stays byte-for-byte
+`
+    const absPath = join(workDir, "tracked.md")
+    writeFileSync(absPath, raw, "utf8")
+    const { meta, body } = parseFrontmatter(raw)
+    const entry: MemoryEntry = {
+      meta,
+      absPath,
+      scope: "global",
+      tokenEstimate: 1,
+      summary: "body match-token",
+    }
+
+    const results = await recallMemory("match-token", [entry])
+
+    expect(results).toHaveLength(1)
+    const updated = readFileSync(absPath, "utf8")
+    const reparsed = parseFrontmatter(updated)
+    expect(reparsed.meta.usage_count).toBe(3)
+    expect(reparsed.meta.last_usage).toMatch(/^\d{4}-\d{2}-\d{2}T/)
+    expect(reparsed.body).toBe(body)
+  })
+
+  test("implementation uses writer guardrail helper instead of naked writeFile replacement", () => {
+    const sourcePath = fileURLToPath(new URL("../../plugins/auto-memory/recall.ts", import.meta.url))
+    const source = readFileSync(sourcePath, "utf8")
+
+    expect(source).not.toContain("writeFile(entry.absPath")
+    expect(source).toContain("rewriteMemoryFileWithGuards")
+  })
+
+  test("hit leaves no-frontmatter files byte-for-byte unchanged", async () => {
+    const legacy = "legacy body match-token\n"
+    const entry = writeEntry("legacy.md", makeMeta({ id: "legacy" }), legacy)
+
+    await recallMemory("match-token", [entry])
+
+    expect(readFileSync(entry.absPath, "utf8")).toBe(legacy)
   })
 
   test("filter by type: only entries whose meta.type matches are searched", async () => {

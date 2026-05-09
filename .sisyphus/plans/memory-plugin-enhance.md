@@ -1098,7 +1098,7 @@ Wave FINAL (4 review 并行 → 用户 okay):
   - Files: `packages/oc-tweaks/package.json`
   - Pre-commit: full verification (above commands)
 
-- [ ] 18. Tag + push (CI publish gating)
+- [x] 18. Tag + push (CI publish gating)
 
   **What to do**:
   - Tag `oc-tweaks-v{new}` on the bump commit and push tag + main. Watch GitHub Action `publish-oc-tweaks.yml` for the run; verify npm registry shows the new version (`npm view oc-tweaks version`).
@@ -1163,15 +1163,15 @@ Wave FINAL (4 review 并行 → 用户 okay):
 > 4 review agents 并行跑。全部 APPROVE 后 → 汇总给用户 → 等用户显式 okay → 才能完成。
 > 永远不要在收到用户 okay 之前勾掉 F1-F4。
 
-- [ ] F1. **Plan 合规审计** — `oracle`
+- [x] F1. **Plan 合规审计** — `oracle`
   读 本plan 与全部 task diff。逐条 Must Have 验证实现存在（读文件 / 跳命令 / curl 接口）。逐条 Must NOT Have 用 grep/ast-grep 扫码确认未引入（embedding / sqlite / `proper-lockfile` / global lock / `autoMemory.enhanced` / 启动时自动补 frontmatter / 全文覆写），找到即 REJECT 并报 file:line。检查 `.sisyphus/evidence/task-{1..18}-*.txt` 均存在。检查 ADR×3 、SDK spike notes、CHANGELOG 、四份 README 同步。验证 npm 发布及 tag 存在。
   Output: `Must Have [N/N] | Must NOT Have [N/N] | Tasks [18/18] | Evidence [N/18+] | VERDICT: APPROVE/REJECT`
 
-- [ ] F2. **代码质量审查** — `unspecified-high`
+- [x] F2. **代码质量审查** — `unspecified-high`
   跑 `bunx tsc --noEmit -p packages/oc-tweaks` + `bun test --cwd packages/oc-tweaks`（需为 6 原生 case + 新增子目录全路径）。审所有改动文件：`as any` / `@ts-ignore` / 空 catch / 生产 `console.log` / 注释档代码 / 未用 import。AI slop：过度抽象、通用名称（data/result/item/temp）、冗余注释、复杂化未使用的参数。验证方护全面：sanitization 、path-guard 、quota 、throttle 、原子写 都有专属 test 覆盖。
   Output: `tsc [PASS/FAIL] | Tests [N pass/N fail] | Files [N clean/N issues] | Slop [N findings] | VERDICT`
 
-- [ ] F3. **真实QA 集成路径** — `unspecified-high` (启动临时 OpenCode 进程探针)
+- [x] F3. **真实QA 集成路径** — `unspecified-high` (启动临时 OpenCode 进程探针)
   从干净 tmpdir 开始。依次跑全部 18 task QA scenarios（依步骤 、收集 evidence）。重点 cross-task 集成：
   1. 起一次性 OpenCode 进程探针 → 抳 system prompt 含 `<untrusted_memory>` 与 summary，且不含 body 全文
   2. 触发模型 recall 路径 → 返回体裹在 `<untrusted_memory id=...>`
@@ -1181,7 +1181,7 @@ Wave FINAL (4 review 并行 → 用户 okay):
   Evidence 存 `.sisyphus/evidence/final-qa/`。
   Output: `Scenarios [N/N] | Integration [5/5] | Edge Cases [N tested] | VERDICT`
 
-- [ ] F4. **范围保真度检查** — `deep`
+- [x] F4. **范围保真度检查** — `deep`
   对每 task：读 "What to do"，读实际 `git diff main..HEAD -- {files}`。1:1 验证：spec 内全建（无遗漏），spec 外未建（无 creep）。Must NOT Have 合规。Cross-task 污染（Task N 是否碰了 Task M 的文件）。Unaccounted changes：git diff 中是否有 plan 未言及的文件。检查是否有法外 commit（未在 plan 范围内的文件）。
   Output: `Tasks [18/18 compliant] | Contamination [CLEAN/N issues] | Unaccounted [CLEAN/N files] | Stray Commits [CLEAN/N] | VERDICT`
 

@@ -565,7 +565,7 @@ describe("collectSessions", () => {
   })
 
   test("resolves project path to project_id before filtering sessions", async () => {
-    const dbPath = `file:oc-insights-project-path-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}?mode=memory&cache=shared`
+    const dbPath = createTestDbPath("sessions-project-path")
     const db = createDatabase(dbPath)
     const now = Date.now()
     const projectId = "7a3e867d3f4463cfbaa9e0866ee3fd5d279668d0"

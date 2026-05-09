@@ -6,9 +6,9 @@
  * for the next-message `<system-reminder>` injection path.
  *
  * Degradation chain (per docs/sdk-spike-notes.md):
- *   1. toast (best-effort, only mode='notify') — TODO: wire to wpf-notify
- *      shell sender; current V1 leaves a hook so the auto-memory plugin can
- *      inject `$` + `client` later without re-shaping callers.
+ *   1. toast (best-effort, only mode='notify') — sender is registered by
+ *      auto-memory plugin init via setToastSender(...), using the shared
+ *      wpf-notify detection/sending path when available.
  *   2. stderr structured JSON line — always (unless mode='off')
  *   3. in-memory reminder queue — drained by the chat.system.transform hook
  *      when the next user message arrives (mode='notify' only).

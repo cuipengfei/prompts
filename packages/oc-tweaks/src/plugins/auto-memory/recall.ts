@@ -8,7 +8,7 @@
  *  4. Wrap hits as <untrusted_memory id="...">body</untrusted_memory>.
  *  5. Truncate body bodies > maxBytesPerFile with `<!-- truncated -->` marker.
  *  6. 0 hits → single sentinel result whose content carries `recall:no-match`.
- *  7. Hit → fire-and-forget `onHit(id)` callback (best-effort; T11 writer wires here later).
+ *  7. Hit → best-effort usage_count/last_usage frontmatter bump, then optional onHit callback.
  *
  * Out of scope (V1):
  *  - tokenization, stemming, fuzzy match
@@ -18,8 +18,10 @@
 
 import { readFile } from "node:fs/promises"
 
+import { parseFrontmatter, serializeFrontmatter } from "./frontmatter"
 import type { MemoryEntry } from "./registry"
 import { wrapAsUntrusted } from "./sanitize"
+import { rewriteMemoryFileWithGuards } from "./writer"
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -37,8 +39,7 @@ export interface RecallOptions {
   maxBytesPerFile?: number
   /**
    * Fire-and-forget callback invoked per hit (id of the entry).
-   * Used by T11 writer to bump usage_count / last_usage. Best-effort —
-   * recall does NOT await this and swallows thrown errors to stderr.
+   * Best-effort — recall does NOT await this and swallows thrown errors to stderr.
    */
   onHit?: (id: string) => void | Promise<void>
 }
@@ -73,6 +74,33 @@ function fireOnHit(id: string, cb?: RecallOptions["onHit"]): void {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error("[recall] onHit (sync) failed:", err)
+  }
+}
+
+async function bumpUsage(entry: MemoryEntry, raw: string): Promise<void> {
+  const stripped = raw.startsWith("\uFEFF") ? raw.slice(1) : raw
+  if (!stripped.startsWith("---")) return
+
+  const { meta, body } = parseFrontmatter(raw)
+  if (!meta.id && !entry.meta.id) return
+
+  const updated = serializeFrontmatter(
+    {
+      ...meta,
+      usage_count: (meta.usage_count ?? 0) + 1,
+      last_usage: new Date().toISOString(),
+    },
+    body,
+  )
+  await rewriteMemoryFileWithGuards(entry.absPath, updated)
+}
+
+async function recordUsage(entry: MemoryEntry, raw: string): Promise<void> {
+  try {
+    await bumpUsage(entry, raw)
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error("[recall] usage bump failed:", err)
   }
 }
 
@@ -130,8 +158,7 @@ export async function recallMemory(
       content: wrapAsUntrusted(id, truncated),
     })
 
-    // Best-effort usage update; T11 writer will wire actual persistence.
-    // TODO(T11): replace `opts.onHit` shim with direct writer.bumpUsage(id).
+    await recordUsage(entry, body)
     fireOnHit(id, opts.onHit)
   }
 
