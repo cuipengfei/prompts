@@ -182,7 +182,7 @@
     "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
   },
   "compaction": { "enabled": true, "language": "繁体中文", "style": "毛泽东语言风格" },
-  "autoMemory": { "enabled": true },
+  "autoMemory": { "enabled": true, "autoWrite": "notify", "maxBytesPerFile": 32768, "maxWritesPerSession": 5, "summaryTokenBudget": 4000 },
   "backgroundSubagent": { "enabled": true },
   "leaderboard": { "enabled": false }
 }
@@ -191,6 +191,27 @@
 `notify.command` 支持 `$TITLE` 和 `$MESSAGE` 两个占位符。上面的 SSH 示例适用于从远程开发机向本地桌面发送通知的场景。如果在本地使用，留空即可，插件会自动检测可用的通知方式。
 
 
+### autoMemory v2：智能记忆管道升级
+
+`autoMemory` 插件在 v2 中完成了记忆管道的全面升级：
+
+- **Summary/Index 注入**：不再全量拼接 memory 文件，改为注入每个文件的摘要索引（包裹在 `<untrusted_memory trusted=false>` 中），token 超出 `summaryTokenBudget`（默认 4000）时按最近更新时间截断。
+- **按需召回**：模型按需通过 `memory diag` 诊断当前状态，而非一次性全量加载所有 memory 内容。
+- **Write+Notify 自动写入**：检测到记忆触发词或 `/remember` 调用时，`autoWrite: 'notify'`（默认）自动写入并发送通知；`'silent'` 静默写入；`'off'` 禁用自动写入。
+
+**升级指引（现有用户必读）**：v2 为 memory 文件引入 frontmatter 元数据（id、scope、type 等）。插件初始化时不会自动迁移，需用户手动执行一次：
+
+```
+/memory-migrate
+```
+
+已有 frontmatter 的文件保持不变；无 frontmatter 的旧文件会被自动补充最小 frontmatter。如需查看当前 memory 系统状态，执行：
+
+```
+memory diag
+```
+
+诊断输出包含：memory 根目录、文件总数、token 估算、最常用的前 5 个文件、最近更新的前 5 个文件。
 ## 免责声明
 
 给 AI 洗脑是门艺术，而非精确科学。结果可能因人而异。可能导致你的 AI 产生优越感。请负责任地使用。

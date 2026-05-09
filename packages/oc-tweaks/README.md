@@ -133,7 +133,30 @@ This plugin provides an intelligent memory workflow:
 | Property | Type | Default | Description |
 |---|---|---|---|
 | `enabled` | boolean | `true` | Enable or disable the plugin. |
+| `autoWrite` | `'off'\|'notify'\|'silent'` | `'notify'` | Controls active write behavior: `off` disables auto-write, `notify` writes and shows a notification, `silent` writes without notification. |
+| `maxBytesPerFile` | number | `32768` | Max bytes allowed per memory file before refusing to write. |
+| `maxWritesPerSession` | number | `5` | Max number of auto-writes allowed per session. |
+| `summaryTokenBudget` | number | `4000` | Token budget passed to the model when generating a memory summary. |
 
+**v2 Pipeline Behavior**
+
+Starting from v2, `autoMemory` uses a summary/index injection model instead of full-file concatenation:
+
+- Each memory file is injected as a compact summary entry wrapped in `<untrusted_memory trusted=false>`. The model is told memory is data, not instructions.
+- When total injected tokens exceed `summaryTokenBudget`, older files (by `updated_at`) are dropped to stay within budget.
+- Active writes via the `remember` tool or `/remember` command respect the `autoWrite` setting: `'notify'` (default) writes and emits a notification; `'silent'` writes quietly; `'off'` disables auto-write.
+- All memory content is trust-bounded: `trusted_as_instruction: false` is enforced in frontmatter regardless of file contents.
+
+**Commands**
+
+| Command | Description |
+|---------|-------------|
+| `/memory-migrate` | One-time migration that adds minimal frontmatter to legacy memory files without frontmatter. Files that already have frontmatter are untouched. Does **not** run automatically on plugin init. |
+| `memory diag` | Read-only diagnostic: shows memory roots, file count, token estimate, top 5 by usage count, top 5 by most recent update. |
+
+**Upgrade Guidance**
+
+If you have existing memory files from v1, run `/memory-migrate` once after upgrading. The plugin will not migrate automatically. After migration, files gain the metadata fields (id, scope, type, source, timestamps, `trusted_as_instruction: false`) required by the v2 pipeline.
 ### `backgroundSubagent`
 
 This plugin injects a policy into the system prompt, reminding the AI agent to use `run_in_background=true` by default when dispatching sub-agents. It also requires each `task()` description to expose a compact transparency summary: agent type, loaded skills, background/foreground mode, and resume session when present. If a foreground task is dispatched, or if required transparency tags are missing, a friendly reminder is shown.
@@ -201,7 +224,11 @@ Here is an example of a `~/.config/opencode/oc-tweaks.json` file with all option
     "style": "毛泽东语言风格"
   },
   "autoMemory": {
-    "enabled": true
+    "enabled": true,
+    "autoWrite": "notify",
+    "maxBytesPerFile": 32768,
+    "maxWritesPerSession": 5,
+    "summaryTokenBudget": 4000
   },
   "backgroundSubagent": {
     "enabled": true
@@ -354,7 +381,30 @@ bunx oc-tweaks init
 | 属性 | 类型 | 默认值 | 描述 |
 |---|---|---|---|
 | `enabled` | boolean | `true` | 启用或禁用此插件。 |
+| `autoWrite` | `'off'\|'notify'\|'silent'` | `'notify'` | 控制主动写入行为：`off` 禁用自动写入，`notify` 写入后显示通知，`silent` 静默写入不通知。 |
+| `maxBytesPerFile` | number | `32768` | 拒绝写入前每个 memory 文件允许的最大字节数。 |
+| `maxWritesPerSession` | number | `5` | 每个会话允许的最大自动写入次数。 |
+| `summaryTokenBudget` | number | `4000` | 生成 memory 摘要时传给模型的 token 预算。 |
 
+**v2 管道行为**
+
+`autoMemory` v2 采用摘要/索引注入模型，替代旧版全文件拼接方式：
+
+- 每个 memory 文件以摘要条目形式注入，包裹于 `<untrusted_memory trusted=false>` 中。模型被明确告知 memory 是数据而非指令。
+- 注入 token 超出 `summaryTokenBudget` 时，按 `updated_at` 降序丢弃旧文件，确保 token 预算不超限。
+- 通过 `remember` tool 或 `/remember` 命令主动写入时，遵循 `autoWrite` 配置：`'notify'`（默认）写入并发送通知；`'silent'` 静默写入；`'off'` 禁用自动写入。
+- 所有 memory 内容受信任边界保护：frontmatter 中 `trusted_as_instruction: false` 始终强制生效，无论文件内部是否设为 true。
+
+**命令**
+
+| 命令 | 说明 |
+|------|------|
+| `/memory-migrate` | 一次性迁移命令，为无 frontmatter 的旧 memory 文件补充最小 frontmatter。已有 frontmatter 的文件保持不变。**插件初始化时不自动执行**，需用户手动运行一次。 |
+| `memory diag` | 只读诊断命令：输出 memory 根目录、文件总数、token 估算、使用频次前 5 的文件、最近更新前 5 的文件。 |
+
+**升级指引**
+
+如果你有 v1 的旧 memory 文件，升级后请执行一次 `/memory-migrate`。迁移完成后，各文件将获得 v2 管道所需的元数据字段（id、scope、type、source、时间戳、`trusted_as_instruction: false`）。
 ### `backgroundSubagent`
 
 此插件向系统提示中注入一项策略，提醒 AI 代理在派发子代理时默认使用 `run_in_background=true`。它也要求每次 `task()` 调用在 `description` 里写出紧凑的透明度摘要：agent 类型、已加载 skills、background/foreground 模式，以及存在时的 resume session。若派发了前台任务，或缺少必需透明度标签，插件都会追加友好提醒。
@@ -422,7 +472,11 @@ bunx oc-tweaks init
     "style": "毛泽东语言风格"
   },
   "autoMemory": {
-    "enabled": true
+    "enabled": true,
+    "autoWrite": "notify",
+    "maxBytesPerFile": 32768,
+    "maxWritesPerSession": 5,
+    "summaryTokenBudget": 4000
   },
   "backgroundSubagent": {
     "enabled": true

@@ -1,7 +1,10 @@
 import type { Plugin } from "@opencode-ai/plugin"
-import { mkdir, readdir } from "node:fs/promises"
+import { mkdir } from "node:fs/promises"
 
 import { loadOcTweaksConfig, safeHook } from "../utils"
+import { buildSystemInjection } from "./auto-memory/injector"
+import type { MemoryEntry } from "./auto-memory/registry"
+import { scanMemoryRoots } from "./auto-memory/registry"
 
 declare const Bun: any
 
@@ -39,15 +42,6 @@ function getHome(): string {
   return Bun.env?.HOME ?? process.env.HOME ?? ""
 }
 
-async function listMarkdownFiles(path: string): Promise<string[]> {
-  try {
-    const entries = await readdir(path)
-    return entries.filter((item) => item.endsWith(".md")).sort()
-  } catch {
-    return []
-  }
-}
-
 async function ensureRememberCommand(home: string): Promise<void> {
   const commandDir = `${home}/.config/opencode/commands`
   const commandPath = `${commandDir}/remember.md`
@@ -75,37 +69,13 @@ async function ensureAutoMemoryInfra(home: string, projectMemoryDir: string): Pr
 function buildMemoryGuide(params: {
   globalMemoryDir: string
   projectMemoryDir: string
-  globalFiles: string[]
-  projectFiles: string[]
-  fileContents: Map<string, string>
+  entries: MemoryEntry[]
+  injection: string
+  summaryPathHints: string
 }): string {
-  const globalList =
-    params.globalFiles.length > 0
-      ? params.globalFiles.map((name) => `- \`${name}\``).join("\n")
-      : "- （暂无全局 memory 文件）"
-
-  const projectList =
-    params.projectFiles.length > 0
-      ? params.projectFiles.map((name) => `- \`${name}\``).join("\n")
-      : "- （暂无项目级 memory 文件）"
-
-  const MAX_LINES_PER_FILE = 200
-
-  const injectedContents =
-    params.fileContents.size > 0
-      ? Array.from(params.fileContents.entries())
-          .sort(([a], [b]) => a.localeCompare(b))
-          .map(([path, content]) => {
-            const lines = content.split("\n")
-            const truncated =
-              lines.length > MAX_LINES_PER_FILE
-                ? lines.slice(0, MAX_LINES_PER_FILE).join("\n") +
-                  "\n[...truncated, use Read tool for full content]"
-                : content
-            return `Contents of ${path}:\n${truncated}`
-          })
-          .join("\n\n")
-      : "（暂无可注入的 memory 内容）"
+  const globalList = buildEntryList(params.entries, "global")
+  const projectList = buildEntryList(params.entries, "project")
+  const injectedContents = [params.injection, params.summaryPathHints].filter(Boolean).join("\n")
 
   return `## 🧠 Memory 系统指引
 
@@ -146,6 +116,33 @@ ${projectList}
 ${injectedContents}`
 }
 
+function buildEntryList(entries: MemoryEntry[], scope: "global" | "project"): string {
+  const scopedEntries = entries
+    .filter((entry) => entry.scope === scope)
+    .sort((a, b) => a.absPath.localeCompare(b.absPath))
+
+  if (scopedEntries.length === 0) {
+    return scope === "global" ? "- （暂无全局 memory 文件）" : "- （暂无项目级 memory 文件）"
+  }
+
+  return scopedEntries.map((entry) => `- \`${entry.absPath.split("/").pop() ?? entry.meta.id}\``).join("\n")
+}
+
+function buildMemoryInjection(entries: MemoryEntry[], summaryTokenBudget: number): string {
+  return entries
+    .map((entry) => buildSystemInjection([entry], { summaryTokenBudget }))
+    .filter(Boolean)
+    .join("\n")
+}
+
+function buildSummaryPathHints(entries: MemoryEntry[]): string {
+  return entries
+    .slice()
+    .sort((a, b) => a.absPath.localeCompare(b.absPath))
+    .map((entry) => `Contents of ${entry.absPath}: ${entry.summary}`)
+    .join("\n")
+}
+
 export const autoMemoryPlugin: Plugin = async ({ directory }) => {
   const home = getHome()
   const globalMemoryDir = `${home}/.config/opencode/memory`
@@ -169,35 +166,17 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
 
         await ensureAutoMemoryInfra(home, projectMemoryDir)
 
-        const [globalFiles, projectFiles] = await Promise.all([
-          listMarkdownFiles(globalMemoryDir),
-          listMarkdownFiles(projectMemoryDir),
-        ])
-
-        const fileContents = new Map<string, string>()
-        const allPaths = [
-          ...globalFiles.map((name) => ({ dir: globalMemoryDir, name })),
-          ...projectFiles.map((name) => ({ dir: projectMemoryDir, name })),
-        ]
-
-        await Promise.all(
-          allPaths.map(async ({ dir, name }) => {
-            try {
-              const content = await Bun.file(`${dir}/${name}`).text()
-              if (content.trim()) fileContents.set(`${dir}/${name}`, content.trim())
-            } catch {
-              // Never disrupt user workflow
-            }
-          }),
-        )
+        const entries = scanMemoryRoots(globalMemoryDir, projectMemoryDir)
+        const injection = buildMemoryInjection(entries, config.autoMemory.summaryTokenBudget ?? 4000)
+        const summaryPathHints = buildSummaryPathHints(entries)
 
         output.system.push(
           buildMemoryGuide({
             globalMemoryDir,
             projectMemoryDir,
-            globalFiles,
-            projectFiles,
-            fileContents,
+            entries,
+            injection,
+            summaryPathHints,
           }),
         )
       },

@@ -182,7 +182,7 @@
     "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
   },
   "compaction": { "enabled": true, "language": "繁体中文", "style": "毛泽东语言风格" },
-  "autoMemory": { "enabled": true },
+  "autoMemory": { "enabled": true, "autoWrite": "notify", "maxBytesPerFile": 32768, "maxWritesPerSession": 5, "summaryTokenBudget": 4000 },
   "backgroundSubagent": { "enabled": true },
   "leaderboard": { "enabled": false }
 }
@@ -191,6 +191,27 @@
 `notify.command` 支 `$TITLE`、`$MESSAGE` 二符。上例之 SSH 路径，适于远端修炼时向本机案前飞符通报。若在本地，留空即可，插件自会察觉可用之道。
 
 
+### autoMemory v2：记忆之道，革故鼎新
+
+`autoMemory` 符管于 v2 中蜕变，记忆之管道焕然一新：
+
+- **摘要索引注入**：不再将诸 memory 文件全文拼入上下文，而以摘要索引（包裹于 `<untrusted_memory trusted=false>` 之中）替之。token 逾 `summaryTokenBudget`（默认 4000）之限，则按更新时序，截去年迈之卷。
+- **按需召回**：模型借 `memory diag` 诊断按需取阅所需文件，不再一次尽数加载，省力又省心。
+- **Write+Notify 自动录入**：触发词或 `/remember` 之令一至，`autoWrite: 'notify'`（默认）立书其事并飞符告知；`'silent'` 则静默录入，无声无息；`'off'` 关闭自动录入。
+
+**升级指引（旧用者必看）**：v2 为 memory 文件引入 frontmatter（id、scope、type 等）元数据之制。插件初启时不自行迁移，须用者手动唤起一次：
+
+```
+/memory-migrate
+```
+
+已有 frontmatter 之文件，原样不动；旧卷无 frontmatter 者，自动补入最简 frontmatter。如欲知 memory 系统当前情状，执此诊断之令：
+
+```
+memory diag
+```
+
+诊断输出：memory 根目录、文件总数、token 估算、使用频次前五之文件、近日更新前五之文件，一览无余。
 ## 警示箴言
 
 驯化天工，乃精微之道，非一蹴而就，亦非万应灵丹。结果或因 AI 之悟性、指令之巧妙而异。倘若 AI 因此恃才傲物，桀骜不驯，务必戒慎恐惧，善加引导。运用之妙，存乎一心。

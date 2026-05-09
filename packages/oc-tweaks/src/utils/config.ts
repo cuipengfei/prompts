@@ -39,7 +39,17 @@ export interface NotifyStyle {
 
 export interface OcTweaksConfig extends Record<string, unknown> {
   compaction: { enabled?: boolean; language?: string; style?: string }
-  autoMemory?: { enabled?: boolean }
+  autoMemory?: {
+    enabled?: boolean
+    /** Controls active write behavior. Default: 'notify' */
+    autoWrite?: 'off' | 'notify' | 'silent'
+    /** Max bytes per memory file before refusing to write. Default: 32768 */
+    maxBytesPerFile?: number
+    /** Max auto-writes per session. Default: 5 */
+    maxWritesPerSession?: number
+    /** Token budget for summary passed to model. Default: 4000 */
+    summaryTokenBudget?: number
+  }
   backgroundSubagent: { enabled?: boolean }
   leaderboard: { enabled?: boolean; configPath?: string | null }
   logging?: {
@@ -65,9 +75,14 @@ export interface OcTweaksConfig extends Record<string, unknown> {
   }
 }
 
-const DEFAULT_CONFIG: OcTweaksConfig = {
+export const DEFAULT_CONFIG: OcTweaksConfig = {
   compaction: {},
-  autoMemory: {},
+  autoMemory: {
+    autoWrite: 'notify',
+    maxBytesPerFile: 32_768,
+    maxWritesPerSession: 5,
+    summaryTokenBudget: 4000,
+  },
   backgroundSubagent: {},
   leaderboard: {},
   notify: {
@@ -83,7 +98,12 @@ export async function loadOcTweaksConfig(): Promise<OcTweaksConfig | null> {
     const file = Bun.file(path)
     if (!(await file.exists())) return null
     const parsed = await file.json()
-    return { ...DEFAULT_CONFIG, ...parsed }
+    const merged: OcTweaksConfig = { ...DEFAULT_CONFIG, ...parsed }
+    // Deep merge autoMemory so new default fields are preserved when user only sets partial config
+    if (parsed.autoMemory && typeof parsed.autoMemory === 'object') {
+      merged.autoMemory = { ...DEFAULT_CONFIG.autoMemory, ...parsed.autoMemory }
+    }
+    return merged
   } catch {
     return null
   }

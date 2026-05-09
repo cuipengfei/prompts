@@ -182,7 +182,7 @@ Then create `~/.config/opencode/oc-tweaks.json` for configuration (all fields ar
     "command": "ssh my-desktop 'notify-send \"$TITLE\" \"$MESSAGE\"'"
   },
   "compaction": { "enabled": true, "language": "繁体中文", "style": "毛泽东语言风格" },
-  "autoMemory": { "enabled": true },
+  "autoMemory": { "enabled": true, "autoWrite": "notify", "maxBytesPerFile": 32768, "maxWritesPerSession": 5, "summaryTokenBudget": 4000 },
   "backgroundSubagent": { "enabled": true },
   "leaderboard": { "enabled": false }
 }
@@ -191,6 +191,27 @@ Then create `~/.config/opencode/oc-tweaks.json` for configuration (all fields ar
 `notify.command` supports `$TITLE` and `$MESSAGE` placeholders. The SSH example above works for sending notifications from a remote dev machine to your local desktop. If running locally, leave the field empty and the plugin will auto-detect an available notifier.
 
 
+### autoMemory v2: Intelligent Memory Pipeline Upgrade
+
+The `autoMemory` plugin received a full pipeline overhaul in v2:
+
+- **Summary/Index injection**: Instead of concatenating all memory files into context, the plugin now injects a summary index for each file (wrapped in `<untrusted_memory trusted=false>`). When total tokens exceed `summaryTokenBudget` (default 4000), older files are dropped by `updated_at` descending.
+- **On-demand recall**: The model retrieves specific memory files on demand via `memory diag`, rather than loading all content upfront.
+- **Write+Notify auto-write**: When a memory trigger phrase or `/remember` call is detected, `autoWrite: 'notify'` (default) writes and sends a notification; `'silent'` writes without notification; `'off'` disables auto-write entirely.
+
+**Upgrade guidance (existing users)**: v2 introduces frontmatter metadata (id, scope, type, etc.) for memory files. Migration does **not** run automatically on plugin init. Run it once manually:
+
+```
+/memory-migrate
+```
+
+Files that already have frontmatter are untouched. Legacy files without frontmatter get a minimal frontmatter prepended. To inspect the current memory system state, run:
+
+```
+memory diag
+```
+
+Diagnostic output includes: memory root directories, file count, token estimate, top 5 files by usage count, and top 5 files by most recent update.
 ## Disclaimer
 
 Brainwashing AI is an art, not an exact science. Results may vary. May cause your AI to develop a superiority complex. Use responsibly.
