@@ -33,6 +33,23 @@ export interface NotifyWriteOpts {
 
 const reminderQueue: string[] = []
 
+export type ToastSender = (msg: string) => void
+
+let _toastSender: ToastSender | null = null
+
+/**
+ * Register a best-effort toast sender. The auto-memory plugin wires this up
+ * during plugin init (T11/T12) so notifyWrite can surface a toast in mode=notify.
+ */
+export function setToastSender(fn: ToastSender): void {
+  _toastSender = fn
+}
+
+/** Test-only helper: clear the registered sender between cases. */
+export function __resetToastSenderForTests(): void {
+  _toastSender = null
+}
+
 /**
  * Drain the pending reminder queue. The auto-memory plugin's
  * `experimental.chat.system.transform` hook calls this once per user turn
@@ -60,15 +77,15 @@ export function notifyWrite(
   // caller still reaches here we must not surface anything.
   if (mode === "off") return
 
-  // 1. Best-effort toast (mode=notify only). V1 leaves this as a hook —
-  //    the auto-memory plugin owns the shell sender + client and will wire
-  //    a callback in via `setToastSender(...)` in T11/T12. For now we just
-  //    swallow any failure to honour "do not block / do not throw".
+  // 1. Best-effort toast (mode=notify only). The auto-memory plugin registers
+  //    a sender via setToastSender(...). If none is registered, degrade silently.
+  //    Any failure is swallowed to honour "do not block / do not throw".
   if (mode === "notify") {
     try {
-      // TODO(T11): invoke registered toast sender (wpf-notify shell first,
-      //            client.tui.showToast fallback per sdk-spike-notes §4).
-      // No-op in V1 — degrade silently to stderr.
+      if (_toastSender) {
+        const toastMsg = `auto-memory ${event.action} ${event.scope}/${event.relPath}`
+        _toastSender(toastMsg)
+      }
     } catch {
       // swallow — degradation chain handles it
     }

@@ -18,6 +18,7 @@ export interface MemoryMeta {
   summary?: string
   usage_count?: number
   last_usage?: string
+  tags?: string[]
 }
 
 // ── Error ──────────────────────────────────────────────────────────────────

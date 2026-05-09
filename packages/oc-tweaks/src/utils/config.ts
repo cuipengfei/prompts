@@ -49,6 +49,8 @@ export interface OcTweaksConfig extends Record<string, unknown> {
     maxWritesPerSession?: number
     /** Token budget for summary passed to model. Default: 4000 */
     summaryTokenBudget?: number
+    /** Max diff lines per write before refusing. Default: 500 */
+    maxDiffLines?: number
   }
   backgroundSubagent: { enabled?: boolean }
   leaderboard: { enabled?: boolean; configPath?: string | null }
@@ -78,10 +80,12 @@ export interface OcTweaksConfig extends Record<string, unknown> {
 export const DEFAULT_CONFIG: OcTweaksConfig = {
   compaction: {},
   autoMemory: {
+    enabled: false,
     autoWrite: 'notify',
     maxBytesPerFile: 32_768,
     maxWritesPerSession: 5,
     summaryTokenBudget: 4000,
+    maxDiffLines: 500,
   },
   backgroundSubagent: {},
   leaderboard: {},

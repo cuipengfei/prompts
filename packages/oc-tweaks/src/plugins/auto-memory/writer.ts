@@ -3,7 +3,7 @@ import { dirname, join, relative, resolve, sep } from "node:path"
 
 import { DEFAULT_CONFIG, loadOcTweaksConfig } from "../../utils/config"
 import { notifyWrite, type NotifyMode } from "./notify"
-import { assertFilenameSafe, assertInsideRoot, assertSize } from "./path-guard"
+import { assertDiffLines, assertFilenameSafe, assertInsideRoot, assertSize } from "./path-guard"
 import { sanitizeForWrite } from "./sanitize"
 
 export type WriteAction = "created" | "updated" | "forgotten"
@@ -63,6 +63,10 @@ export async function writeMemory(
   if (existing === finalContent) {
     return { skipped: true, reason: "unchanged" }
   }
+
+  const diffStr = computeDiffStr(existing, finalContent)
+  const maxDiffLines = autoMemory?.maxDiffLines ?? DEFAULT_CONFIG.autoMemory?.maxDiffLines ?? 500
+  assertDiffLines(diffStr, maxDiffLines)
 
   const tmpfile = `${absPath}.tmp.${randomSuffix()}`
   let tmpfileCreated = false
@@ -145,6 +149,21 @@ function applyMarker(action: WriteAction, existing: string | null, content: stri
   if (content.startsWith(MARKER)) return content
   if (existing === null || action === "created" || existing.startsWith(MARKER)) return MARKER + content
   return content
+}
+
+function computeDiffStr(existing: string | null, finalContent: string): string {
+  if (existing === null) return finalContent
+  const existingLines = new Set(existing.split("\n"))
+  const finalLines = new Set(finalContent.split("\n"))
+  const added: string[] = []
+  const removed: string[] = []
+  for (const line of finalContent.split("\n")) {
+    if (!existingLines.has(line)) added.push("+" + line)
+  }
+  for (const line of existing.split("\n")) {
+    if (!finalLines.has(line)) removed.push("-" + line)
+  }
+  return [...added, ...removed].join("\n")
 }
 
 async function writeAndFsync(path: string, content: string): Promise<void> {

@@ -3,6 +3,7 @@ import { mkdir } from "node:fs/promises"
 
 import { loadOcTweaksConfig, safeHook } from "../utils"
 import { buildSystemInjection } from "./auto-memory/injector"
+import { recallMemory } from "./auto-memory/recall"
 import type { MemoryEntry } from "./auto-memory/registry"
 import { scanMemoryRoots } from "./auto-memory/registry"
 
@@ -167,7 +168,13 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
         await ensureAutoMemoryInfra(home, projectMemoryDir)
 
         const entries = scanMemoryRoots(globalMemoryDir, projectMemoryDir)
+        const recalled = await recallMemory("", entries, {
+          onHit: (id) => {
+            process.stderr.write(`T9-onHit: ${id}\n`)
+          },
+        })
         const injection = buildMemoryInjection(entries, config.autoMemory.summaryTokenBudget ?? 4000)
+        const recallInjection = recalled.map((result) => result.content).join("\n")
         const summaryPathHints = buildSummaryPathHints(entries)
 
         output.system.push(
@@ -175,53 +182,10 @@ export const autoMemoryPlugin: Plugin = async ({ directory }) => {
             globalMemoryDir,
             projectMemoryDir,
             entries,
-            injection,
+            injection: [injection, recallInjection].filter(Boolean).join("\n"),
             summaryPathHints,
           }),
         )
-      },
-    ),
-
-    "experimental.session.compacting": safeHook(
-      "auto-memory:compacting",
-      async (_input: { sessionID: string }, output: { context: string[]; prompt?: string }) => {
-        const config = await loadOcTweaksConfig()
-        if (!config || config.autoMemory?.enabled !== true) return
-
-        await ensureAutoMemoryInfra(home, projectMemoryDir)
-
-        output.context.push(`## 💾 Memory Checkpoint
-
-核心问题：**如果明天开一个全新会话，本轮对话中有哪些信息会让你希望已经记录下来？**
-
-有 → 标记保存。没有 → 标记 none。
-
-### 值得保存
-- 用户表达的偏好、纠正、或明确要求记住的内容
-- 架构决策、设计约束、技术选型及其理由
-- 反复出现问题的根因与解决方案
-- 工作流、工具链、沟通风格等跨会话有价值的模式
-
-### 不要保存
-- 本次对话的临时细节（具体报错、一次性调试步骤）
-- AGENTS.md / CLAUDE.md 中已有的内容
-- 未验证的猜测
-- 机密信息（密码、API key 等）
-
-每次 compaction 最多标记 1-2 条，宁缺毋滥。
-
-有内容：
-\`\`\`
-[MEMORY: 文件名.md]
-简洁 bullet points，保持原意
-\`\`\`
-
-无内容：\`[MEMORY: none]\` 并附一句理由说明为何无需保存
-
-### Memory 路径
-- 全局：\`${globalMemoryDir}/\`
-- 项目：\`${projectMemoryDir}/\`
-`)
       },
     ),
   }

@@ -61,7 +61,7 @@ describe("autoMemoryPlugin", () => {
 
     const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-register-project" })
     expect(typeof hooks["experimental.chat.system.transform"]).toBe("function")
-    expect(typeof hooks["experimental.session.compacting"]).toBe("function")
+    expect(hooks["experimental.session.compacting"]).toBeUndefined()
     expect(hooks.tool).toBeUndefined()
     expect(writes.some((path) => path.endsWith("/commands/remember.md"))).toBe(true)
   })
@@ -79,13 +79,10 @@ describe("autoMemoryPlugin", () => {
 
     const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-disabled-project" })
     const systemOut = { system: [] as string[] }
-    const contextOut = { context: [] as string[] }
 
     await hooks["experimental.chat.system.transform"]({}, systemOut)
-    await hooks["experimental.session.compacting"]({ sessionID: "s-disabled" }, contextOut)
 
     expect(systemOut.system.length).toBe(0)
-    expect(contextOut.context.length).toBe(0)
     expect(writes.length).toBe(0)
   })
 
@@ -100,13 +97,10 @@ describe("autoMemoryPlugin", () => {
 
     const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-missing-project" })
     const systemOut = { system: [] as string[] }
-    const contextOut = { context: [] as string[] }
 
     await hooks["experimental.chat.system.transform"]({}, systemOut)
-    await hooks["experimental.session.compacting"]({ sessionID: "s-missing" }, contextOut)
 
     expect(systemOut.system.length).toBe(0)
-    expect(contextOut.context.length).toBe(0)
     expect(writes.length).toBe(0)
   })
 
@@ -171,20 +165,10 @@ describe("autoMemoryPlugin", () => {
     expect(text).toContain("use persistent files")
   })
 
-  test("injects compacting memory reminder", async () => {
-    const home = "/tmp/oc-auto-compact"
-    setHome(home)
+  test("does not register compacting hook", async () => {
+    const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-no-compact-project" })
 
-    const configPath = `${home}/.config/opencode/oc-tweaks.json`
-    mockBunFile({ [configPath]: { autoMemory: { enabled: true } } })
-    ;(globalThis as any).Bun.write = async () => {}
-
-    const hooks = await autoMemoryPlugin({ directory: "/tmp/oc-auto-compact-project" })
-    const output = { context: [] as string[] }
-    await hooks["experimental.session.compacting"]({ sessionID: "s-compact" }, output)
-
-    expect(output.context.length).toBe(1)
-    expect(output.context[0]).toContain("[MEMORY:")
+    expect(hooks["experimental.session.compacting"]).toBeUndefined()
   })
 
   test("ensureRememberCommand overwrites when content differs", async () => {

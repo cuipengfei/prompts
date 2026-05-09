@@ -31,6 +31,8 @@ export interface RecallResult {
 export interface RecallOptions {
   /** Pre-filter: only search entries whose meta.type equals this value. */
   filterType?: string
+  /** Pre-filter: keep entries whose meta.tags overlap with any of these tags. */
+  filterTags?: string[]
   /** Cap per-entry body bytes; longer bodies are truncated with a marker. */
   maxBytesPerFile?: number
   /**
@@ -95,10 +97,16 @@ export async function recallMemory(
     return [{ id: NO_MATCH_SENTINEL_ID, content: NO_MATCH_SENTINEL_CONTENT }]
   }
 
-  // Pre-filter by type (V1: tag/type filtering uses meta.type only).
-  const candidates = opts.filterType
+  // Pre-filter by type, then optional OR tag overlap.
+  const typeCandidates = opts.filterType
     ? registry.filter((e) => e.meta.type === opts.filterType)
     : registry
+  const candidates = opts.filterTags?.length
+    ? typeCandidates.filter((entry) => {
+        const tags = entry.meta.tags
+        return !tags || tags.some((tag) => opts.filterTags?.includes(tag))
+      })
+    : typeCandidates
 
   const hits: RecallResult[] = []
 

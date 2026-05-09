@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-05-09
+
+### Fixed
+
+- **T7**：补齐 `DEFAULT_CONFIG.autoMemory.enabled` 默认键（`false`），避免插件初始化时读取到 undefined。
+- **T11**：`writer.ts` 增加 `assertDiffLines` 保护，防止单次超大 diff 直接写入 memory 文件。
+- **T10**：`notify.ts` 实现 `setToastSender` 注册机制，让 toast → notify 退化链真正可用。
+- **T9**：`recall.ts` 增加 `filterTags` OR 过滤；V1 hit 写回失败时降级为 stderr log，不再静默吞错。
+- **T12**：移除 `experimental.session.compacting` hook（违反 plan Must NOT 约束）；recall 改为接入 `experimental.chat.system.transform` pipeline。
+
+### Added
+
+- `config.ts` 新增 `maxDiffLines` 配置项（默认 `500`），用于约束单次 diff 写入规模。
+- `frontmatter.ts` `MemoryMeta` 增加 `tags?: string[]` 字段，为 `recall.filterTags` 提供数据基础。
+
 ## [Unreleased]
 
 Memory 系统从 v1 full-concat 注入模式升级至 v2 summary/index 注入 + 按需召回模式。

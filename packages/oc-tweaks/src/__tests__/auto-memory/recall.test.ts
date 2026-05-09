@@ -107,7 +107,7 @@ describe("recallMemory", () => {
     expect(calls).toContain("u1")
   })
 
-  test("filter by tags: only entries whose meta.tags include query tag are searched", async () => {
+  test("filter by type: only entries whose meta.type matches are searched", async () => {
     const e1 = writeEntry(
       "a.md",
       makeMeta({ id: "tagged", type: "decision" }),
@@ -123,6 +123,27 @@ describe("recallMemory", () => {
     })
     expect(results.map((r) => r.id)).toContain("tagged")
     expect(results.map((r) => r.id)).not.toContain("untagged")
+  })
+
+  test("filter by tags: OR overlap keeps tagged entries and entries without tags", async () => {
+    const e1 = writeEntry(
+      "a.md",
+      makeMeta({ id: "matching-tag", tags: ["workflow", "decision"] }),
+      "match-token here",
+    )
+    const e2 = writeEntry(
+      "b.md",
+      makeMeta({ id: "other-tag", tags: ["setup"] }),
+      "match-token also here",
+    )
+    const e3 = writeEntry("c.md", makeMeta({ id: "no-tags" }), "match-token too")
+    const results = await recallMemory("match-token", [e1, e2, e3], {
+      filterTags: ["decision", "preference"],
+    })
+
+    expect(results.map((r) => r.id)).toContain("matching-tag")
+    expect(results.map((r) => r.id)).toContain("no-tags")
+    expect(results.map((r) => r.id)).not.toContain("other-tag")
   })
 
   test("body exceeding maxBytesPerFile is truncated with marker", async () => {
