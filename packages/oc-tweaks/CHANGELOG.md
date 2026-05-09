@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.2] - 2026-05-09
+
+### Fixed
+
+- **disabled memory recall**：`memory_recall` 现在会跳过 `disabled: true` 的 memory entry，且不会为 disabled entry 写入 `usage_count` / `last_usage`。
+- **disabled coverage**：新增 registry 与 recall 双层测试，覆盖扫描阶段跳过 disabled entry，以及直接传入 disabled entry 时不召回、不写回。
+
 ## [0.11.1] - 2026-05-09
 
 ### Fixed

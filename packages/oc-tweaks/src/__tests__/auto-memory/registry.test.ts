@@ -111,6 +111,28 @@ describe("scanMemoryRoots", () => {
     expect(entry!.summary).toBe("P")
   })
 
+  test("disabled frontmatter entries are skipped", () => {
+    writeMd(
+      projectDir,
+      "disabled.md",
+      makeFrontmatter({
+        id: "disabled",
+        scope: "project",
+        type: "test",
+        source: "user",
+        created_at: "2026-01-01T00:00:00Z",
+        updated_at: "2026-01-01T00:00:00Z",
+        trusted_as_instruction: "false",
+        disabled: "true",
+        summary: "Should be skipped",
+      }) + "disabled body",
+    )
+
+    const result = scanMemoryRoots(globalDir, projectDir)
+
+    expect(result).toEqual([])
+  })
+
   test("skips README.md, README*.md, .swp, .lock files; only keeps valid .md", () => {
     writeMd(globalDir, "README.md", "# readme")
     writeMd(globalDir, "README.en.md", "# readme en")

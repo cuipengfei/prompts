@@ -178,6 +178,37 @@ body match-token stays byte-for-byte
     expect(results.map((r) => r.id)).not.toContain("untagged")
   })
 
+  test("disabled registry entries are not recalled or usage-updated", async () => {
+    const raw = `---
+id: disabled
+scope: project
+type: live-test
+source: user
+created_at: 2026-05-09T00:00:00Z
+updated_at: 2026-05-09T00:00:00Z
+trusted_as_instruction: false
+disabled: true
+usage_count: 0
+---
+disabled match-token body
+`
+    const absPath = join(workDir, "disabled.md")
+    writeFileSync(absPath, raw, "utf8")
+    const { meta, body } = parseFrontmatter(raw)
+    const entry: MemoryEntry = {
+      meta,
+      absPath,
+      scope: "project",
+      tokenEstimate: 1,
+      summary: body.slice(0, 100),
+    }
+
+    const results = await recallMemory("match-token", [entry])
+
+    expect(JSON.stringify(results)).toContain("recall:no-match")
+    expect(readFileSync(absPath, "utf8")).toBe(raw)
+  })
+
   test("filter by tags: OR overlap keeps tagged entries and entries without tags", async () => {
     const e1 = writeEntry(
       "a.md",

@@ -104,6 +104,7 @@ function scanDir(
     }
 
     const { meta, body } = parseFrontmatter(partial)
+    if (meta.disabled === true) continue
     const summary = extractSummary(meta, body)
     const tokenEstimate = Math.ceil(
       (summary.length + JSON.stringify(meta).length) / 4,

@@ -126,9 +126,10 @@ export async function recallMemory(
   }
 
   // Pre-filter by type, then optional OR tag overlap.
+  const enabledEntries = registry.filter((entry) => entry.meta.disabled !== true)
   const typeCandidates = opts.filterType
-    ? registry.filter((e) => e.meta.type === opts.filterType)
-    : registry
+    ? enabledEntries.filter((e) => e.meta.type === opts.filterType)
+    : enabledEntries
   const candidates = opts.filterTags?.length
     ? typeCandidates.filter((entry) => {
         const tags = entry.meta.tags
