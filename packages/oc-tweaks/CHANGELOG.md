@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.3] - 2026-05-09
+
+### Fixed
+
+- **`oc-tweaks memory migrate` CLI route**：`oc-tweaks memory migrate --root <dir> --scope <global|project>` 现在会调用 auto-memory migration，而不是误回退到 `init`。
+
 ## [0.11.2] - 2026-05-09
 
 ### Fixed

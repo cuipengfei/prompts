@@ -80,4 +80,17 @@ describe("CLI init", () => {
       opts: { globalRoot: "/g" },
     })
   })
+
+  test("routes memory migrate command with root and scope", async () => {
+    const { parseCliArgs } = await import("../cli/init")
+
+    expect(parseCliArgs(["memory", "migrate", "--root", "/tmp/mem", "--scope", "project"])).toEqual({
+      command: "memory-migrate",
+      opts: { root: "/tmp/mem", scope: "project" },
+    })
+    expect(parseCliArgs(["tweaks", "memory", "migrate", "--root", "/g", "--scope", "global"])).toEqual({
+      command: "memory-migrate",
+      opts: { root: "/g", scope: "global" },
+    })
+  })
 })

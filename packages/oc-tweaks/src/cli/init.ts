@@ -3,6 +3,7 @@
 import { mkdir } from "node:fs/promises"
 import { dirname } from "node:path"
 import { formatDiagReport, runDiag, type DiagOpts } from "../plugins/auto-memory/diag"
+import { migrate, type MigrateOptions } from "../plugins/auto-memory/migrate"
 declare const Bun: any
 
 export const DEFAULT_CONFIG = {
@@ -33,6 +34,7 @@ export async function initConfig(): Promise<{ created: boolean; path: string }> 
 export type CliCommand =
   | { command: "init" }
   | { command: "memory-diag"; opts: DiagOpts }
+  | { command: "memory-migrate"; opts: MigrateOptions }
 
 export function parseCliArgs(argv: string[]): CliCommand {
   const args = argv[0] === "tweaks" ? argv.slice(1) : argv
@@ -40,6 +42,10 @@ export function parseCliArgs(argv: string[]): CliCommand {
 
   if (args[0] === "memory" && args[1] === "diag") {
     return { command: "memory-diag", opts: parseDiagOpts(args.slice(2)) }
+  }
+
+  if (args[0] === "memory" && args[1] === "migrate") {
+    return { command: "memory-migrate", opts: parseMigrateOpts(args.slice(2)) }
   }
 
   return { command: "init" }
@@ -56,6 +62,19 @@ function parseDiagOpts(args: string[]): DiagOpts {
   return opts
 }
 
+function parseMigrateOpts(args: string[]): MigrateOptions {
+  const opts: MigrateOptions = { root: "" }
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i]
+    if (arg === "--root" && args[i + 1]) opts.root = args[++i]
+    else if (arg === "--scope" && args[i + 1]) {
+      const scope = args[++i]
+      if (scope === "global" || scope === "project") opts.scope = scope
+    }
+  }
+  return opts
+}
+
 // Only run when executed directly
 const isMain = typeof Bun !== "undefined" && 
   Bun.main === import.meta.path
@@ -65,6 +84,12 @@ if (isMain) {
   if (parsed.command === "memory-diag") {
     const report = await runDiag(parsed.opts)
     console.log(formatDiagReport(report))
+  } else if (parsed.command === "memory-migrate") {
+    if (!parsed.opts.root) throw new Error("--root <dir> is required")
+    const result = await migrate(parsed.opts)
+    console.log(
+      `Summary: migrated=${result.migrated.length}, skipped=${result.skipped.length}, errored=${result.errored.length}`,
+    )
   } else {
     const result = await initConfig()
     if (result.created) {

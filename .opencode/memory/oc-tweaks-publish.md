@@ -1,3 +1,12 @@
+---
+id: oc-tweaks-publish
+scope: project
+type: note
+source: migrate
+created_at: 2026-05-09T14:35:03.919Z
+updated_at: 2026-05-09T14:35:03.919Z
+trusted_as_instruction: false
+---
 # oc-tweaks 发布流程
 
 ## 步骤
