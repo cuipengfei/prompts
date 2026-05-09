@@ -1,0 +1,16 @@
+{
+  "name": "jichang",
+  "version": "1.0.0",
+  "description": "[Skill] Jichang - 在广告污染、测速偏差与高风险环境下评估机场候选，输出风险分层与低暴露尽调注意事项而非推荐榜单",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "keywords": [
+    "jichang",
+    "proxy-evaluation",
+    "source-credibility"
+  ]
+}

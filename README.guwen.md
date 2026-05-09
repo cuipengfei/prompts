@@ -96,11 +96,11 @@
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览二十二宝
+# 览二十三宝
 /plugin list
 ```
 
-### 仙器目录（二十二件独立仙器）
+### 仙器目录（二十三件独立仙器）
 
 觅者可择需而取，勿须尽纳：
 
@@ -113,6 +113,7 @@
 | 📚 启智 | `response-guidelines` | 应答准则心法 |
 | 📚 启智 | `session-learn` | 会话学习 - 三层藏经 + 忆念召唤 |
 | 📚 启智 | `help-me-read` | 取 URL 全文，逐段陈原文、必要译文与轻点评注 |
+| 🔧 神通 | `jichang` | 机场验真之术 - 辨广告浊流、测速偏差与风险层级 |
 | 🏗 筑基 | `foundational-principles` | 根基要诀 |
 | 🏗 筑基 | `quality-standards` | 质量法度 |
 | 🏗 筑基 | `programming-workflow` | TDD 工作流 |
@@ -145,8 +146,8 @@
 # 用法: /learn 或 /learn 代码风格
 # 用法: /recall 或 /recall 认证模式
 
-# 尽收二十二宝
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read
+# 尽收二十三宝
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang
 ```
 
 ## 天工开物篇：OpenCode 仙器

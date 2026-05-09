@@ -96,11 +96,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 22 available plugins
+# View all 23 available plugins
 /plugin list
 ```
 
-### Available Plugins (22 Independent Plugins)
+### Available Plugins (23 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -113,6 +113,7 @@ Users can selectively install any combination:
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
 | 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
 | 📚 Learning | `help-me-read` | Read full URL content with original paragraphs, optional translation, and light commentary |
+| 🔧 Tools | `jichang` | Jichang evaluation - ad pollution, benchmark bias, and risk-tiered candidate screening |
 | 🏗 Development | `foundational-principles` | Foundational principles skill |
 | 🏗 Development | `quality-standards` | Quality standards skill |
 | 🏗 Development | `programming-workflow` | TDD workflow skill |
@@ -146,7 +147,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang
 ```
 
 ## OpenCode Plugins
