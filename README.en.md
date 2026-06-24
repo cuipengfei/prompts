@@ -106,7 +106,7 @@ Users can selectively install any combination:
 
 | Category | Plugin | Description |
 |----------|--------|-------------|
-| 🛠 Productivity | `improve-prompt` | Prompt optimization command |
+| 🛠 Productivity | `improve-prompt` | Prompt optimization command with verifiable DoD |
 | 🛠 Productivity | `desktop-notify` | Desktop notification hooks (WSL → Windows Toast) |
 | 🛠 Productivity | `natural-writing` | Natural writing output style |
 | 📚 Learning | `structured-responder` | Structured response output style |
@@ -124,7 +124,7 @@ Users can selectively install any combination:
 | 🔧 Tools | `shortcut-system` | Shortcut system skill |
 | 🔧 Tools | `zellij-control` | Zellij control skill |
 | 🔧 Tools | `codex` | Codex advisor - call OpenAI Codex for second opinions |
-| 🔧 Tools | `deep-research` | Deep research workflow with multi-source search and structured synthesis |
+| 🔧 Tools | `deep-research` | Deep research workflow with multi-source search, exact URL citations, and structured synthesis |
 | 🔧 Tools | `cline-kanban` | Manage local orchestration kanban tasks with the kanban CLI |
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
 | 📚 Learning      | `jpm-voice`               | Provides the linguistic style and literary essence of "Jin Ping Mei" (permanently active) |

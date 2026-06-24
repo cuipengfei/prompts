@@ -1,5 +1,5 @@
 ---
-description: 优化提示词 - 识别真实意图并结构化改写，防止执行方向跑偏
+description: 优化提示词 - 识别真实意图并结构化改写，补充可验证 Definition of Done，防止执行方向跑偏
 ---
 
 # MANDATORY 2-Step Process

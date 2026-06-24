@@ -1,7 +1,7 @@
 {
   "name": "deep-research",
-  "version": "1.0.4",
-  "description": "[Command + Skill] 深度研究 - 多源搜索、交叉验证、结构化输出的研究工作流",
+  "version": "1.0.5",
+  "description": "[Command + Skill] 深度研究 - 多源搜索、交叉验证、关键结论精确 URL 引用、结构化输出的研究工作流",
   "author": {
     "name": "cuipengfei",
     "email": "cuipengfei@gmail.com"

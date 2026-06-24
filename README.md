@@ -106,7 +106,7 @@
 
 | Category         | Plugin                    | 描述                                        |
 | ---------------- | ------------------------- | ------------------------------------------- |
-| 🛠 Productivity  | `improve-prompt`          | 提示词优化命令                              |
+| 🛠 Productivity  | `improve-prompt`          | 提示词优化命令（含可验证 DoD）             |
 | 🛠 Productivity  | `desktop-notify`          | 桌面通知钩子（WSL → Windows Toast）         |
 | 🛠 Productivity  | `natural-writing`         | 自然写作输出风格                            |
 | 📚 Learning      | `structured-responder`    | 结构化响应输出风格                          |
@@ -124,7 +124,7 @@
 | 🔧 Tools         | `shortcut-system`         | 快捷命令 skill                              |
 | 🔧 Tools         | `zellij-control`          | Zellij 控制 skill                           |
 | 🔧 Tools         | `codex`                   | Codex 顾问 - 调用 OpenAI Codex 获取第二意见 |
-| 🔧 Tools         | `deep-research`           | 深度研究 - 多源搜索、交叉验证、结构化输出   |
+| 🔧 Tools         | `deep-research`           | 深度研究 - 多源搜索、精确 URL 引用、结构化输出 |
 | 🔧 Tools         | `cline-kanban`            | Cline Kanban - 管理本地编排看板任务         |
 | 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
 | 📚 Learning      | `jpm-voice`               | 提供《金瓶梅》语言风格与文学精髓的化身技能 |

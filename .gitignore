@@ -2,7 +2,6 @@
 .claude/settings.local.json
 plugins/natural-writing/reference/
 packages/oc-tweaks/node_modules/
-.sisyphus/evidence/
-.sisyphus/notepads/
-.sisyphus/drafts/
-.sisyphus/boulder.json
+.sisyphus/
+.omo/
+.rtk/filters.toml

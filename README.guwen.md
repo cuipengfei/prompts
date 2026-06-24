@@ -106,7 +106,7 @@
 
 | 门类 | 仙器 | 功用 |
 |------|------|------|
-| 🛠 济世 | `improve-prompt` | 提示词优化令符 |
+| 🛠 济世 | `improve-prompt` | 提示词优化令符（含可验成准） |
 | 🛠 济世 | `desktop-notify` | 桌案飞符钩沉（WSL → Windows 弹窗） |
 | 🛠 济世 | `natural-writing` | 自然写作文风 |
 | 📚 启智 | `structured-responder` | 结构化应答体例 |
@@ -124,7 +124,7 @@
 | 🔧 神通 | `shortcut-system` | 快捷符咒 |
 | 🔧 神通 | `zellij-control` | Zellij 御器术 |
 | 🔧 神通 | `codex` | Codex 顾问 - 唤 OpenAI Codex 为参谋 |
-| 🔧 神通 | `deep-research` | 深研之法 - 多源搜采、交叉验真、结构化成文 |
+| 🔧 神通 | `deep-research` | 深研之法 - 多源搜采、精确引址、交叉验真、结构化成文 |
 | 🔧 神通 | `cline-kanban` | Cline Kanban - 统驭本地看板诸务 |
 | 🤝 协同 | `ba-collaboration` | BA 共工之法 |
 | 📚 启智 | `jpm-voice` | 《金瓶梅》文气化身之技 |
