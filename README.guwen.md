@@ -112,8 +112,8 @@
 | 📚 启智 | `structured-responder` | 结构化应答体例 |
 | 📚 启智 | `response-guidelines` | 应答准则心法 |
 | 📚 启智 | `session-learn` | 会话学习 - 三层藏经 + 忆念召唤 |
-| 📚 启智 | `help-me-read` | 取 URL 全文，逐段陈原文、必要译文与轻点评注 |
-| 🔧 神通 | `jichang` | 机场验真之术 - 辨广告浊流、测速偏差与风险层级 |
+| 📚 启智 | `help-me-read` | 取 URL 全文，按段或段组陈原文、必要译文与轻点评注 |
+| 🔧 神通 | `jichang` | 机场验真之术 - 辨广告浊流、测速偏差、风险层级与低曝试序 |
 | 🏗 筑基 | `foundational-principles` | 根基要诀 |
 | 🏗 筑基 | `quality-standards` | 质量法度 |
 | 🏗 筑基 | `programming-workflow` | TDD 工作流 |

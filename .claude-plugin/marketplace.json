@@ -136,13 +136,13 @@
     },
     {
       "name": "help-me-read",
-      "description": "[Skill] Help Me Read - 读取 URL 全文，按段落提供原文、信达雅译文与轻量 commentary，帮助快速阅读",
+      "description": "[Skill] Help Me Read - 读取 URL 全文，按段落或段落组提供原文、信达雅译文与轻量 commentary，帮助快速阅读",
       "source": "./plugins/help-me-read",
       "category": "learning"
     },
     {
       "name": "jichang",
-      "description": "[Skill] Jichang - 在广告污染、测速偏差与高风险环境下评估机场候选，输出风险分层与低暴露尽调注意事项而非推荐榜单",
+      "description": "[Skill] Jichang - 在广告污染、测速偏差与高风险环境下评估机场候选，输出风险分层、低暴露测试优先级与尽调注意事项",
       "source": "./plugins/jichang",
       "category": "tools"
     }

@@ -112,8 +112,8 @@
 | 📚 Learning      | `structured-responder`    | 结构化响应输出风格                          |
 | 📚 Learning      | `response-guidelines`     | 响应指南 skill                              |
 | 📚 Learning      | `session-learn`           | 会话学习 - 三层存储分类 + Memory MCP 召回   |
-| 📚 Learning      | `help-me-read`            | 读取 URL 全文，按段落提供原文、必要译文与轻量 commentary |
-| 🔧 Tools         | `jichang`                 | 机场候选评估 - 广告污染、测速偏差与风险分层 |
+| 📚 Learning      | `help-me-read`            | 读取 URL 全文，按段落或段落组提供原文、必要译文与轻量 commentary |
+| 🔧 Tools         | `jichang`                 | 机场候选评估 - 广告污染、测速偏差、风险分层与低暴露测试优先级 |
 | 🏗 Development   | `foundational-principles` | 基础原则 skill                              |
 | 🏗 Development   | `quality-standards`       | 质量标准 skill                              |
 | 🏗 Development   | `programming-workflow`    | TDD 工作流 skill                            |

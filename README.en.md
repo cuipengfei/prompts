@@ -112,8 +112,8 @@ Users can selectively install any combination:
 | 📚 Learning | `structured-responder` | Structured response output style |
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
 | 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
-| 📚 Learning | `help-me-read` | Read full URL content with original paragraphs, optional translation, and light commentary |
-| 🔧 Tools | `jichang` | Jichang evaluation - ad pollution, benchmark bias, and risk-tiered candidate screening |
+| 📚 Learning | `help-me-read` | Read full URL content with original paragraphs or paragraph groups, optional translation, and light commentary |
+| 🔧 Tools | `jichang` | Jichang evaluation - ad pollution, benchmark bias, risk tiers, and low-exposure test priority |
 | 🏗 Development | `foundational-principles` | Foundational principles skill |
 | 🏗 Development | `quality-standards` | Quality standards skill |
 | 🏗 Development | `programming-workflow` | TDD workflow skill |

@@ -1,7 +1,7 @@
 {
   "name": "jichang",
-  "version": "1.0.0",
-  "description": "[Skill] Jichang - 在广告污染、测速偏差与高风险环境下评估机场候选，输出风险分层与低暴露尽调注意事项而非推荐榜单",
+  "version": "1.0.1",
+  "description": "[Skill] Jichang - 在广告污染、测速偏差与高风险环境下评估机场候选，输出风险分层、低暴露测试优先级与尽调注意事项",
   "author": {
     "name": "cuipengfei",
     "email": "cuipengfei@gmail.com"

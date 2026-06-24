@@ -1,7 +1,7 @@
 {
   "name": "help-me-read",
-  "version": "1.0.1",
-  "description": "[Skill] Help Me Read - 读取 URL 全文，按段落提供原文、信达雅译文与轻量 commentary，帮助快速阅读",
+  "version": "1.0.2",
+  "description": "[Skill] Help Me Read - 读取 URL 全文，按段落或段落组提供原文、信达雅译文与轻量 commentary，帮助快速阅读",
   "author": {
     "name": "cuipengfei",
     "email": "cuipengfei@gmail.com"
