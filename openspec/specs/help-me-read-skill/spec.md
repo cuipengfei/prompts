@@ -37,6 +37,19 @@ The system SHALL keep commentary useful but lighter than the reading material it
 - **THEN** the commentary MUST focus on meaning, context, or reading guidance that helps the user move faster
 - **AND** the commentary MUST NOT become longer or denser than the combined original paragraph and translation for that reading unit
 
+### Requirement: Source-Grounded End Synthesis
+The system SHALL append a source-grounded synthesis after the paragraph-by-paragraph reading units.
+
+#### Scenario: Single source synthesis
+- **WHEN** Claude finishes presenting the paragraph-based reading units for a source
+- **THEN** the response MUST include end sections for insights, key information, logical ordering, and interpretation
+- **AND** those sections MUST be grounded in the source text already presented or explicitly label external background, inference, or unproven claims
+
+#### Scenario: Multiple source synthesis
+- **WHEN** the user asks Claude to read multiple URLs
+- **THEN** each source MUST receive its own end synthesis after that source's reading units
+- **AND** any cross-source comparison MUST be separate from the per-source synthesis sections
+
 ### Requirement: Translation Quality Expectation
 The system SHALL instruct Claude to translate with emphasis on faithfulness, readability, and style rather than literal word-for-word replacement.
 

@@ -96,11 +96,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 23 个可用插件
+# 查看所有 24 个可用插件
 /plugin list
 ```
 
-### 可用插件（23 个独立插件）
+### 可用插件（24 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -112,7 +112,7 @@
 | 📚 Learning      | `structured-responder`    | 结构化响应输出风格                          |
 | 📚 Learning      | `response-guidelines`     | 响应指南 skill                              |
 | 📚 Learning      | `session-learn`           | 会话学习 - 三层存储分类 + Memory MCP 召回   |
-| 📚 Learning      | `help-me-read`            | 读取 URL 全文，按段落或段落组提供原文、必要译文与轻量 commentary |
+| 📚 Learning      | `help-me-read`            | 读取 URL 全文，按段落或段落组提供原文、必要译文、轻量 commentary 与文末综合解读 |
 | 🔧 Tools         | `jichang`                 | 机场候选评估 - 广告污染、测速偏差、风险分层与低暴露测试优先级 |
 | 🏗 Development   | `foundational-principles` | 基础原则 skill                              |
 | 🏗 Development   | `quality-standards`       | 质量标准 skill                              |
@@ -128,6 +128,7 @@
 | 🔧 Tools         | `cline-kanban`            | Cline Kanban - 管理本地编排看板任务         |
 | 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
 | 📚 Learning      | `jpm-voice`               | 提供《金瓶梅》语言风格与文学精髓的化身技能 |
+| 📚 Learning      | `evolutionary-architecture` | 进化式架构知识库 - 适应性函数、增量变更、架构量子 |
 | 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
 
 ### 安装示例
@@ -147,7 +148,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
 ```
 
 ## OpenCode 插件

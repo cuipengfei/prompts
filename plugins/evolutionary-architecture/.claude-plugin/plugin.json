@@ -1,0 +1,11 @@
+{
+  "name": "evolutionary-architecture",
+  "version": "1.0.1",
+  "description": "[Skill] 进化式架构知识库 - 基于 Neal Ford、Rebecca Parsons、Patrick Kua 的著作《Building Evolutionary Architectures》，提取适应性函数、增量变更、架构量子等核心框架。",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}

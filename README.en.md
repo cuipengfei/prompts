@@ -96,11 +96,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 23 available plugins
+# View all 24 available plugins
 /plugin list
 ```
 
-### Available Plugins (23 Independent Plugins)
+### Available Plugins (24 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -112,7 +112,7 @@ Users can selectively install any combination:
 | 📚 Learning | `structured-responder` | Structured response output style |
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
 | 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
-| 📚 Learning | `help-me-read` | Read full URL content with original paragraphs or paragraph groups, optional translation, and light commentary |
+| 📚 Learning | `help-me-read` | Read full URL content with original paragraphs or paragraph groups, optional translation, light commentary, and end synthesis |
 | 🔧 Tools | `jichang` | Jichang evaluation - ad pollution, benchmark bias, risk tiers, and low-exposure test priority |
 | 🏗 Development | `foundational-principles` | Foundational principles skill |
 | 🏗 Development | `quality-standards` | Quality standards skill |
@@ -128,6 +128,7 @@ Users can selectively install any combination:
 | 🔧 Tools | `cline-kanban` | Manage local orchestration kanban tasks with the kanban CLI |
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
 | 📚 Learning      | `jpm-voice`               | Provides the linguistic style and literary essence of "Jin Ping Mei" (permanently active) |
+| 📚 Learning | `evolutionary-architecture` | Evolutionary architecture knowledge base - fitness functions, incremental change, architectural quanta |
 | 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
 
 ### Installation Examples
@@ -147,7 +148,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
 ```
 
 ## OpenCode Plugins

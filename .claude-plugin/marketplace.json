@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -136,7 +136,7 @@
     },
     {
       "name": "help-me-read",
-      "description": "[Skill] Help Me Read - 读取 URL 全文，按段落或段落组提供原文、信达雅译文与轻量 commentary，帮助快速阅读",
+      "description": "[Skill] Help Me Read - 读取 URL 全文，按段落或段落组提供原文、信达雅译文、轻量 commentary 与文末综合解读，帮助快速阅读",
       "source": "./plugins/help-me-read",
       "category": "learning"
     },
@@ -145,6 +145,12 @@
       "description": "[Skill] Jichang - 在广告污染、测速偏差与高风险环境下评估机场候选，输出风险分层、低暴露测试优先级与尽调注意事项",
       "source": "./plugins/jichang",
       "category": "tools"
+    },
+    {
+      "name": "evolutionary-architecture",
+      "description": "[Skill] 进化式架构知识库 - 基于《Building Evolutionary Architectures》一书，提取适应性函数、增量变更、架构量子等核心框架",
+      "source": "./plugins/evolutionary-architecture",
+      "category": "learning"
     }
   ]
 }
