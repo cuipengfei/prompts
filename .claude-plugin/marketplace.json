@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -67,12 +67,6 @@
       "description": "[Skill] BA 协作 - 与业务分析师协作的专业化工作流",
       "source": "./plugins/ba-collaboration",
       "category": "collaboration"
-    },
-    {
-      "name": "memory-bank",
-      "description": "[Skill] 记忆库 - 跨会话知识持久化管理",
-      "source": "./plugins/memory-bank",
-      "category": "development"
     },
     {
       "name": "response-guidelines",

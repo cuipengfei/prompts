@@ -33,7 +33,6 @@
 ### 炼心篇（核心行为）
 
 - `[.github/instructions/foundational-principles.md](.github/instructions/foundational-principles.md)`：授其“心法”，明其“思路”，使其知其然，亦知其所以然。
-- `[.github/instructions/memory-bank.instructions.md](.github/instructions/memory-bank.instructions.md)`：建 AI 之“藏经阁”，使其不昧前尘，温故知新。可谓革故鼎新之举。
 - `[.github/instructions/response-and-prompt-guidelines.md](.github/instructions/response-and-prompt-guidelines.md)`：正其言，使其沟通有度，如君子之风，远避繁冗。内含八股文章之精义。
 - `[.github/instructions/programming-workflow.md](.github/instructions/programming-workflow.md)`：AI 之“格物、致知、诚意、正心、修身”流程，防微杜渐，免蹈覆辙。
 - `[.github/instructions/planning-workflow.md](.github/instructions/planning-workflow.md)`：授 AI 以“庖丁解牛”之技，化繁为简，从容不迫（MECE 心法）。
@@ -51,7 +50,6 @@
 ### 神通篇（高级技巧）
 
 - `[.github/instructions/sequential-thinking.md](.github/instructions/sequential-thinking.md)`：启 AI 之“灵台”，展“序进思维”之神通，应对复杂如反掌。
-- `[.github/instructions/shortcut-system-instruction.md](.github/instructions/shortcut-system-instruction.md)`：设“快捷方式”之符咒，一触即发，提升效能。如 `r!`、`d!`、`t!` 等，皆随心所欲。
 
 ## 如何修习此法
 
@@ -73,13 +71,11 @@
     { "file": "../prompts/.github/instructions/foundational-principles.md" },
     { "file": "../prompts/.github/instructions/planning-workflow.md" },
     { "file": "../prompts/.github/instructions/ba.md" },
-    { "file": "../prompts/.github/instructions/memory-bank.instructions.md" },
     { "file": "../prompts/.github/instructions/quality-standards.md" },
     { "file": "../prompts/.github/instructions/programming-workflow.md" },
     { "file": "../prompts/.github/instructions/response-and-prompt-guidelines.md" },
     { "file": "../prompts/.github/instructions/testing-guidelines.md" },
-    { "file": "../prompts/.github/instructions/sequential-thinking.md" },
-    { "file": "../prompts/.github/instructions/shortcut-system-instruction.md" }
+    { "file": "../prompts/.github/instructions/sequential-thinking.md" }
 ]
 ```
 
@@ -96,11 +92,11 @@
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览二十四宝
+# 览二十三宝
 /plugin list
 ```
 
-### 仙器目录（二十四件独立仙器）
+### 仙器目录（二十三件独立仙器）
 
 觅者可择需而取，勿须尽纳：
 
@@ -119,7 +115,6 @@
 | 🏗 筑基 | `programming-workflow` | TDD 工作流 |
 | 🏗 筑基 | `testing-guidelines` | 测试准绳 |
 | 🏗 筑基 | `planning-workflow` | 规划引导 |
-| 🏗 筑基 | `memory-bank` | 藏经阁 |
 | 🔧 神通 | `sequential-thinking` | 序进思维 |
 | 🔧 神通 | `shortcut-system` | 快捷符咒 |
 | 🔧 神通 | `zellij-control` | Zellij 御器术 |
@@ -147,8 +142,8 @@
 # 用法: /learn 或 /learn 代码风格
 # 用法: /recall 或 /recall 认证模式
 
-# 尽收二十四宝
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
+# 尽收二十三宝
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
 ```
 
 ## 天工开物篇：OpenCode 仙器

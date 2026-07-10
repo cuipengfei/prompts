@@ -38,7 +38,6 @@ marketplace.json:
   - testing-guidelines      # 1 skill
   - planning-workflow       # 1 skill
   - ba-collaboration        # 1 skill
-  - memory-bank            # 1 skill
   - response-guidelines    # 1 skill
   - sequential-thinking    # 1 skill
   - shortcut-system        # 1 skill

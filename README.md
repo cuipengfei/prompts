@@ -33,7 +33,6 @@
 ### 脑外科手术部（核心行为）
 
 - `[.github/instructions/foundational-principles.md](.github/instructions/foundational-principles.md)`：为 AI 注入哲学，教它如何“思考”，而不仅仅是执行。
-- `[.github/instructions/memory-bank.instructions.md](.github/instructions/memory-bank.instructions.md)`：赋予你的 AI 持久“大脑”，对抗数字失忆症。我们知道，这很革命性。
 - `[.github/instructions/response-and-prompt-guidelines.md](.github/instructions/response-and-prompt-guidelines.md)`：强制 AI 专业沟通，拒绝聊天机器人的存在主义危机。包含神圣的 8 段式响应结构。
 - `[.github/instructions/programming-workflow.md](.github/instructions/programming-workflow.md)`：AI 版 TDD 福音，防止牛仔式编码灾难。
 - `[.github/instructions/planning-workflow.md](.github/instructions/planning-workflow.md)`：教 AI 分解复杂问题而不精神崩溃（MECE 原则万岁）。
@@ -51,7 +50,6 @@
 ### 工具大师学院（高级技巧）
 
 - `[.github/instructions/sequential-thinking.md](.github/instructions/sequential-thinking.md)`：为 `sequentialthinking` MCP 工具解锁动态问题解决能力。
-- `[.github/instructions/shortcut-system-instruction.md](.github/instructions/shortcut-system-instruction.md)`：实现战术效率的命令快捷方式。`r!`、`d!`、`t!`——启动！
 
 ## 如何使用这些玩意儿
 
@@ -73,13 +71,11 @@
     { "file": "../prompts/.github/instructions/foundational-principles.md" },
     { "file": "../prompts/.github/instructions/planning-workflow.md" },
     { "file": "../prompts/.github/instructions/ba.md" },
-    { "file": "../prompts/.github/instructions/memory-bank.instructions.md" },
     { "file": "../prompts/.github/instructions/quality-standards.md" },
     { "file": "../prompts/.github/instructions/programming-workflow.md" },
     { "file": "../prompts/.github/instructions/response-and-prompt-guidelines.md" },
     { "file": "../prompts/.github/instructions/testing-guidelines.md" },
-    { "file": "../prompts/.github/instructions/sequential-thinking.md" },
-    { "file": "../prompts/.github/instructions/shortcut-system-instruction.md" }
+    { "file": "../prompts/.github/instructions/sequential-thinking.md" }
 ]
 ```
 
@@ -96,11 +92,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 24 个可用插件
+# 查看所有 23 个可用插件
 /plugin list
 ```
 
-### 可用插件（24 个独立插件）
+### 可用插件（23 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -119,7 +115,6 @@
 | 🏗 Development   | `programming-workflow`    | TDD 工作流 skill                            |
 | 🏗 Development   | `testing-guidelines`      | 测试指南 skill                              |
 | 🏗 Development   | `planning-workflow`       | 规划工作流 skill                            |
-| 🏗 Development   | `memory-bank`             | 记忆库 skill                                |
 | 🔧 Tools         | `sequential-thinking`     | 顺序思维 skill                              |
 | 🔧 Tools         | `shortcut-system`         | 快捷命令 skill                              |
 | 🔧 Tools         | `zellij-control`          | Zellij 控制 skill                           |
@@ -148,7 +143,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
 ```
 
 ## OpenCode 插件

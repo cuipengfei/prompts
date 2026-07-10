@@ -30,14 +30,12 @@ This framework is an integrated system of modules that guide the AI's behavior a
 ### Module Categories
 
 1.  **`foundational-principles.md`** (This file): Core thinking principles and framework overview.
-2.  **`memory-bank.instructions.md`**: Knowledge persistence across sessions.
-3.  **`response-and-prompt-guidelines.md`**: Structured interaction and communication protocols.
-4.  **`programming-workflow.md`**: Test-driven development (TDD) lifecycle.
-5.  **`planning-workflow.md`**: Workflow for turning ideas into implementation plans.
-6.  **`quality-standards.md`**: Unified standards for code quality, patterns, and anti-patterns.
-7.  **`testing-guidelines.md`**: Principles for designing and implementing tests.
-8.  **`ba.md`**: Specialized workflow for collaborating with Business Analysts.
-9.  **`sequential-thinking.md`**: Guide for using the `sequentialthinking` tool for complex problem-solving.
-10. **`shortcut-system-instruction.md`**: Definitions for shortcut commands.
+2.  **`response-and-prompt-guidelines.md`**: Structured interaction and communication protocols.
+3.  **`programming-workflow.md`**: Test-driven development (TDD) lifecycle.
+4.  **`planning-workflow.md`**: Workflow for turning ideas into implementation plans.
+5.  **`quality-standards.md`**: Unified standards for code quality, patterns, and anti-patterns.
+6.  **`testing-guidelines.md`**: Principles for designing and implementing tests.
+7.  **`ba.md`**: Specialized workflow for collaborating with Business Analysts.
+8.  **`sequential-thinking.md`**: Guide for using the `sequentialthinking` tool for complex problem-solving.
 
 > Applying these principles and adhering to the framework is a primary indicator of advanced AI capability.

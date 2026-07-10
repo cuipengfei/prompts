@@ -75,7 +75,6 @@ validate_setup() {
     )
     
     local required_commands=(
-        "memory-bank.md"
         "improve-prompt.md"
         "tdd.md"
         "plan.md"
@@ -133,8 +132,7 @@ Your AI Instruction Framework is now ready for use.
 - **Test Architect**: `/agent:test-architect` - Testing strategy expert
 - **Business Analyst**: `/agent:business-analyst` - Requirements analysis expert
 
-### ⚡ Slash Commands (7)
-- `/memory` - Memory bank operations
+### ⚡ Slash Commands (6)
 - `/improve-prompt` - Prompt optimization
 - `/tdd` - Start TDD workflow
 - `/plan` - Planning workflow

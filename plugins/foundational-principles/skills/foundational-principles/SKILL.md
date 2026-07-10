@@ -28,14 +28,14 @@ description: 基础原则 - AI 助手的核心思维原则和指令框架概述�
 ### 模块分类
 
 1. **`foundational-principles`** (本文件): 核心思维原则和框架概述
-2. **`memory-bank`**: 跨会话知识持久化
-3. **`response-guidelines`**: 结构化交互和通信协议
-4. **`programming-workflow`**: 测试驱动开发(TDD)生命周期
-5. **`planning-workflow`**: 从想法到实现计划的工作流
-6. **`quality-standards`**: 代码质量、模式和反模式的统一标准
-7. **`testing-guidelines`**: 测试设计和实现原则
-8. **`ba-collaboration`**: 与业务分析师协作的专业化工作流
-9. **`sequential-thinking`**: 使用 sequentialthinking 工具进行复杂问题求解的指南
-10. **`shortcut-system`**: 快捷命令定义
+2. **`response-guidelines`**: 结构化交互和通信协议
+3. **`programming-workflow`**: 测试驱动开发(TDD)生命周期
+4. **`planning-workflow`**: 从想法到实现计划的工作流
+5. **`quality-standards`**: 代码质量、模式和反模式的统一标准
+6. **`testing-guidelines`**: 测试设计和实现原则
+
+7. **`ba-collaboration`**: 与业务分析师协作的专业化工作流
+8. **`sequential-thinking`**: 使用 sequentialthinking 工具进行复杂问题求解的指南
+9. **`shortcut-system`**: 快捷命令定义
 
 > 应用这些原则并遵循框架是高级 AI 能力的主要指标。

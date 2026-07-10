@@ -90,7 +90,6 @@ TBD - created by archiving change transform-to-plugin-marketplace. Update Purpos
   - `testing-guidelines`
   - `planning-workflow`
   - `ba`（业务分析）
-  - `memory-bank`
   - `response-guidelines`
   - `sequential-thinking`
   - `shortcut-system`

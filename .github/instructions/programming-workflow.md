@@ -22,7 +22,7 @@ _This document outlines the mandatory, structured programming workflow for The A
 
 ## Phase 0: Preparation & Understanding
 
-1.  **Contextualize**: Thoroughly read the [Memory Bank](../memory-bank.instructions.md) to understand project goals, architecture, and current progress.
+1.  **Contextualize**: Thoroughly read the relevant project context, architecture notes, and current progress before making changes.
 2.  **Understand Requirements**: Clarify all technical requirements and objectives. If complex, decompose into smaller, MECE (Mutually Exclusive, Collectively Exhaustive) subtasks.
 
 ---
@@ -56,4 +56,4 @@ _Constraint: Do not write any implementation or test code in this phase._
 ## Phase 4: Review & Finalize
 
 1.  **Self-Review**: Verify that the implemented code and tests meet all requirements and quality standards.
-2.  **Documentation**: If applicable, update the [Memory Bank](../memory-bank.instructions.md) and any other relevant documentation.
+2.  **Documentation**: If applicable, update any relevant project documentation alongside the implementation.

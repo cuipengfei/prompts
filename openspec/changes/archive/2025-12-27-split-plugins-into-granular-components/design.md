@@ -32,7 +32,6 @@ prompts-skills (bundle)
 | prompts-skills | testing-guidelines | skill | 1 skill |
 | prompts-skills | planning-workflow | skill | 1 skill |
 | prompts-skills | ba-collaboration | skill | 1 skill |
-| prompts-skills | memory-bank | skill | 1 skill |
 | prompts-skills | response-guidelines | skill | 1 skill |
 | prompts-skills | sequential-thinking | skill | 1 skill |
 | prompts-skills | shortcut-system | skill | 1 skill |
@@ -92,7 +91,7 @@ plugins/quality-standards/
 |----------|---------|
 | productivity | improve-prompt, desktop-notify |
 | learning | structured-responder, response-guidelines |
-| development | quality-standards, programming-workflow, testing-guidelines, planning-workflow, memory-bank, foundational-principles |
+| development | quality-standards, programming-workflow, testing-guidelines, planning-workflow, foundational-principles |
 | tools | zellij-control, sequential-thinking, shortcut-system |
 | collaboration | ba-collaboration |
 

@@ -33,7 +33,6 @@ How each file in `[.github/instructions/](.github/instructions/)` bends AI to yo
 ### Brain Surgery Department (Core Behavior)
 
 - `[.github/instructions/foundational-principles.md](.github/instructions/foundational-principles.md)`: Injects philosophy into the AI, teaching it _how_ to think, not just what to do.
-- `[.github/instructions/memory-bank.instructions.md](.github/instructions/memory-bank.instructions.md)`: Gives your AI a persistent "brain" to combat digital amnesia. We know, it's revolutionary.
 - `[.github/instructions/response-and-prompt-guidelines.md](.github/instructions/response-and-prompt-guidelines.md)`: Mandates professional communication, not chatbot existential crises. Features the sacred 8-section response.
 - `[.github/instructions/programming-workflow.md](.github/instructions/programming-workflow.md)`: The TDD gospel to prevent AI cowboy coding disasters.
 - `[.github/instructions/planning-workflow.md](.github/instructions/planning-workflow.md)`: Teaches AI to break down complex problems without meltdowns (MECE for the win).
@@ -51,7 +50,6 @@ How each file in `[.github/instructions/](.github/instructions/)` bends AI to yo
 ### Tool Master Academy (Advanced Techniques)
 
 - `[.github/instructions/sequential-thinking.md](.github/instructions/sequential-thinking.md)`: Unlocks dynamic problem-solving for the `sequentialthinking` MCP tool.
-- `[.github/instructions/shortcut-system-instruction.md](.github/instructions/shortcut-system-instruction.md)`: Command shortcuts for tactical efficiency. `r!`, `d!`, `t!` – engage!
 
 ## How to Use This Stuff
 
@@ -73,13 +71,11 @@ Want to brainwash Copilot directly in VS Code? Use the right structure:
     { "file": "../prompts/.github/instructions/foundational-principles.md" },
     { "file": "../prompts/.github/instructions/planning-workflow.md" },
     { "file": "../prompts/.github/instructions/ba.md" },
-    { "file": "../prompts/.github/instructions/memory-bank.instructions.md" },
     { "file": "../prompts/.github/instructions/quality-standards.md" },
     { "file": "../prompts/.github/instructions/programming-workflow.md" },
     { "file": "../prompts/.github/instructions/response-and-prompt-guidelines.md" },
     { "file": "../prompts/.github/instructions/testing-guidelines.md" },
-    { "file": "../prompts/.github/instructions/sequential-thinking.md" },
-    { "file": "../prompts/.github/instructions/shortcut-system-instruction.md" }
+    { "file": "../prompts/.github/instructions/sequential-thinking.md" }
 ]
 ```
 
@@ -96,11 +92,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 24 available plugins
+# View all 23 available plugins
 /plugin list
 ```
 
-### Available Plugins (24 Independent Plugins)
+### Available Plugins (23 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -119,7 +115,6 @@ Users can selectively install any combination:
 | 🏗 Development | `programming-workflow` | TDD workflow skill |
 | 🏗 Development | `testing-guidelines` | Testing guidelines skill |
 | 🏗 Development | `planning-workflow` | Planning workflow skill |
-| 🏗 Development | `memory-bank` | Memory bank skill |
 | 🔧 Tools | `sequential-thinking` | Sequential thinking skill |
 | 🔧 Tools | `shortcut-system` | Shortcut system skill |
 | 🔧 Tools | `zellij-control` | Zellij control skill |
@@ -148,7 +143,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration memory-bank response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
 ```
 
 ## OpenCode Plugins

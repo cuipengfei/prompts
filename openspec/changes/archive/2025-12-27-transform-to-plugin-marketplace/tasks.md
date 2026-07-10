@@ -37,7 +37,6 @@
   - [x] 5.3.4 `testing-guidelines/SKILL.md`
   - [x] 5.3.5 `planning-workflow/SKILL.md`
   - [x] 5.3.6 `ba-collaboration/SKILL.md`
-  - [x] 5.3.7 `memory-bank/SKILL.md`
   - [x] 5.3.8 `response-guidelines/SKILL.md`
   - [x] 5.3.9 `sequential-thinking/SKILL.md`
   - [x] 5.3.10 `shortcut-system/SKILL.md`
