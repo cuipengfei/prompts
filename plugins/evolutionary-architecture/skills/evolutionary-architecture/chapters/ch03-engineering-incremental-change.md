@@ -16,24 +16,26 @@ Incremental change——无论发生在 development 还是 deployment——都�
   - When to use: 当 business 想 staged release，而 engineering 想 continuous deployment 时
   - How: 部署代码但先关闭 feature → 只把 QA 用户路由过去 → 在 production 测试 → 准备好后打开 toggle
 
-- **Hypothesis-Driven Development**: 把 feature change 表述成 hypothesis（“如果我们把图片做大，销量会提升 5%”），再通过 A/B experiments 验证。
-  - When to use: 当你不想只靠 business analyst intuition 来决定 feature 时
-  - How: Hypothesis → experiment → measure → validate or reject
+- **Consumer-Driven Contracts** (2nd ed 强化): 消费者定义期望的 API 契约，提供者验证是否满足。Pact 是典型工具。
+  - When to use: 微服务间集成，避免提供者变更破坏消费者
+  - How: 消费者写 contract test → 提供者在 pipeline 中验证 contract → 契约不匹配则阻断部署
 
-- **Scientist Framework** (GitHub): 在 production 中让新代码与旧代码并行运行，并比较结果。对用户始终返回旧行为；如果有差异则记录下来供分析。
-  - When to use: 以高 deployment frequency 重构关键基础设施、同时又要保持高信心时
-  - How: `use` block（control/old）+ `try` block（candidate/new）→ Scientist 比较、记录，并返回 control value
+- **API Consistency Validation** (2nd ed 新增): 把 API consistency checks 作为 deployment pipeline 的多个验证阶段；Spectral 可 lint OpenAPI specification，OpenAPI.Tools 汇集相关工具。
+  - When to use: API 数量增多后保持设计一致性
+  - How: 定义 API style guide → 用 Spectral 在 CI 中 lint OpenAPI spec
+
+- **Auto-Disintegration** (2nd ed 新增): 自动发现并清理不再使用的 infrastructure resources；Swabbie 是书中的实现例子。
+  - When to use: 微服务生态中服务生命周期管理
+  - How: 检测未使用资源 → 通知 owner → 超期自动清理
 
 ## Key Concepts
-- **4D Architecture**: 2D（diagram）→ 3D（specific technologies）→ 4D（随时间演进）。"Architecture is abstract until operationalized, when it becomes a living thing."
 - **Continuous Deployment**: 只要 pipeline 成功就自动部署到 production——这是理想状态，但需要高度成熟的协调机制
-- **Monitoring-Driven Development (MDD)**: 不只靠 tests，而是使用 production monitors 来评估技术健康度与业务健康度
-- **Cycle Time**: 一个工作单元从启动到完成的 elapsed time——这是与演进速度成反比的关键指标（cycle time 越短，evolution 越快）
+- **QA in Production** (2nd ed 强调): 不只在 staging 测试，而是在 production 中用 feature toggles、synthetic transactions 和 canary releases 持续验证
+- **Service Discovery**: 微服务自动发现彼此位置的机制——让增量部署不需要硬编码 endpoint
 
 ## Mental Models
 - 把 deployment pipeline 看成 evolutionary architecture 的 **central nervous system**——所有 fitness functions 都通过它汇报
-- 把 **GitHub's Scientist** 当成 holistic continual fitness functions 的样板——新旧并跑、对比结果
-- 思考 **nested feedback loops**：testing → CI → iterations → 与真实用户进行 hypothesis experiments
+- 用 nested feedback loops 思考 pipeline：便宜、快速的检查先执行，昂贵或人工检查后执行
 
 ## Worked Example
 **PenultimateWidgets' Invoicing Service Pipeline**（6 个 stages）：
@@ -47,18 +49,16 @@ Incremental change——无论发生在 development 还是 deployment——都�
 
 每周会自动生成 report，追踪 fitness function 的 success/failure rates、health 和 cadence。把 security 与 audit 都放进 pipeline stage 后，瓶颈会变得可见——如果 audit 每月一次，而 security 每周一次，那么更快发布的真正约束显然就是 audit stage。
 
-**GitHub's merge refactoring**: 他们把基于 shell-script 的 Git merge 替换成 libgit2。过渡期间用 Scientist 在 1% traffic 上并行运行新实现，持续 4 天。连续 24 小时 zero mismatches 后，旧代码被删除。整个过渡期间，他们仍然保持每天 60 次 deployment。
-
 ## Key Takeaways
 1. Deployment pipelines（不是单纯的 CI servers）才是承载 fitness functions 的正确机制
 2. 不同 fitness function category 的组合（atomic+triggered、holistic+continual 等）会映射到不同 pipeline stages
 3. Feature toggles 让 deployment 与 release 解耦，从而可以在 production 做 QA
-4. Hypothesis-driven development 把 users 纳入 feedback loop
-5. Scientist-style refactoring 会把 legacy code 变成一致性测试——这是改动 critical path 最安全的方式
-6. Manual pipeline stages 完全合理——它们能让 bottleneck 变得可见，并且可与 automated stages 横向比较
+4. Consumer-driven contracts 让 provider change 在破坏 consumer 前被 pipeline 捕获
+5. Manual pipeline stages 完全合理——它们能让 bottleneck 变得可见，并且可与 automated stages 横向比较
 
 ## Connects To
 - **Ch 2**: Fitness function categories（atomic/holistic × triggered/continual）决定它们应该放在哪个 pipeline stage
-- **Ch 4**: Incremental change 需要小型 architectural quanta——service granularity 很关键
-- **Ch 6**: Deployment pipelines 是 3-step mechanics 里的第 3 步
-- **Ch 7**: Cycle time 与 evolution speed 成反比（v ∝ 1/c）——它本身也是一个关键的 process fitness function
+- **Ch 4**: Governance 自动化——FFs 嵌入 pipeline 成为可执行的 governance
+- **Ch 5**: Incremental change 需要小型 architectural quanta——service granularity 很关键
+- **Ch 7**: Deployment pipelines 是 3-step mechanics 里的第 3 步
+- **Ch 8**: Cycle time 本身可成为 process fitness function

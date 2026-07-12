@@ -12,56 +12,42 @@
   - When to use: 当 architecting 需要权衡多个相互竞争的 "-ilities" 时
   - How: 它不会被直接 "evaluated"——而是作为 decision prioritization 的指导框架
 
-- **Fitness Function Categories** (7 axes):
-  - **Atomic vs. Holistic**: 在单一上下文中测试，还是在共享上下文中测试组合效应
-  - **Triggered vs. Continual**: 由事件触发验证，还是持续不断地验证
-  - **Static vs. Dynamic**: 结果固定，还是定义会随上下文变化
-  - **Automated vs. Manual**: 由 pipeline 驱动，还是由人类验证（例如 regulatory）
-  - **Temporal**: 基于时间的检查（例如 library staleness、break-upon-upgrade）
-  - **Intentional vs. Emergent**: 在项目初期定义，还是在开发中逐渐发现
-  - **Domain-specific**: 某些特殊领域关注（security、regulatory）
+- **Fitness Function Categories** (6 axes):
+  - **Scope: Atomic vs. Holistic**: 在单一上下文中测试，还是在共享上下文中测试组合效应
+  - **Cadence: Triggered vs. Continual vs. Temporal** (NEW: Temporal 独立): 由事件触发验证，持续不断验证，或基于时间维度检查（如 library staleness、break-upon-upgrade）。2nd edition 中 Dependabot/snyk 是 temporal FFs 的典型工具
+  - **Result: Static vs. Dynamic**: 结果固定，还是定义会随上下文变化
+  - **Invocation: Automated vs. Manual**: 由 pipeline 驱动，还是由人类验证（例如 regulatory）
+  - **Proactivity: Intentional vs. Emergent**: 在项目初期定义，还是在开发中逐渐发现
+  - **Coverage: Architecture vs. Domain**: fitness functions 通常只覆盖 architecture characteristics；domain behavior 应继续由 domain tests 验证
 
 ## Key Concepts
 - **Tradeoffs**: architect 最头痛的问题——fitness functions 让 tradeoffs 变得显性、可比较
-- **Key/Relevant/Not Relevant**: 用于给 fitness functions 排优先级的分类——Key 维度决定 architecture 选择；Relevant 在 feature 级别考虑；Not Relevant 不影响设计
-- **Fitness Function Review**: 定期会议（至少每年一次）用来更新 fitness functions——检查 relevancy、scale、measurement approaches，并发现新的 fitness functions
+- **Synthetic Transactions**: 模拟真实用户行为并持续执行，用于 continual fitness functions；其 scope 取决于被验证的 architecture characteristic
+- **Temporal FFs 工具**: Dependabot（GitHub）、snyk——自动检测依赖过期和已知漏洞，是 temporal cadence FFs 的典型工具
 
 ## Mental Models
 - 把 fitness functions 想成 **dog breeding，而不是 random mutation**——这是带约束的 guided evolution，会主动限制不想要的方向
 - 使用 **apples-to-apples** 模型：fitness functions 把 security、performance、scalability 等看似不同的关注点统一到一种机制里，因此才能横向比较
 - 把每个 fitness function 看成某种 "-ility" 的 **protection mechanism**——每一个都在防止某个 characteristic 退化
 
-## Worked Example
-**PenultimateWidgets' Enterprise Spreadsheet**: architect 把期望的 characteristics（scalability、security、resiliency 等）列在 spreadsheet 里。问题是：开发者持续加 feature 时，怎么确保这些特征不退化？方案是：为每个 concern 建立 fitness functions，把它们重写成满足 objective evaluation criteria 的形式，并接入 deployment pipeline。这样一来，不再依赖偶尔的 ad hoc verification，而是每次代码变更都会触发 automated fitness function checks。
-
-Example fitness function（原书 JDepend 示例重构，非原文照搬）:
+## Code Example
+**ArchUnit cycle fitness function**（根据本章示例精简）:
 ```java
-// Reconstructed example: 原书 Ch 2 用 JDepend 验证 package 依赖方向性
-// 此处为精简重构，保留核心 API 调用结构，非逐行复制原文
-public void testMatch() {
-    DependencyConstraint constraint = new DependencyConstraint();
-    JavaPackage persistence = constraint.addPackage("com.xyz.persistence");
-    JavaPackage web = constraint.addPackage("com.xyz.web");
-    JavaPackage util = constraint.addPackage("com.xyz.util");
-    persistence.dependsUpon(util);
-    web.dependsUpon(util);
-    jdepend.analyze();
-    assertEquals("Dependency mismatch", true, jdepend.dependencyMatch(constraint));
-}
+slices().matching("..penultimate.(*)..")
+    .should().beFreeOfCycles();
 ```
-如果开发者不小心从 persistence import 到 util，这个 unit test 会在 commit 前失败——也就是说，architecture violation 会被当成可执行 artifact 捕获，而不是落成一套官僚式 guideline。
+当 package dependency 形成 cycle 时，测试失败；architecture rule 因而成为可执行 artifact。
 
 ## Key Takeaways
 1. Fitness functions = 对 architectural characteristics 的 objective integrity assessment
 2. 不是所有 tests 都是 fitness functions——只有验证 architecture characteristics 的才算
-3. 七个 category axes 能帮助你分类并组合 fitness functions
-4. 用 Key/Relevant/Not Relevant 分类，给设计精力排优先级
-5. 应尽早识别 fitness functions——越早识别，越能优先处理高风险工作
-6. 至少每年 review 一次 fitness functions——业务变化会要求它们同步更新
-7. Manual fitness functions 也是有效的（例如 regulatory certification）——能自动化就自动化，但不要因为不能自动化就跳过
+3. 六个 category axes 能帮助你分类并组合 fitness functions
+4. 应尽早识别 fitness functions，也要允许 emergent FF 在 stress point 出现后补入
+5. Manual fitness functions 也是有效的（例如 regulatory certification）——能自动化就自动化，但不要因为不能自动化就跳过
 
 ## Connects To
 - **Ch 1**: Fitness functions 提供 evolutionary architecture 定义里的 "guided"
 - **Ch 3**: Deployment pipelines 会把 fitness functions operationalize——定义跑哪些、何时跑、跑多频繁
-- **Ch 6**: Fitness functions 是构建 evolutionary architecture 的 3-step mechanics 里的第 2 步
-- **Ch 7**: 不恰当的 governance 可能制造出过多或错误的 fitness functions
+- **Ch 4**: Governance 自动化——FFs 作为代码度量、工具链和 pipeline 治理的执行层
+- **Ch 7**: Fitness functions 是构建 evolutionary architecture 的 3-step mechanics 里的第 2 步
+- **Ch 8**: 不恰当的 governance 可能制造出过多或错误的 fitness functions

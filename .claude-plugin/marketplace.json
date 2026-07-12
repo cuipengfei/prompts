@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -142,7 +142,7 @@
     },
     {
       "name": "evolutionary-architecture",
-      "description": "[Skill] 进化式架构知识库 - 基于《Building Evolutionary Architectures》一书，提取适应性函数、增量变更、架构量子等核心框架",
+      "description": "[Skill] 进化式架构知识库 - 基于《Building Evolutionary Architectures》2nd Edition，覆盖 fitness functions、自动化架构治理、connascence、架构量子、Data Mesh 与 Team Topologies",
       "source": "./plugins/evolutionary-architecture",
       "category": "learning"
     }

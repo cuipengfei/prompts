@@ -1,59 +1,80 @@
 ---
 name: evolutionary-architecture
-description: "Knowledge base from \"Building Evolutionary Architectures\" by Neal Ford, Rebecca Parsons, Patrick Kua. Use when applying fitness functions, architectural quanta, incremental change, or evolutionary architecture concepts."
+description: "Knowledge base from \"Building Evolutionary Architectures\" 2nd Edition (2022) by Neal Ford, Rebecca Parsons, Patrick Kua, Pramod Sadalage. Use when applying fitness functions, architectural governance, connascence, architectural quanta, Data Mesh, Team Topologies, or evolutionary architecture concepts."
 ---
 
 <!-- argument-hint: [topic, framework name, or chapter number] -->
 
-# Building Evolutionary Architectures
-**Author**: Neal Ford, Rebecca Parsons, Patrick Kua | **Pages**: ~217 | **Chapters**: 8 | **Generated**: 2026-07-08
+# Building Evolutionary Architectures (2nd Edition)
+**Authors**: Neal Ford, Rebecca Parsons, Patrick Kua, Pramod Sadalage | **Pages**: ~269 | **Chapters**: 9 | **Generated**: 2026-07-12
 
 ## How to Use This Skill
 
 - **无参数** — 加载核心框架供参考
-- **按主题** — 问 `fitness functions`、`quantum`、`expand/contract` 等主题，找到并读取对应章节
-- **按章节** — 问 `ch05`，加载该章节摘要
+- **按主题** — 问 `fitness functions`、`connascence`、`Data Mesh`、`Team Topologies` 等主题，找到并读取对应章节
+- **按章节** — 问 `ch04`，加载该章节摘要
 - **浏览** — 问 "有哪些章节" 查看完整索引
 
-当查询 Core Frameworks 未覆盖的主题时，会先读取对应章节文件再回答。
+回答具体主题前，先按 Topic Index 读取对应 chapter；跨主题问题只读取直接相关章节，不一次加载全部文件。
 
 ---
 
 ## Core Frameworks & Mental Models
 
 ### Evolutionary Architecture（进化式架构）
-当系统面临持续生态变化时使用。三大支柱：增量变更、适应性函数、适当耦合。不是无约束变更——由 fitness functions 引导，朝架构目标演进。Prefer evolutionary over adaptable——guided change toward a goal, not jury-rigged patches。
+当系统面临持续生态变化时使用。三大支柱：增量变更、适应性函数、适当耦合。变化由 fitness functions 引导朝目标演进。2nd edition 强调 governance 与 evolution 的重叠。Prefer evolutionary over adaptable——guided change toward a goal, not jury-rigged patches。
 
 ### Fitness Functions（适应性函数）
-为每个要保护的架构特性定义。当架构演进时，用客观完整性评估防止特性退化。七条分类轴：atomic/holistic、triggered/continual、static/dynamic、automated/manual、temporal、intentional/emergent、domain-specific。优先按 Key/Relevant/Not Relevant 分级。Wire into deployment pipelines。至少每年 review 一次。
+为每个要保护的架构特性定义。客观完整性评估防止特性退化。六条分类轴：scope (atomic/holistic)、cadence (triggered/continual/**temporal**)、result (static/dynamic)、invocation (automated/manual)、proactivity (intentional/emergent)、coverage。Coverage 强调 architecture FFs 与 domain tests 的职责分离。Wire into deployment pipelines。
+
+### Automating Architectural Governance（自动化架构治理）— 2nd ed 新增
+FFs 是 governance 的自动化执行层。Code-based FFs：afferent/efferent coupling、abstractness/instability、distance from main sequence。Zone of Pain = low A/low I；Zone of Uselessness = high A/high I。Turnkey tools：ArchUnit、NetArchTest、Pa11y、Black Duck。Linters 作为细粒度 governance。Chaos Engineering 验证 resilience。Scientist 提供 fidelity FFs。Herding 通过逐步收紧阈值引导改进。Frozen Caveman 指旧事故催生的规则脱离上下文后固化为非理性风险规避。
+
+### Connascence（同生耦合）— 2nd ed 新增
+比 "coupling" 更精确的度量体系。Static (CoN/CoT/CoM/CoP/CoA) + Dynamic (CoE/CoTi/CoV/CoI)。Properties：strength (strong→weak 越好)、locality、degree。Rules：strong→weak 优先；connascence 随距离增大而减弱。
 
 ### Architectural Quantum（架构量子）
-评估架构可演进性时使用。最小可独立部署 + 高功能内聚的组件，包含所有依赖（代码、数据、基础设施）。Quantum size = 增量变更的下限。Smaller quanta = faster evolution。Transactions act as strong nuclear force binding quanta——它们定义最小服务粒度。
-
-### Incremental Change（增量变更）
-开发侧（小步变更）和部署侧（模块化/解耦）两端都需要。Use when Continuous Delivery practices are in place：deployment pipelines、service discovery、feature toggles。Cycle time 与 evolution speed 成反比：`v ∝ 1/c`（cycle time 越短，evolution 越快）。Refactoring critical infrastructure 时用 Scientist framework。
+可独立部署 + 高功能内聚 + 高静态耦合 + 同步动态耦合的最小组件。Quantum size 是增量变更下限，但缩小 quantum 也会增加分布式协调成本。**Dynamic coupling 3D space**：communication、consistency、coordination。Transactions act as strong nuclear force binding quanta。
 
 ### Expand/Contract Pattern（扩展/收缩模式）
-当外部系统依赖的 database schema 需要变更时使用。Expand（加新列/表）→ 用 triggers 维护新旧两套 → 等消费者迁移 → Contract（删旧）。Parallel change 的子集，适用于所有 backward-incompatible interface 变更。
+当外部系统依赖的 database schema 需要变更时使用。Expand→维护新旧结构→等消费者迁移→Contract。数据库拆分使原生约束不能跨边界工作时，以替代机制和 FF 保护完整性；不是普遍移除 DB constraints。
+
+### Data Mesh & Data Product Quantum — 2nd ed 新增
+去中心化数据架构：domain ownership、data as product、self-serve platform、federated governance。DPQ 三类型：source-aligned、aggregate、fit-for-purpose。
+
+### Sidecar Pattern + Service Mesh — 2nd ed 新增
+把 operational concerns 放到 sidecar proxy 中，与业务代码正交解耦。Service mesh 管理所有 sidecar。两种 coupling 独立演进。
+
+### Contract Spectrum — 2nd ed 新增
+服务间契约存在 strict-to-loose trade-off；RMI、gRPC、REST、GraphQL、name/value payloads 展示不同约束组合，不应机械视为普适线性排名。
 
 ### Deployment Pipeline（部署流水线 + 适应性函数）
-替代 CI server 作为 fitness functions 的执行机制。Stages：unit tests → container build → atomic FFs → holistic FFs → manual gates → deploy。Fan out/fan in 实现并行验证。Manual stages 使瓶颈可见——把 security review 和 audit 都当 pipeline stage，瓶颈一目了然。
+替代 CI server 作为 FFs 执行机制。Stages：unit tests→container build→atomic FFs→holistic FFs→manual gates→deploy。Manual stages 使瓶颈可见。**Auto-Disintegration** (2nd ed)：自动清理废弃资源（Swabbie）。
 
-### Conway's Law & Inverse Conway Maneuver
-当组织团队结构时使用。"Organizations which design systems are constrained to produce designs which are copies of the communication structures." Fix：用 Inverse Conway Maneuver——让团队结构匹配目标架构，而非反过来。
+### Team Topologies — 2nd ed 新增
+四种团队类型：stream-aligned、enabling、complicated-subsystem、platform。Cognitive load balance：超载就拆分或提供 platform 支持。
+
+### Postel's Law for Contracts — 2nd ed 新增
+"Be conservative in what you send, liberal in what you accept." 非 breaking change 不 version。
 
 ### Guidelines for Building Evolutionary Architectures
-1. Remove Needless Variability — 用 immutable infrastructure 锁定可变项
-2. Make Decisions Reversible — 用 feature toggles、routing proxies 避免不可逆决策
-3. Prefer Evolvable over Predictable — 冲突时选 evolvable
-4. Build Anticorruption Layers — 隔离外部系统和集成点
-5. Build Sacrificial Architectures — 接受某些架构是一次性的
-6. Mitigate External Change — 用 pull model 管理依赖，不让外部变更破坏构建
-7. Update Frameworks Aggressively, Libraries Passively — 框架高耦合→push update；库低耦合→pull update
-8. Prefer Continuous Delivery over Snapshots — fluid dependencies > static snapshots
+1. Remove Needless Variability — immutable infrastructure 锁定可变项
+2. Make Decisions Reversible — feature toggles、routing proxies
+3. Prefer Evolvable over Predictable
+4. Build Anticorruption Layers
+5. Build Sacrificial Architectures
+6. Mitigate External Change — pull model 管理依赖
+7. Update Frameworks Aggressively, Libraries Passively
+8. Version Services Internally
 
-### Goldilocks Governance（金发姑娘治理）
-当标准化压力与 right-sizing 冲突时使用。选 3 个技术栈（simple/intermediate/complex），让团队按服务需求选。Not one（overengineers simple cases），not infinite（hurts portability）。
+### Just Enough Governance
+提供少量组织可支持的 technology stacks，让团队按问题规模选择，避免 one-size-fits-all 与无约束 polyglot 两端。
+
+### Fitness Functions as Experimental Media — 2nd ed 新增
+FFs 不只是约束——还是实验媒介。用 FFs 测试不同架构决策的影响。
+
+### Hypothesis-Driven Development — 2nd ed 强化
+把 feature change 表述成 hypothesis，用 A/B 实验验证。案例：Facebook photo flagging、mobile.de。
 
 ---
 
@@ -61,65 +82,95 @@ description: "Knowledge base from \"Building Evolutionary Architectures\" by Nea
 
 | # | Title | Key Frameworks |
 |---|-------|----------------|
-| [ch01](chapters/ch01-software-architecture.md) | Software Architecture | Evolutionary Architecture, Dynamic Equilibrium, Conway's Law |
-| [ch02](chapters/ch02-fitness-functions.md) | Fitness Functions | Fitness Function Categories, Key/Relevant Classification |
-| [ch03](chapters/ch03-engineering-incremental-change.md) | Engineering Incremental Change | Deployment Pipelines, Feature Toggles, Scientist, Hypothesis-Driven Dev |
-| [ch04](chapters/ch04-architectural-coupling.md) | Architectural Coupling | Architectural Quantum, Modularity Hierarchy, Evolvability of Styles |
-| [ch05](chapters/ch05-evolutionary-data.md) | Evolutionary Data | Expand/Contract, Database Migrations, Two-Phase Commit |
-| [ch06](chapters/ch06-building-evolvable.md) | Building Evolvable Architectures | 3-Step Mechanics, 8 Guidelines, Internal Versioning, Pull Model |
-| [ch07](chapters/ch07-pitfalls-antipatterns.md) | Pitfalls and Antipatterns | Vendor King, Last 10% Trap, Code Reuse Abuse, Goldilocks Governance |
-| [ch08](chapters/ch08-putting-into-practice.md) | Putting into Practice | Cross-Functional Teams, Consumer-Driven Contracts, Consulting Judo |
+| [ch01](chapters/ch01-software-architecture.md) | Evolving Software Architecture | Evolutionary Architecture, Dynamic Equilibrium, Governance Overlap |
+| [ch02](chapters/ch02-fitness-functions.md) | Fitness Functions | FF Categories (6 axes), Temporal FFs, Systemwide FFs |
+| [ch03](chapters/ch03-engineering-incremental-change.md) | Engineering Incremental Change | Deployment Pipelines, Feature Toggles, Consumer-Driven Contracts, Auto-Disintegration |
+| [ch04](chapters/ch04-automating-governance.md) | Automating Architectural Governance | Code-Based FFs, ArchUnit, Chaos Engineering, Fidelity FFs, Documenting FFs |
+| [ch05](chapters/ch05-evolutionary-architecture-topologies.md) | Evolutionary Architecture Topologies | Connascence, Architectural Quantum, Dynamic Coupling 3D, Contract Spectrum, Data Mesh, Sidecar/Service Mesh |
+| [ch06](chapters/ch06-evolutionary-data.md) | Evolutionary Data | Expand/Contract, Database Migrations, From Native to FF, Strangler Fig for DB |
+| [ch07](chapters/ch07-building-evolvable-architectures.md) | Building Evolvable Architectures | 5 Principles (含 Postel's Law), 3-Step Mechanics, LCOM, FF-Driven Architecture |
+| [ch08](chapters/ch08-pitfalls-antipatterns.md) | Pitfalls and Antipatterns | Last 10% Trap (+Low-Code), Vendor King, Just Enough Governance, Reporting Antipattern |
+| [ch09](chapters/ch09-putting-into-practice.md) | Putting into Practice | Team Topologies, Cognitive Load, FFs as Experimental Media, Hypothesis-Driven Dev, Zero-Day Security |
 
 ## Topic Index
 
-- **Adaptation vs. Evolution** → ch01
-- **Anticorruption Layers** → ch06
-- **Architectural Fitness Function** → ch02
-- **Architectural Quantum** → ch04, ch05
+- **Adaptation vs. Evolution** → ch01, ch09
+- **Anticorruption Layers** → ch07
+- **ArchUnit** → ch04
+- **Architectural Fitness Function** → ch02, ch04
+- **Architectural Quantum** → ch05, ch06
+- **Auto-Disintegration** → ch03
+- **Afferent/Efferent Coupling** → ch04
+- **Abstractness/Instability** → ch04
 - **Bit Rot** → ch01
-- **Bounded Context** → ch04
-- **Code Reuse Abuse** → ch07
-- **Consumer-Driven Contracts** → ch08
+- **Bounded Context** → ch05
+- **Chaos Engineering** → ch04
+- **Code Reuse Trade-off** → ch05, ch08
+- **Cognitive Load** → ch09
+- **Connascence** → ch05
+- **Consumer-Driven Contracts** → ch03
+- **Contract Spectrum** → ch05
 - **Continuous Deployment** → ch03
-- **Conway's Law** → ch01, ch08
-- **Cycle Time** → ch03, ch07
-- **Database Migration** → ch05
-- **Deployment Pipeline** → ch03, ch06
+- **Conway's Law** → ch01, ch09
+- **Cycle Time** → ch08, ch09
+- **Data Mesh** → ch05
+- **Data Product Quantum (DPQ)** → ch05
+- **Database Migration** → ch06
+- **Deployment Pipeline** → ch03, ch07
+- **Dependabot/snyk** → ch02, ch09
+- **Distance from Main Sequence** → ch04
 - **Dynamic Equilibrium** → ch01
-- **Expand/Contract** → ch05
+- **Dynamic Quantum Coupling** → ch05
+- **Expand/Contract** → ch06
 - **Feature Toggles** → ch03
-- **Fitness Functions** → ch02, ch03, ch06
-- **Goldilocks Governance** → ch07
-- **Holistic Fitness Function** → ch02
-- **Hypothesis-Driven Development** → ch03
-- **Immutable Infrastructure** → ch06
+- **Fidelity Fitness Function** → ch04, ch09
+- **Fitness Functions** → ch02, ch04
+- **Fitness Functions as Experimental Media** → ch09
+- **Frozen Caveman** → ch04
+- **Just Enough Governance** → ch08
+- **Herding Governance** → ch04
+- **Hypothesis-Driven Development** → ch09
+- **Immutable Infrastructure** → ch07
 - **Incremental Change** → ch01, ch03
-- **Internal Versioning** → ch06
-- **Inverse Conway Maneuver** → ch01, ch08
-- **Last 10% Trap** → ch07
-- **Modularity** → ch04
-- **Parallel Change** → ch05
-- **PenultimateWidgets** → ch01, ch03, ch05, ch06, ch07, ch08
-- **Pull Model (Dependencies)** → ch06
-- **Reporting Antipattern** → ch07
-- **Sacrificial Architecture** → ch06
-- **Scientist Framework** → ch03
-- **Service Templates** → ch04
-- **Share Nothing** → ch04
-- **Snowflake Servers** → ch06
+- **Inverse Conway Maneuver** → ch01, ch09
+- **Last 10% Trap** → ch08
+- **LCOM** → ch07
+- **Low-Code/No-Code** → ch08
+- **Migrate Method from Database** → ch06
+- **Modularity** → ch05
+- **Monolithic Listing** → ch05
+- **Parallel Change** → ch06
+- **PenultimateWidgets** → ch01, ch03, ch06, ch07, ch08, ch09
+- **Postel's Law** → ch07
+- **Pull Model (Dependencies)** → ch07
+- **Reporting Antipattern** → ch08
+- **Sacrificial Architecture** → ch07
+- **Scientist Framework** → ch04
+- **Service Mesh** → ch05
+- **Share Nothing** → ch05
+- **Sidecar Pattern** → ch05
+- **Snowflake Servers** → ch07
+- **Spectral** → ch03
+- **Stamp Coupling** → ch05
+- **Strangler Fig for DB** → ch06
+- **Swabbie** → ch03
 - **Systemwide Fitness Function** → ch02
-- **Three Strikes and You Refactor** → ch08
-- **Two-Phase Commit** → ch05
-- **Vendor King** → ch07
+- **Team Topologies** → ch09
+- **Temporal Fitness Function** → ch02
+- **Three Strikes and You Refactor** → ch09
+- **Two-Phase Commit** → ch06
+- **Vendor King** → ch08
+- **Zero-Day Security** → ch09
+- **Zone of Pain/Uselessness** → ch04
 
 ## Supporting Files
 
-- [glossary.md](glossary.md) — 术语表与定义
-- [patterns.md](patterns.md) — 模式与技术清单
-- [cheatsheet.md](cheatsheet.md) — 决策速查表与判断指南
+- [glossary.md](glossary.md) — 术语表与定义（2nd ed 更新）
+- [patterns.md](patterns.md) — 模式与技术清单（2nd ed 更新）
+- [cheatsheet.md](cheatsheet.md) — 决策速查表与判断指南（2nd ed 更新）
 
 ---
 
 ## Scope & Limits
 
-本 skill 仅覆盖书中内容。在代码库中实施时，需结合项目特定工具。超出本书范围的主题，请查看相关 skill 或直接询问 agent。
+本 skill 覆盖 2nd edition（2022）全书内容。在代码库中实施时，需结合项目特定工具。超出本书范围的主题，请查看相关 skill 或直接询问 agent。

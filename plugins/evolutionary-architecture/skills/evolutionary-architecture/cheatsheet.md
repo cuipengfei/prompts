@@ -1,63 +1,81 @@
-# Cheatsheet — Building Evolutionary Architectures
+# Cheatsheet — Building Evolutionary Architectures (2nd Edition)
 
 ## Core Decision Rules
 
 | When... | Do... | Because... |
 |---|---|---|
-| Choosing between predictability and evolvability | 选择 evolvable 的方案 | 在持续变化的生态里，predictability 只是幻觉 (Ch 6) |
-| Deciding service granularity | 先从较大的 services 开始，后续再拆小 | 如果过早把 quantum 拆得太小，会破坏 transactional contexts (Ch 4, 6) |
-| Choosing between libraries and frameworks | 优先选择 libraries | frameworks 会形成更高 coupling（framework 调你的代码）；libraries 更偏工具性 (Ch 6) |
-| Updating frameworks vs. libraries | Frameworks = push（尽快更新）；Libraries = pull（按需更新） | framework coupling 会让延迟升级变得非常痛苦 (Ch 6) |
-| Managing external dependencies | 使用 pull model（internal repo 作为 proxy） | 外部变化不应该破坏你的 builds (Ch 6) |
-| Versioning service endpoints | 用 internal versioning，不用 version numbering | callers 不该理解 version numbers；并发最多支持 2 个版本 (Ch 6) |
-| Code reuse across services | duplication 优先于 coupling | shared code 会把 services 绑在一起；reuse 更像器官移植，不像搭 Lego (Ch 7) |
-| Standardizing technology stacks | 采用 Goldilocks：3 个选项（simple/intermediate/complex） | 单一栈会让简单场景过度设计；无限栈又会损害 portability (Ch 7) |
-| Organizing teams | 围绕 business capabilities，而不是 job functions | Conway's Law：团队结构会映射成架构结构 (Ch 1, 8) |
-| Reporting needs | 通过 event streaming 拆出独立 reporting services | 把 reports 直接耦合到 DB schema 会摧毁 evolvability (Ch 7) |
+| Choosing predictability vs evolvability | 选 evolvable | 持续变化生态里 predictability 是幻觉 (Ch 7) |
+| Deciding service granularity | 先从较大 services 开始 | 过早拆小会破坏 transactional contexts (Ch 5, 7) |
+| Choosing libraries vs frameworks | 优先 libraries | frameworks 高 coupling（调你的代码）(Ch 7) |
+| Updating frameworks vs libraries | Frameworks = push（尽快）；Libraries = pull（按需） | framework coupling 让延迟升级痛苦 (Ch 7) |
+| Managing external dependencies | 用 pull model（internal repo 作 proxy） | 外部变化不应破坏 builds (Ch 7) |
+| Versioning service endpoints | Internal versioning + Postel's Law | 非 breaking change 不 version (Ch 7) |
+| Code reuse across services | duplication 优先于 coupling | reuse 像器官移植，不像 Lego (Ch 5, 8) |
+| Standardizing technology stacks | Just Enough Governance：少量受支持选项 | 避免 one-size-fits-all 与无约束 polyglot (Ch 8) |
+| Organizing teams | Team Topologies + business capabilities | Conway's Law：团队结构映射架构 (Ch 1, 9) |
+| Reporting needs | Event streaming + 独立 reporting services 或 Data Mesh | 直接耦合 DB schema 摧毁 evolvability (Ch 8) |
+| Choosing service communication protocol | 按 Contract Spectrum 的 coupling trade-offs 选 | 协议不是普适线性排名 (Ch 5) |
+| Evaluating module design balance | 画 A-I 散点图，查 Zone of Pain/Uselessness | D = |A + I - 1| (Ch 4) |
+| Microservices operational complexity增长 | 用 Service Mesh + Sidecar | 正交分离 operational 和业务 coupling (Ch 5) |
+| Data architecture需跨域演进 | 用 Data Mesh | 去中心化数据所有权 (Ch 5) |
+| Team 认知负担超载 | 拆分 team 或提供 platform 支持 | cognitive load 超载 = 质量下降 (Ch 9) |
+| Refactoring critical path | 用 Scientist framework 做 fidelity FF | 行为一致性验证后才能安全切换 (Ch 4) |
 
 ## Fitness Function Quick Selection
 
 | Characteristic | Category | Example Mechanism |
 |---|---|---|
-| Coupling directionality | Atomic + Triggered | 在 CI 中运行 JDepend unit test |
-| Performance SLA | Atomic + Triggered | 针对每个 service 做 response time test |
-| Transaction speed | Atomic + Continual | 在 production 中监控 transaction 性能 |
-| Resiliency | Holistic + Continual | Chaos Monkey |
-| Code quality | Atomic + Triggered + Static | 设定 cyclomatic complexity threshold |
-| Security | Holistic + Triggered | 在 pipeline 中运行 penetration test |
-| Regulatory compliance | Manual + Triggered | 加入独立 accountant review 阶段 |
-| Dependency staleness | Temporal | 通过 break-upon-upgrade test 检测 |
-| Integration integrity | Atomic + Triggered | Consumer-driven contracts |
-| Cycle time | Process + Continual | 为 pipeline duration 设置 alarm threshold |
+| Coupling directionality | Atomic + Triggered | ArchUnit layer check in CI |
+| Performance SLA | Atomic + Triggered | Response time test per service |
+| Transaction speed | Atomic + Continual | Production transaction monitoring |
+| Resiliency | Holistic + Continual | Chaos Monkey/Gorilla/Kong |
+| Code quality | Atomic + Triggered + Static | Cyclomatic complexity threshold |
+| Security | Holistic + Triggered | Pipeline penetration test |
+| Regulatory compliance | Manual + Triggered | Independent accountant review stage |
+| Dependency staleness | Temporal | Dependabot/snyk scan |
+| Integration integrity | Atomic + Triggered | Consumer-driven contracts (Pact) |
+| Cycle time | Process + Continual | Pipeline duration alarm threshold |
+| Fidelity (refactoring) | Atomic + Continual | Scientist framework comparison |
+| Architecture governance | Atomic + Triggered | ArchUnit package/class/layer checks |
+| A11y compliance | Atomic + Triggered | Pa11y automated check |
+| License compliance | Temporal + Triggered | Black Duck scan |
+| Communication patterns | Holistic + Continual | Log parsing FFs for microservices |
 
-## Architecture Style → Evolvability Score
+## Connascence Decisions
 
-| Style | Quantum | Incremental Change | Best For |
-|---|---|---|---|
-| Big Ball of Mud | Entire system | ❌ Terrible | 没有合适场景——应立即重构 |
-| Layered Monolith | Application | ⚠️ Moderate | 简单应用、稳定领域 |
-| Modular Monolith | Application | ✅ Good (if disciplined) | 作为迈向 microservices 之前的起点 |
-| Microkernel | Core + plug-in | ✅ Good | 需要可扩展性的工具类系统（如 IDEs、browsers） |
-| Microservices | Single service | ✅✅ Excellent | 以 domain 为中心、变化频繁的系统 |
-| Service-based | Large service | ⚠️ Moderate | 从 monolith 迁移、或 transaction 密集型系统 |
+- 先评估 **type、locality、degree**，不要依赖单一总排序。
+- 尽量把 strong connascence 限制在局部；距离越远，允许的 connascence 应越弱。
+- 典型改善：CoP 改 named parameters；CoM 改 constants/enums；dynamic connascence 优先缩小 degree 与传播距离。
+
+## Team Topologies Selection
+
+| 团队类型 | 职责 | 何时设立 |
+|---|---|---|
+| Stream-aligned | 端到端交付价值流 | 默认——每条价值流一个 |
+| Enabling | 帮助其他团队提升能力 | 团队需要 coaching 时 |
+| Complicated-subsystem | 深度专业知识子系统 | 子系统需要专家时 |
+| Platform | 自助式内部平台 | stream-aligned 团队认知超载时 |
 
 ## Tells & Smells
 
 | Smell | You're probably... | Fix |
 |---|---|---|
-| Shared component team is a bottleneck | 过度滥用 code reuse | fork 或直接 duplication；拆掉 coupling |
-| Hacks proliferate around a tool | 陷入 Last 10% Trap | 回到更通用的 tools |
-| Releases require specialized formal process | 缺少快速 release 的能力 | 上 Continuous Deployment；把 cycle time 当作 FF 跟踪 |
-| Report designers bypass architecture layers | 命中了 reporting antipattern | 用 event streaming 拆出独立 reporting |
-| Teams defend outdated plans despite evidence | 计划周期过长 / sunk cost 影响判断 | 把交付拆得更小 |
-| All projects forced to use same heavy stack | 治理方式不合适 | 采用 Goldilocks Governance（3 stacks） |
-| Vendor product dictates all decisions | 落入 Vendor King | 把它当成 integration point；增加 anticorruption layer |
-| Errors at UI originate deep in stack | abstraction 泄漏 | 先理解下一层；再用 fitness functions 做保护 |
+| Shared component team is bottleneck | 过度滥用 code reuse | fork 或 duplication；拆 coupling |
+| Hacks proliferate around a tool | Last 10% Trap | 回到通用 tools |
+| Low-code platform can't express business rules | Last 10% Trap (low-code 变体) | 回到 general-purpose language |
+| Releases require specialized formal process | 缺少快速 release 能力 | 上 CD；cycle time 当 FF 跟踪 |
+| Report designers bypass architecture layers | reporting antipattern | event streaming 拆出独立 reporting |
+| Teams defend outdated plans despite evidence | planning horizon 过长 / sunk cost | 拆更小 deliverables |
+| All projects forced to use same heavy stack | governance 不合适 | Just Enough Governance |
+| Vendor product dictates all decisions | Vendor King | 当成 integration point；加 anticorruption layer |
+| Errors at UI originate deep in stack | abstraction 泄漏 | 理解下一层；用 FFs 保护 |
+| Module in Zone of Pain | low A + low I；concrete 且 rigid | 沿 main sequence 重平衡 abstraction/stability |
+| Module in Zone of Uselessness | high A + high I；抽象无 dependents | 增加实际依赖或减少无用抽象 |
+| Old incident cited without current evidence | Frozen Caveman | 恢复原始上下文；用可执行 FF 替代恐惧规则 |
+| Teams use different stacks to "force" decoupling | 可能是刻意 trade-off，不自动判错 | 比较 accidental coupling 风险与 portability 成本 |
+| Pass data structs with unused fields | Stamp Coupling | 只传需要的字段 |
 
-## Cycle Time Formula
-```
-v ∝ 1/c
-```
-- v = 变更速度（evolution speed）
-- c = cycle time
-- **Cycle time 越快，evolution 越快。应把 cycle time 作为 fitness function 持续跟踪。**
+## Cycle Time Rule
+
+- 原书叙述：缩短 cycle time 会提高 evolution speed，应把 cycle time 作为 fitness function 持续跟踪。
+- 原书印刷公式与该叙述冲突；不要把公式作为决策依据。
