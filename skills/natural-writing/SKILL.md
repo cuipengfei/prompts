@@ -1,6 +1,6 @@
 ---
 name: natural-writing
-description: 避免 AI 写作痕迹，生成更自然的文本。当用户说"太AI了"、"不像人写的"、"自然一点"、"去AI味"、"humanize"时使用。
+description: 当用户要求文字更自然、更像人写的、去除 AI 写作痕迹，且不改变原意或事实主张时使用。
 ---
 
 # Natural Writing Style

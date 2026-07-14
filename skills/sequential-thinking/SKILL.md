@@ -1,6 +1,6 @@
 ---
 name: sequential-thinking
-description: 顺序思维 - 使用 sequentialthinking MCP 工具进行动态反思性问题求解的指南。当用户说"逐步思考"、"sequential thinking"、"分步推理"时使用。
+description: 当复杂、不确定或多阶段问题需要使用 sequentialthinking MCP 工具进行迭代推理、修订或分支比较时使用。
 ---
 
 # 使用 `sequentialthinking` MCP 工具指南

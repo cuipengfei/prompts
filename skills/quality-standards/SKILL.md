@@ -1,6 +1,6 @@
 ---
 name: quality-standards
-description: 质量标准 - 代码质量、设计模式和反模式的统一指南。包含 SOLID 原则、代码异味识别和最佳实践。当用户提到"代码质量"、"SOLID"、"代码异味"、"设计模式"、"best practices"时使用。
+description: 当审查或重构代码中的可维护性问题、SOLID 或 DRY 违规、代码异味、不当模式或架构质量风险时使用。
 ---
 
 # AI 助手质量标准：代码、模式与异味
