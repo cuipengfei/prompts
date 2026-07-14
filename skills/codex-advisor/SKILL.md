@@ -1,6 +1,6 @@
 ---
 name: codex-advisor
-description: 调用 OpenAI Codex 获取第二意见，批判性评估后三分类展示给用户
+description: 调用 OpenAI Codex 获取第二意见，批判性评估后三分类展示给用户。当用户说"问问 Codex"、"第二意见"、"Codex 怎么看"、"second opinion"时使用。
 ---
 
 # Codex 顾问技能

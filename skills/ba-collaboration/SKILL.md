@@ -1,6 +1,6 @@
 ---
 name: ba-collaboration
-description: BA 协作 - 与业务分析师协作的专业化工作流。帮助 BA 编写高质量用户故事和验收标准。
+description: BA 协作 - 与业务分析师协作的专业化工作流。帮助 BA 编写高质量用户故事和验收标准。当用户提到"用户故事"、"验收标准"、"BA"、"业务分析师"、"user story"、"acceptance criteria"时使用。
 ---
 
 # AI 指南：业务分析师用户故事协作
