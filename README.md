@@ -92,11 +92,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 23 个可用插件
+# 查看所有 24 个可用插件
 /plugin list
 ```
 
-### 可用插件（23 个独立插件）
+### 可用插件（24 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -124,6 +124,7 @@
 | 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
 | 📚 Learning      | `jpm-voice`               | 提供《金瓶梅》语言风格与文学精髓的化身技能 |
 | 📚 Learning      | `evolutionary-architecture` | 进化式架构知识库 - 适应性函数、增量变更、架构量子 |
+| 📚 Learning | `exploring-generative-ai` | Exploring Generative AI 知识库 - 官方 29 篇文章，覆盖 coding assistants、agentic coding、context engineering 与 local models |
 | 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
 
 ### 安装示例
@@ -143,7 +144,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai
 ```
 
 ## OpenCode 插件

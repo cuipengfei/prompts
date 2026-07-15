@@ -124,6 +124,7 @@
 | 🤝 协同 | `ba-collaboration` | BA 共工之法 |
 | 📚 启智 | `jpm-voice` | 《金瓶梅》文气化身之技 |
 | 📚 启智 | `evolutionary-architecture` | 进化式架构藏经 - 适应性函数、增量变更、架构量子 |
+| 📚 启智 | `exploring-generative-ai` | Exploring Generative AI 二十九篇官文之藏，论编程佐理、agentic coding、context engineering 与 local models |
 | 🤝 协同 | `debate` | 辩论仙器 - 主从代理结构化论道 |
 
 ### 使用示例
@@ -142,8 +143,8 @@
 # 用法: /learn 或 /learn 代码风格
 # 用法: /recall 或 /recall 认证模式
 
-# 尽收二十三宝
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
+# 尽收二十四宝
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai
 ```
 
 ## 天工开物篇：OpenCode 仙器

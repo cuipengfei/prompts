@@ -92,11 +92,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 23 available plugins
+# View all 24 available plugins
 /plugin list
 ```
 
-### Available Plugins (23 Independent Plugins)
+### Available Plugins (24 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -124,6 +124,7 @@ Users can selectively install any combination:
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
 | 📚 Learning      | `jpm-voice`               | Provides the linguistic style and literary essence of "Jin Ping Mei" (permanently active) |
 | 📚 Learning | `evolutionary-architecture` | Evolutionary architecture knowledge base - fitness functions, incremental change, architectural quanta |
+| 📚 Learning | `exploring-generative-ai` | Exploring Generative AI knowledge base - 29 official articles on coding assistants, agentic coding, context engineering, and local models |
 | 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
 
 ### Installation Examples
@@ -143,7 +144,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai
 ```
 
 ## OpenCode Plugins
