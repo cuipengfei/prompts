@@ -5,3 +5,4 @@ packages/oc-tweaks/node_modules/
 .sisyphus/
 .omo/
 .rtk/filters.toml
+.corpus/exploring-generative-ai/
