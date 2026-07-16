@@ -1,8 +1,8 @@
 
-# PROJECT KNOWLEDGE BASE
+# Repository Guidelines
 
-**Generated:** 2026-04-15
-**Commit:** 65b179d
+**Generated:** 2026-07-16
+**Commit:** b5b6952
 **Branch:** main
 
 ## OVERVIEW
@@ -14,9 +14,9 @@
 ```text
 prompts/
 ├── .claude-plugin/marketplace.json   # Claude Code marketplace 清单
-├── plugins/                          # 21 个独立插件；看 plugins/AGENTS.md
+├── plugins/                          # 24 个独立插件；看 plugins/AGENTS.md
 ├── packages/oc-tweaks/               # OpenCode 运行时增强包；看 packages/oc-tweaks/AGENTS.md
-├── openspec/                         # spec / change proposal 工作流；看 openspec/AGENTS.md
+├── openspec/                         # spec / change proposal 工作流
 ├── .claude/                          # 本仓库自带 Claude workspace 资产；看 .claude/AGENTS.md
 └── .sisyphus/                        # 计划、证据、notepads；看 .sisyphus/AGENTS.md
 ```
@@ -28,7 +28,7 @@ prompts/
 | 新增或调整 Claude Code 插件 | `plugins/` | 插件层共享约束在 `plugins/AGENTS.md` |
 | 修改 OpenCode 运行时增强 | `packages/oc-tweaks/` | 包级规则已独立维护 |
 | 修改 insights 报告链路 | `packages/oc-tweaks/src/insights/` | 这是 `oc-tweaks` 内最独立的子域 |
-| 写 proposal / spec delta | `openspec/` | 先读 `openspec/AGENTS.md` |
+| 写 proposal / spec delta | `openspec/` | 查看 `openspec/project.md` 与相关 spec/change |
 | 调整本仓库的 Claude workspace 资产 | `.claude/` | 包括 commands / agents / output-styles |
 | 追计划、证据、执行工件 | `.sisyphus/` | 计划文件视为只读规范 |
 
