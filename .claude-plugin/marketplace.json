@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "improve-prompt",
-      "description": "[Command + Skill] 优化提示词命令 - 识别真实意图并结构化改写，补充可验证 Definition of Done，防止执行方向跑偏",
+      "description": "[Command + Skill] 优化提示词：识别意图（含隐含 NFR）、结构化改写、分级可验证 DoD，防止执行跑偏",
       "source": "./plugins/improve-prompt",
       "category": "productivity"
     },

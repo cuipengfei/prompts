@@ -102,7 +102,7 @@ Users can selectively install any combination:
 
 | Category | Plugin | Description |
 |----------|--------|-------------|
-| 🛠 Productivity | `improve-prompt` | Prompt optimization command with verifiable DoD |
+| 🛠 Productivity | `improve-prompt` | Prompt optimization command with NFRs and tiered, verifiable DoD |
 | 🛠 Productivity | `desktop-notify` | Desktop notification hooks (WSL → Windows Toast) |
 | 🛠 Productivity | `natural-writing` | Natural writing output style |
 | 📚 Learning | `structured-responder` | Structured response output style |

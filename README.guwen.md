@@ -102,7 +102,7 @@
 
 | 门类 | 仙器 | 功用 |
 |------|------|------|
-| 🛠 济世 | `improve-prompt` | 提示词优化令符（含可验成准） |
+| 🛠 济世 | `improve-prompt` | 提示词优化令符（含隐限与分级可验成准） |
 | 🛠 济世 | `desktop-notify` | 桌案飞符钩沉（WSL → Windows 弹窗） |
 | 🛠 济世 | `natural-writing` | 自然写作文风 |
 | 📚 启智 | `structured-responder` | 结构化应答体例 |

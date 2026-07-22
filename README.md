@@ -102,7 +102,7 @@
 
 | Category         | Plugin                    | 描述                                        |
 | ---------------- | ------------------------- | ------------------------------------------- |
-| 🛠 Productivity  | `improve-prompt`          | 提示词优化命令（含可验证 DoD）             |
+| 🛠 Productivity  | `improve-prompt`          | 提示词优化命令（含 NFR 与分级可验证 DoD）  |
 | 🛠 Productivity  | `desktop-notify`          | 桌面通知钩子（WSL → Windows Toast）         |
 | 🛠 Productivity  | `natural-writing`         | 自然写作输出风格                            |
 | 📚 Learning      | `structured-responder`    | 结构化响应输出风格                          |
