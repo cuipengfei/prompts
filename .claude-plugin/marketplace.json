@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -151,6 +151,18 @@
       "description": "[Skill] Exploring Generative AI 知识库 - 基于 Martin Fowler 官方 29 篇系列文章，覆盖 coding assistants、agentic coding、context engineering、软件质量与 local models",
       "source": "./plugins/exploring-generative-ai",
       "category": "learning"
+    },
+    {
+      "name": "improve-skill",
+      "description": "[Skill] 改进现有 skill：判定来源（lock 追踪 / 自制），前者改原 repo，后者就地改；按会话走坏找缺口或走好提炼经验两类依据改进",
+      "source": "./plugins/improve-skill",
+      "category": "productivity"
+    },
+    {
+      "name": "fuck",
+      "description": "[Skill] 用户强烈指出 agent 刚才离谱时，回看理解偏差，从人类视角提出有根据的原因并校正方向。",
+      "source": "./plugins/fuck",
+      "category": "productivity"
     }
   ]
 }
