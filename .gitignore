@@ -4,5 +4,6 @@ plugins/natural-writing/reference/
 packages/oc-tweaks/node_modules/
 .sisyphus/
 .omo/
+.omc/
 .rtk/filters.toml
 .corpus/exploring-generative-ai/
