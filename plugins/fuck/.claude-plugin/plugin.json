@@ -1,6 +1,6 @@
 {
   "name": "fuck",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "[Skill] 用户强烈指出 agent 刚才离谱时，回看理解偏差，从人类视角提出有根据的原因并校正方向。",
   "author": {
     "name": "cuipengfei",
