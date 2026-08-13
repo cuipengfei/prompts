@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -162,6 +162,12 @@
       "name": "fuck",
       "description": "[Skill] 用户强烈指出 agent 刚才离谱时，回看理解偏差，从人类视角提出有根据的原因并校正方向。",
       "source": "./plugins/fuck",
+      "category": "productivity"
+    },
+    {
+      "name": "no-bs",
+      "description": "[Skill] No BS - 用户明确要求直接 verdict、反外交腔或纠正假公平时，基于证据明确站队、给出判断。",
+      "source": "./plugins/no-bs",
       "category": "productivity"
     }
   ]

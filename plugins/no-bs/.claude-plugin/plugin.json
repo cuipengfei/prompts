@@ -1,0 +1,17 @@
+{
+  "name": "no-bs",
+  "version": "0.1.1",
+  "description": "[Skill] No BS - 用户明确要求直接 verdict、反外交腔或纠正假公平时，基于证据明确站队、给出判断。",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts",
+  "keywords": [
+    "directness",
+    "critical-thinking",
+    "anti-sycophancy",
+    "evidence-based"
+  ]
+}
