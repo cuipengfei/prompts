@@ -1,7 +1,7 @@
 # help-me-read-skill Specification
 
 ## Purpose
-TBD - created by archiving change add-help-me-read-skill. Update Purpose after archive.
+Help readers quickly judge whether a URL is worth deep reading, then expand into the original text with faithful translation and light commentary. The reading guide grows out of each article's own logic rather than a fixed template.
 ## Requirements
 ### Requirement: Multi-URL Reading Workflow
 The system SHALL provide a `help-me-read` skill that can guide Claude to read one or more URLs as a structured reading aid instead of a summary-only answer.
@@ -37,18 +37,19 @@ The system SHALL keep commentary useful but lighter than the reading material it
 - **THEN** the commentary MUST focus on meaning, context, or reading guidance that helps the user move faster
 - **AND** the commentary MUST NOT become longer or denser than the combined original paragraph and translation for that reading unit
 
-### Requirement: Source-Grounded End Synthesis
-The system SHALL append a source-grounded synthesis after the paragraph-by-paragraph reading units.
+### Requirement: Source-Grounded Reading Guide
+The system SHALL provide a reading guide before the paragraph-by-paragraph reading units, grounded in the fetched full text.
 
-#### Scenario: Single source synthesis
-- **WHEN** Claude finishes presenting the paragraph-based reading units for a source
-- **THEN** the response MUST include end sections for insights, key information, logical ordering, and interpretation
-- **AND** those sections MUST be grounded in the source text already presented or explicitly label external background, inference, or unproven claims
+#### Scenario: Reading guide structure
+- **WHEN** Claude prepares the reading guide for a source
+- **THEN** the guide MUST answer what the article's core judgment is, how the article argues to it, and how much the reader should trust it
+- **AND** the guide's structure MUST grow out of the article's own argument shape rather than a fixed set of sections
+- **AND** every judgment MUST be grounded in the fetched source text or explicitly labeled as external background, inference, or unproven claims
 
-#### Scenario: Multiple source synthesis
+#### Scenario: Multiple source reading guide
 - **WHEN** the user asks Claude to read multiple URLs
-- **THEN** each source MUST receive its own end synthesis after that source's reading units
-- **AND** any cross-source comparison MUST be separate from the per-source synthesis sections
+- **THEN** each source MUST receive its own reading guide
+- **AND** any cross-source comparison MUST be separate from the per-source guide
 
 ### Requirement: Translation Quality Expectation
 The system SHALL instruct Claude to translate with emphasis on faithfulness, readability, and style rather than literal word-for-word replacement.
