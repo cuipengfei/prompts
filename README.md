@@ -124,7 +124,7 @@
 | 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
 | 📚 Learning      | `jpm-voice`               | 提供《金瓶梅》语言风格与文学精髓的化身技能 |
 | 📚 Learning      | `evolutionary-architecture` | 进化式架构知识库 - 适应性函数、增量变更、架构量子 |
-| 📚 Learning | `exploring-generative-ai` | Exploring Generative AI 知识库 - 官方 29 篇文章，覆盖 coding assistants、agentic coding、context engineering 与 local models |
+| 📚 Learning | `exploring-generative-ai` | Exploring Generative AI 知识库 - 官方 31 篇文章 + 1 篇官方后续文，覆盖 coding assistants、agentic coding、harness engineering、context engineering 与 local models |
 | 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
 
 ### 安装示例

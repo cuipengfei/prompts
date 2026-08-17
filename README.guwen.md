@@ -124,7 +124,7 @@
 | 🤝 协同 | `ba-collaboration` | BA 共工之法 |
 | 📚 启智 | `jpm-voice` | 《金瓶梅》文气化身之技 |
 | 📚 启智 | `evolutionary-architecture` | 进化式架构藏经 - 适应性函数、增量变更、架构量子 |
-| 📚 启智 | `exploring-generative-ai` | Exploring Generative AI 二十九篇官文之藏，论编程佐理、agentic coding、context engineering 与 local models |
+| 📚 启智 | `exploring-generative-ai` | Exploring Generative AI 三十一篇官文并一篇续作之藏，论编程佐理、agentic coding、harness engineering、context engineering 与 local models |
 | 🤝 协同 | `debate` | 辩论仙器 - 主从代理结构化论道 |
 
 ### 使用示例

@@ -124,7 +124,7 @@ Users can selectively install any combination:
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
 | 📚 Learning      | `jpm-voice`               | Provides the linguistic style and literary essence of "Jin Ping Mei" (permanently active) |
 | 📚 Learning | `evolutionary-architecture` | Evolutionary architecture knowledge base - fitness functions, incremental change, architectural quanta |
-| 📚 Learning | `exploring-generative-ai` | Exploring Generative AI knowledge base - 29 official articles on coding assistants, agentic coding, context engineering, and local models |
+| 📚 Learning | `exploring-generative-ai` | Exploring Generative AI knowledge base - 31 official articles plus 1 official follow-up on coding assistants, agentic coding, harness engineering, context engineering, and local models |
 | 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
 
 ### Installation Examples

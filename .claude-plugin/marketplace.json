@@ -148,7 +148,7 @@
     },
     {
       "name": "exploring-generative-ai",
-      "description": "[Skill] Exploring Generative AI 知识库 - 基于 Martin Fowler 官方 29 篇系列文章，覆盖 coding assistants、agentic coding、context engineering、软件质量与 local models",
+      "description": "[Skill] Exploring Generative AI 知识库 - 基于 Martin Fowler 官方 31 篇系列文章 + 1 篇官方后续文，覆盖 coding assistants、agentic coding、harness engineering（guides/sensors）、context engineering、软件质量与 local models",
       "source": "./plugins/exploring-generative-ai",
       "category": "learning"
     },
