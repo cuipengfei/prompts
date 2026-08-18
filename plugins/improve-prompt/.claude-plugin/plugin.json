@@ -1,6 +1,6 @@
 {
   "name": "improve-prompt",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "[Command + Skill] 优化提示词：识别意图（含隐含 NFR）、结构化改写、分级可验证 DoD，防止执行跑偏",
   "author": {
     "name": "cuipengfei",
