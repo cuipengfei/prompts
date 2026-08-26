@@ -166,7 +166,7 @@
     },
     {
       "name": "no-bs",
-      "description": "[Skill] No BS - 用户明确要求直接 verdict、反外交腔或纠正假公平时，基于证据明确站队、给出判断。",
+      "description": "[Skill] No BS - 基于证据直接判断、拒绝假公平，并在整场 session 持续使用朴实、不装腔的表达。",
       "source": "./plugins/no-bs",
       "category": "productivity"
     }
