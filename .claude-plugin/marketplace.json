@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
