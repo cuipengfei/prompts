@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -168,6 +168,12 @@
       "name": "no-bs",
       "description": "[Skill] No BS - 基于证据直接判断、拒绝假公平，并在整场 session 持续使用朴实、不装腔的表达。",
       "source": "./plugins/no-bs",
+      "category": "productivity"
+    },
+    {
+      "name": "github-repo-osint",
+      "description": "[Skill] GitHub 仓库情报研究：对任意仓库产出分层简报——身份机制、硬指标、社区口碑、star 真实性档位、选型含义，每条结论带证据分级。",
+      "source": "./plugins/github-repo-osint",
       "category": "productivity"
     }
   ]

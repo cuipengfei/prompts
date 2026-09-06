@@ -92,11 +92,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 24 个可用插件
+# 查看所有 28 个可用插件
 /plugin list
 ```
 
-### 可用插件（24 个独立插件）
+### 可用插件（28 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -120,12 +120,16 @@
 | 🔧 Tools         | `zellij-control`          | Zellij 控制 skill                           |
 | 🔧 Tools         | `codex`                   | Codex 顾问 - 调用 OpenAI Codex 获取第二意见 |
 | 🔧 Tools         | `deep-research`           | 深度研究 - 多源搜索、精确 URL 引用、结构化输出 |
+| 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
 | 🔧 Tools         | `cline-kanban`            | Cline Kanban - 管理本地编排看板任务         |
 | 🤝 Collaboration | `ba-collaboration`        | BA 协作 skill                               |
 | 📚 Learning      | `jpm-voice`               | 提供《金瓶梅》语言风格与文学精髓的化身技能 |
 | 📚 Learning      | `evolutionary-architecture` | 进化式架构知识库 - 适应性函数、增量变更、架构量子 |
 | 📚 Learning | `exploring-generative-ai` | Exploring Generative AI 知识库 - 官方 31 篇文章 + 1 篇官方后续文，覆盖 coding assistants、agentic coding、harness engineering、context engineering 与 local models |
-| 🤝 Collaboration | `debate`                  | 辩论插件 - 主代理与子代理结构化辩论         |
+| 🤝 Collaboration | `improve-skill`            | 改进现有 skill：判定来源，按会话证据补缺口或提炼经验 |
+| 🤝 Collaboration | `no-bs`                    | 基于证据直接判断、拒绝假公平的持续表达风格 |
+| 🔧 Tools         | `github-repo-osint`        | GitHub 仓库情报研究：分层简报 + star 真实性档位 + 证据分级 |
+| 🔧 Tools         | `fuck`                     | 用户强烈指出 agent 离谱时回看偏差并校正方向 |
 
 ### 安装示例
 
@@ -144,7 +148,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
 ```
 
 ## OpenCode 插件

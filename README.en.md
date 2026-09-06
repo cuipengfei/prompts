@@ -92,11 +92,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 24 available plugins
+# View all 28 available plugins
 /plugin list
 ```
 
-### Available Plugins (24 Independent Plugins)
+### Available Plugins (28 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -120,12 +120,16 @@ Users can selectively install any combination:
 | 🔧 Tools | `zellij-control` | Zellij control skill |
 | 🔧 Tools | `codex` | Codex advisor - call OpenAI Codex for second opinions |
 | 🔧 Tools | `deep-research` | Deep research workflow with multi-source search, exact URL citations, and structured synthesis |
+| 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
 | 🔧 Tools | `cline-kanban` | Manage local orchestration kanban tasks with the kanban CLI |
 | 🤝 Collaboration | `ba-collaboration` | BA collaboration skill |
 | 📚 Learning      | `jpm-voice`               | Provides the linguistic style and literary essence of "Jin Ping Mei" (permanently active) |
 | 📚 Learning | `evolutionary-architecture` | Evolutionary architecture knowledge base - fitness functions, incremental change, architectural quanta |
 | 📚 Learning | `exploring-generative-ai` | Exploring Generative AI knowledge base - 31 official articles plus 1 official follow-up on coding assistants, agentic coding, harness engineering, context engineering, and local models |
-| 🤝 Collaboration | `debate` | Debate plugin - structured debate between main and sub-agents |
+| 🤝 Collaboration | `improve-skill` | Improve existing skills: determine source repo, patch gaps or distill lessons from session evidence |
+| 🤝 Collaboration | `no-bs` | Evidence-based direct verdicts, no fake fairness; persistent plain-spoken style |
+| 🔧 Tools | `github-repo-osint` | GitHub repo intelligence: layered brief, star authenticity tiering, evidence-graded conclusions |
+| 🔧 Tools | `fuck` | When the user calls out the agent's blunder, review the drift and correct course |
 
 ### Installation Examples
 
@@ -144,7 +148,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
 ```
 
 ## OpenCode Plugins
