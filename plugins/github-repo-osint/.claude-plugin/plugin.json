@@ -1,6 +1,6 @@
 {
   "name": "github-repo-osint",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "[Skill] GitHub 仓库情报研究：对任意仓库产出分层简报——身份机制、硬指标、社区口碑、star 真实性档位、选型含义，每条结论带证据分级。",
   "author": {
     "name": "cuipengfei",
