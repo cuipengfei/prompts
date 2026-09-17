@@ -1,5 +1,5 @@
 ---
-description: 优化提示词：推断用户为什么（why）、从 why 推导怎么做（how）、结构化改写、分级可验证 DoD，防止执行跑偏
+description: 优化提示词：构建意图链（why→how）推导目标、结构化改写、分级可验证 DoD，防止执行跑偏
 ---
 
 # MANDATORY 2-Step Process
