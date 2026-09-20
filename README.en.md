@@ -92,11 +92,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 28 available plugins
+# View all 29 available plugins
 /plugin list
 ```
 
-### Available Plugins (28 Independent Plugins)
+### Available Plugins (29 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -109,6 +109,7 @@ Users can selectively install any combination:
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
 | 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
 | 📚 Learning | `help-me-read` | Read full URL content with original paragraphs or paragraph groups, optional translation, light commentary, and end synthesis |
+| 📚 Learning | `uncharted` | Use LLMs to enter unfamiliar fields by building domain vocabulary, knowledge frameworks, and verifiable rules |
 | 🔧 Tools | `jichang` | Jichang evaluation - ad pollution, benchmark bias, risk tiers, and low-exposure test priority |
 | 🏗 Development | `foundational-principles` | Foundational principles skill |
 | 🏗 Development | `quality-standards` | Quality standards skill |
@@ -148,7 +149,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
 ```
 
 ## OpenCode Plugins

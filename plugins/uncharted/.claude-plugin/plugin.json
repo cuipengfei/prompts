@@ -1,0 +1,11 @@
+{
+  "name": "uncharted",
+  "version": "0.1.0",
+  "description": "[Skill] Uncharted - 借助 LLM 进入陌生领域，建立领域词汇、知识框架与可验证的执行规则",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}

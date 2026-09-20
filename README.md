@@ -92,11 +92,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 28 个可用插件
+# 查看所有 29 个可用插件
 /plugin list
 ```
 
-### 可用插件（28 个独立插件）
+### 可用插件（29 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -109,6 +109,7 @@
 | 📚 Learning      | `response-guidelines`     | 响应指南 skill                              |
 | 📚 Learning      | `session-learn`           | 会话学习 - 三层存储分类 + Memory MCP 召回   |
 | 📚 Learning      | `help-me-read`            | 读取 URL 全文，按段落或段落组提供原文、必要译文、轻量 commentary 与文末综合解读 |
+| 📚 Learning      | `uncharted`               | 借助 LLM 进入陌生领域，建立领域词汇、知识框架与可验证规则 |
 | 🔧 Tools         | `jichang`                 | 机场候选评估 - 广告污染、测速偏差、风险分层与低暴露测试优先级 |
 | 🏗 Development   | `foundational-principles` | 基础原则 skill                              |
 | 🏗 Development   | `quality-standards`       | 质量标准 skill                              |
@@ -148,7 +149,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
 ```
 
 ## OpenCode 插件

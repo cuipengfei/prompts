@@ -92,11 +92,11 @@
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览二十八宝
+# 览二十九宝
 /plugin list
 ```
 
-### 仙器目录（二十八件独立仙器）
+### 仙器目录（二十九件独立仙器）
 
 觅者可择需而取，勿须尽纳：
 
@@ -109,6 +109,7 @@
 | 📚 启智 | `response-guidelines` | 应答准则心法 |
 | 📚 启智 | `session-learn` | 会话学习 - 三层藏经 + 忆念召唤 |
 | 📚 启智 | `help-me-read` | 取 URL 全文，按段或段组陈原文、必要译文、轻点评注与篇末综解 |
+| 📚 启智 | `uncharted` | 借 LLM 入陌生之域，立词汇、知识框架与可验之则 |
 | 🔧 神通 | `jichang` | 机场验真之术 - 辨广告浊流、测速偏差、风险层级与低曝试序 |
 | 🏗 筑基 | `foundational-principles` | 根基要诀 |
 | 🏗 筑基 | `quality-standards` | 质量法度 |
@@ -147,8 +148,8 @@
 # 用法: /learn 或 /learn 代码风格
 # 用法: /recall 或 /recall 认证模式
 
-# 尽收二十八宝
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
+# 尽收二十九宝
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
 ```
 
 ## 天工开物篇：OpenCode 仙器
