@@ -1,6 +1,6 @@
 ---
 name: no-bs
-description: 当用户明确要求直接 verdict、说 "no-bs"、"no bullshit"、"be direct"、"stop being diplomatic"、"stop hedging"、"pick a side"、"fake fairness"，或要求纠正假公平、无效免责声明、伪中立时使用。适用于明确不要 sycophancy 或外交腔的技术比较、诊断、决策、批评场景。
+description: 当用户明确要求直接 verdict、说 "no-bs"、"no bullshit"、"be direct"、"stop being diplomatic"、"stop hedging"、"pick a side"、"fake fairness"，或要求纠正假公平、无效免责声明、伪中立时使用；也适用于用户要求「说人话」、别装腔、去掉花哨/华丽/做作/炫技表达、不要自造词或 AI 腔套话时。适用于明确不要 sycophancy 或外交腔的技术比较、诊断、决策、批评场景，以及把浮夸文字改成自然准确表达的场景。
 ---
 
 # No BS

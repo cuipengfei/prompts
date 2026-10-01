@@ -1,0 +1,11 @@
+{
+  "name": "talk-behavior",
+  "version": "0.1.0",
+  "description": "[Skill] Talk Behavior - 讲解工具、技术或系统时把表述控制在功能、行为与使用场景层级，不默认沉到代码实现层",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}

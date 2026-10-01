@@ -92,11 +92,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 29 个可用插件
+# 查看所有 30 个可用插件
 /plugin list
 ```
 
-### 可用插件（29 个独立插件）
+### 可用插件（30 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -131,6 +131,7 @@
 | 🤝 Collaboration | `no-bs`                    | 基于证据直接判断、拒绝假公平的持续表达风格 |
 | 🔧 Tools         | `github-repo-osint`        | GitHub 仓库情报研究：分层简报 + star 真实性档位 + 证据分级 |
 | 🔧 Tools         | `fuck`                     | 用户强烈指出 agent 离谱时回看偏差并校正方向 |
+| 🛠 Productivity  | `talk-behavior`            | 讲解工具与技术时按行为层级表述，不默认沉到代码实现层 |
 
 ### 安装示例
 
@@ -149,7 +150,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck talk-behavior
 ```
 
 ## OpenCode 插件
