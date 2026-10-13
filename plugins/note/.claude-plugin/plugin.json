@@ -1,0 +1,11 @@
+{
+  "name": "note",
+  "version": "0.1.0",
+  "description": "[Skill] 会话笔记：记录重要信息，在上下文压缩后重新读取并补充当前对话",
+  "author": {
+    "name": "cuipengfei",
+    "email": "cuipengfei@gmail.com"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/cuipengfei/prompts"
+}
