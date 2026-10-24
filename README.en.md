@@ -128,10 +128,10 @@ Users can selectively install any combination:
 | 📚 Learning | `evolutionary-architecture` | Evolutionary architecture knowledge base - fitness functions, incremental change, architectural quanta |
 | 📚 Learning | `exploring-generative-ai` | Exploring Generative AI knowledge base - 31 official articles plus 1 official follow-up on coding assistants, agentic coding, harness engineering, context engineering, and local models |
 | 🤝 Collaboration | `improve-skill` | Improve existing skills: determine source repo, patch gaps or distill lessons from session evidence |
-| 🤝 Collaboration | `no-bs` | Evidence-based direct verdicts, no fake fairness; persistent plain-spoken style |
+| 🤝 Collaboration | `no-bs` | Evidence-based direct verdicts and a persistent plain-spoken style; complete the current task within its authorized scope |
 | 🔧 Tools | `github-repo-osint` | GitHub repo intelligence: layered brief, star authenticity tiering, evidence-graded conclusions |
 | 🔧 Tools | `fuck` | When the user calls out the agent's blunder, review the drift and correct course |
-| 🛠 Productivity | `talk-behavior` | Explain tools and tech at the behavior level by default; drop to implementation only on explicit conditions |
+| 🛠 Productivity | `talk-behavior` | Explain the use, flow, or mechanism the question calls for; preserve needed names, exact numbers, and conditions, and omit irrelevant implementation details |
 | 🛠 Productivity | `note` | Session notes: save important information and reread it after compaction to supplement the remaining context |
 | 🛠 Productivity | `restating-complete-answers` | When revising a previous reply after feedback or correction, deliver the complete restated answer rather than a patch list |
 

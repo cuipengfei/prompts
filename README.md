@@ -128,10 +128,10 @@
 | 📚 Learning      | `evolutionary-architecture` | 进化式架构知识库 - 适应性函数、增量变更、架构量子 |
 | 📚 Learning | `exploring-generative-ai` | Exploring Generative AI 知识库 - 官方 31 篇文章 + 1 篇官方后续文，覆盖 coding assistants、agentic coding、harness engineering、context engineering 与 local models |
 | 🤝 Collaboration | `improve-skill`            | 改进现有 skill：判定来源，按会话证据补缺口或提炼经验 |
-| 🤝 Collaboration | `no-bs`                    | 基于证据直接判断、拒绝假公平的持续表达风格 |
+| 🤝 Collaboration | `no-bs`                    | 基于证据直接判断、拒绝假公平；在授权范围内完成当前任务，持续使用自然表达 |
 | 🔧 Tools         | `github-repo-osint`        | GitHub 仓库情报研究：分层简报 + star 真实性档位 + 证据分级 |
 | 🔧 Tools         | `fuck`                     | 用户强烈指出 agent 离谱时回看偏差并校正方向 |
-| 🛠 Productivity  | `talk-behavior`            | 讲解工具与技术时按行为层级表述，不默认沉到代码实现层 |
+| 🛠 Productivity  | `talk-behavior`            | 按提问说明用途、流程和机制，保留必要名称、精确数字与条件，省略无关实现 |
 | 🛠 Productivity  | `note`                     | 会话笔记：保存重要信息，压缩后重新读取并补充当前对话 |
 | 🛠 Productivity  | `restating-complete-answers` | 收到反馈或纠错需修正上一条回复时，交付合并后的完整重述版而非补丁列表 |
 

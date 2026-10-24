@@ -128,10 +128,10 @@
 | 📚 启智 | `evolutionary-architecture` | 进化式架构藏经 - 适应性函数、增量变更、架构量子 |
 | 📚 启智 | `exploring-generative-ai` | Exploring Generative AI 三十一篇官文并一篇续作之藏，论编程佐理、agentic coding、harness engineering、context engineering 与 local models |
 | 🤝 协同 | `improve-skill` | 磨砺旧器 - 判其源流，按会话之证补缺或炼心得 |
-| 🤝 协同 | `no-bs` | 据证直断、不假圆融，文风朴实恒常 |
+| 🤝 协同 | `no-bs` | 据证直断、不假圆融；事止于所托，文风朴实恒常 |
 | 🔧 神通 | `github-repo-osint` | 仓库探赜 - 分层简报、star 真伪之察、证据分级 |
 | 🔧 神通 | `fuck` | 用者怒斥之际，回视偏差而正其道 |
-| 🛠 俗务 | `talk-behavior` | 言说器术之技 - 陈功用、行为与施用场景，不轻言代码之末节 |
+| 🛠 俗务 | `talk-behavior` | 随所问陈功用、流程与机理，保留必要名称、准确数值与条件，省去无关代码 |
 | 🛠 俗务 | `note` | 记会话之要，压缩后复读，以补留存之言 |
 | 🛠 俗务 | `restating-complete-answers` | 纳谏改误之际，重陈完篇之答，不作零碎补丁 |
 
