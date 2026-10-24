@@ -84,6 +84,12 @@
 
 **小贴士：** 路径用相对路径，或自定义 text 规则。越具体，洗脑效果越强。
 
+## Skill 源文件
+
+所有 skill 的正文和附属文件保存在根目录 `skills/<skill-name>/`。`plugins/<plugin>/skills/<skill-name>` 通过相对 symlink 指向该目录，修改时直接编辑根目录中的文件。
+
+各工具的 skill 入口同样使用 symlink。OpenSpec 文案中的工具专用命令写法保存在对应 skill 的 `variants/` 下，保持各工具原有的调用方式。
+
 ## Claude Code 插件安装（推荐！）
 
 本仓库现已支持 Claude Code 插件系统！**每个功能都是独立插件**，按需安装：

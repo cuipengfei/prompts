@@ -1,6 +1,6 @@
 {
   "name": "improve-skill",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "[Skill] 改进已有 skill：先判 lock 来源；本地自制就地改，已追踪的回原 repo；从实际问题或有效经验提炼改进。",
   "author": {
     "name": "cuipengfei",

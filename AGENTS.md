@@ -7,19 +7,19 @@
 
 ## OVERVIEW
 
-这个仓库同时维护两类产物：Claude Code 插件市场（`plugins/` + `.claude-plugin/marketplace.json`）与 OpenCode 运行时增强包（`packages/oc-tweaks/`）。根目录只保留跨仓库共享规则；局部实现规则下沉到子目录 `AGENTS.md`。
+这个仓库同时维护两类产物：Claude Code 插件市场（`plugins/` + `.claude-plugin/marketplace.json`）与 OpenCode 运行时增强包（`packages/oc-tweaks/`）。根目录 `AGENTS.md` 记录本仓库通用的结构与维护规则，包括 skill 的目录布局；各子目录的局部实现规则写在对应子目录的 `AGENTS.md` 中。
 
 ## STRUCTURE
 
-```text
-prompts/
-├── .claude-plugin/marketplace.json   # Claude Code marketplace 清单
-├── plugins/                          # 24 个独立插件；看 plugins/AGENTS.md
-├── packages/oc-tweaks/               # OpenCode 运行时增强包；看 packages/oc-tweaks/AGENTS.md
-├── openspec/                         # spec / change proposal 工作流
-├── .claude/                          # 本仓库自带 Claude workspace 资产；看 .claude/AGENTS.md
-└── .sisyphus/                        # 计划、证据、notepads；看 .sisyphus/AGENTS.md
-```
+| 路径 | 用途 |
+| --- | --- |
+| `.claude-plugin/marketplace.json` | Claude Code marketplace 清单 |
+| `skills/<skill-name>/` | 所有 skill 的正文与附属文件 |
+| `plugins/` | 独立插件及指向根目录 skill 的入口 |
+| `packages/oc-tweaks/` | OpenCode 运行时增强包 |
+| `openspec/` | spec 与 change proposal 工作流 |
+| `.claude/` | 本仓库的 Claude workspace 入口 |
+| `.sisyphus/` | 计划、证据与工作文件 |
 
 ## WHERE TO LOOK
 
@@ -40,6 +40,13 @@ prompts/
 - `README.md`、`README.en.md`、`README.guwen.md` 必须保持内容同步。
 - 文档与插件说明默认中文；技术术语保持英文。
 
+## SKILL DIRECTORY RULES
+
+- 所有 skill 的实际内容统一放在仓库根目录 `skills/<skill-name>/`，包括 `SKILL.md`、`references/`、脚本和其他附属文件。新增和修改 skill 都在这个目录完成。
+- plugin 内的 `plugins/<plugin>/skills/<skill-name>` 必须是相对 symlink，指向 `../../../skills/<skill-name>`。plugin 名称与 skill 名称可以不同。
+- `.claude/skills/`、`.codex/skills/` 等工具目录也通过相对 symlink 引用根目录内容。工具专用文案存在必要差异时，保存在对应 skill 的 `variants/` 下，工具入口中的 `SKILL.md` 链接到该文件；相同文案共用同一个源文件。
+- 迁移时保留正文、附属文件、文件权限和必要的工具差异。完成后检查每个入口可以读取 `SKILL.md`、相对资源引用可访问，且 skill 发现结果保持一致。
+
 ## ANTI-PATTERNS
 
 - 不要把多个无关能力塞进同一个插件目录。
@@ -53,8 +60,15 @@ prompts/
 # 验证所有插件 manifest
 for f in plugins/*/.claude-plugin/plugin.json; do jq . "$f" >/dev/null; done
 
-# 验证 SKILL frontmatter
-bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/plugin-settings/scripts/parse-frontmatter.sh plugins/*/skills/*/SKILL.md
+# 验证根目录 skill 发现（只列出，不安装）
+skills add . --list
+
+# 验证 plugin 的相对 symlink 及其 SKILL.md 入口
+for entry in plugins/*/skills/*; do
+  test -L "$entry" &&
+    test "$(readlink "$entry")" = "../../../skills/${entry##*/}" &&
+    test -f "$entry/SKILL.md" || exit 1
+done
 
 # 验证 hooks schema（先提取 .hooks）
 jq '.hooks' plugins/desktop-notify/hooks/hooks.json > /tmp/hooks.json

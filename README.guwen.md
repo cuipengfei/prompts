@@ -84,6 +84,12 @@
 
 **心法要诀：** 文件路径宜用相对之道，亦可自定义箴言。愈精愈详，则 AI 愈能心领神会。
 
+## Skill 源文所在
+
+凡 skill 正文及附属文件，皆存根目录 `skills/<skill-name>/`。`plugins/<plugin>/skills/<skill-name>` 以相对 symlink 相连；修订之时，径改根目录源文。
+
+各工具入口亦用 symlink。OpenSpec 因工具而异的命令写法，存于对应 skill 的 `variants/`，各循原有调用之法。
+
 ## 玄门秘法：Claude Code 仙器安装（推荐！）
 
 此册已融 Claude Code 仙器之道！**各器独立**，可择而用之：

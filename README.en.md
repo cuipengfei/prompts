@@ -84,6 +84,12 @@ Want to brainwash Copilot directly in VS Code? Use the right structure:
 
 **Pro tip:** Use relative paths to your instruction files, or add custom text rules. The more specific, the stronger the brainwashing.
 
+## Skill source files
+
+All skill content and supporting files live in the root `skills/<skill-name>/` directory. Each `plugins/<plugin>/skills/<skill-name>` entry is a relative symlink to that directory. Edit the files in the root directory.
+
+Tool-specific skill entries also use symlinks. OpenSpec wording with tool-specific command syntax lives under the skill's `variants/` directory, preserving each tool's existing commands.
+
 ## Claude Code Plugin Installation (Recommended!)
 
 This repository now supports the Claude Code plugin system! **Each feature is an independent plugin** for selective installation:

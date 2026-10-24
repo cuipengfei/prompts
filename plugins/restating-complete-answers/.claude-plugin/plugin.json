@@ -1,6 +1,6 @@
 {
   "name": "restating-complete-answers",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "[Skill] 收到顾问反馈或用户纠错需修正上一条回复时，交付合并后的完整重述版而非修正点补丁列表",
   "author": {
     "name": "cuipengfei",

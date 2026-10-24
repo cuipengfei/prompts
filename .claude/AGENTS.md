@@ -14,6 +14,7 @@
 | 改本仓库专用命令 | `commands/` | 当前有 `improve-prompt.md` 与 `openspec/` 命令组 |
 | 改本仓库专用子代理说明 | `agents/` | 如 `tdd-coach.md`、`planning-analyst.md` |
 | 改本仓库专用输出风格 | `output-styles/` | 当前是 `structured-responder.md` |
+| 改本仓库专用 skill | 根目录 `skills/<skill-name>/` | `skills/` 中仅保留 symlink 入口 |
 
 ## CONVENTIONS
 

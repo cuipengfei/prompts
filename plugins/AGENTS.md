@@ -8,15 +8,13 @@ Claude Code 插件市场目录的共享规则层。这里讲跨插件共性；�
 
 ## STRUCTURE
 
-```text
-plugins/<plugin>/
-├── .claude-plugin/plugin.json
-├── commands/*.md
-├── skills/*/SKILL.md
-├── hooks/hooks.json
-├── hooks/*.ts
-└── output-styles/*.md
-```
+| 路径 | 用途 |
+| --- | --- |
+| `.claude-plugin/plugin.json` | 插件元数据 |
+| `commands/*.md` | 命令 |
+| `skills/<skill-name>` | 指向根目录 skill 的相对 symlink |
+| `hooks/hooks.json`、`hooks/*.ts` | hooks 配置与实现 |
+| `output-styles/*.md` | 输出风格 |
 
 并非每个插件都有全部目录；常见形态是单 skill、单 output-style、单 hook，或 command + skill 混合。
 
@@ -26,7 +24,7 @@ plugins/<plugin>/
 |------|----------|-------|
 | 改插件元数据 | `.claude-plugin/plugin.json` | 只放元数据 |
 | 改 slash command | `commands/*.md` | 命令依赖 skill 时优先用强制激活模式 |
-| 改 skill | `skills/*/SKILL.md` | frontmatter 必须可解析 |
+| 改 skill | 仓库根目录 `skills/<skill-name>/` | frontmatter 必须可解析 |
 | 改 hook | `hooks/` | `hooks.json` 用 wrapper 结构 |
 | 改 output style | `output-styles/*.md` | 只写输出风格，不混业务逻辑 |
 
@@ -43,7 +41,7 @@ plugins/<plugin>/
 
 - 需要对照官方插件实现时，优先查看 `~/.claude/plugins/marketplaces/claude-code-plugins/plugins/`。
 - 典型 `plugin.json` 形状保持简洁：`name`、`version`、`description`、`author`、`license`、`repository`；不要往里塞行为定义。
-- skill 目录通常由 `skills/<skill-name>/SKILL.md` 承担主体知识；复杂 skill 再加 `references/` 或 examples 子树。
+- skill 的内容位置与 symlink 要求见根目录 `AGENTS.md` 的 `SKILL DIRECTORY RULES`。
 
 ## SKILL AUTHORING NOTES
 
@@ -60,15 +58,14 @@ plugins/<plugin>/
 
 ## VALIDATION
 
+skill 发现与 symlink 校验统一使用根目录 `AGENTS.md` 中 `COMMANDS` 的对应命令。以下命令也从仓库根目录执行。
+
 ```bash
 # 查看官方插件结构
 ls ~/.claude/plugins/marketplaces/claude-code-plugins/plugins/
 
 # plugin.json 语法检查
 for f in plugins/*/.claude-plugin/plugin.json; do jq . "$f" >/dev/null; done
-
-# skill frontmatter
-bash ~/.claude/plugins/cache/claude-plugins-official/plugin-dev/unknown/skills/plugin-settings/scripts/parse-frontmatter.sh plugins/*/skills/*/SKILL.md
 
 # hook schema（wrapper 先提取 .hooks）
 jq '.hooks' plugins/desktop-notify/hooks/hooks.json > /tmp/hooks.json
