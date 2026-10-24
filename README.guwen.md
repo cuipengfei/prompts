@@ -92,11 +92,11 @@
 # 添仙阁（一次即可）
 /plugin marketplace add cuipengfei/prompts
 
-# 览三十一宝
+# 览三十二宝
 /plugin list
 ```
 
-### 仙器目录（三十一件独立仙器）
+### 仙器目录（三十二件独立仙器）
 
 觅者可择需而取，勿须尽纳：
 
@@ -133,6 +133,7 @@
 | 🔧 神通 | `fuck` | 用者怒斥之际，回视偏差而正其道 |
 | 🛠 俗务 | `talk-behavior` | 言说器术之技 - 陈功用、行为与施用场景，不轻言代码之末节 |
 | 🛠 俗务 | `note` | 记会话之要，压缩后复读，以补留存之言 |
+| 🛠 俗务 | `restating-complete-answers` | 纳谏改误之际，重陈完篇之答，不作零碎补丁 |
 
 ### 使用示例
 
@@ -150,8 +151,8 @@
 # 用法: /learn 或 /learn 代码风格
 # 用法: /recall 或 /recall 认证模式
 
-# 尽收三十一宝
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck talk-behavior note
+# 尽收三十二宝
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck talk-behavior note restating-complete-answers
 ```
 
 ## 天工开物篇：OpenCode 仙器

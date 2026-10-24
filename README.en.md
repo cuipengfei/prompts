@@ -92,11 +92,11 @@ This repository now supports the Claude Code plugin system! **Each feature is an
 # Add marketplace (one-time)
 /plugin marketplace add cuipengfei/prompts
 
-# View all 31 available plugins
+# View all 32 available plugins
 /plugin list
 ```
 
-### Available Plugins (31 Independent Plugins)
+### Available Plugins (32 Independent Plugins)
 
 Users can selectively install any combination:
 
@@ -133,6 +133,7 @@ Users can selectively install any combination:
 | 🔧 Tools | `fuck` | When the user calls out the agent's blunder, review the drift and correct course |
 | 🛠 Productivity | `talk-behavior` | Explain tools and tech at the behavior level by default; drop to implementation only on explicit conditions |
 | 🛠 Productivity | `note` | Session notes: save important information and reread it after compaction to supplement the remaining context |
+| 🛠 Productivity | `restating-complete-answers` | When revising a previous reply after feedback or correction, deliver the complete restated answer rather than a patch list |
 
 ### Installation Examples
 
@@ -151,7 +152,7 @@ Users can selectively install any combination:
 # Usage: /recall or /recall auth-patterns
 
 # Install all
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck talk-behavior note
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck talk-behavior note restating-complete-answers
 ```
 
 ## OpenCode Plugins

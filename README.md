@@ -92,11 +92,11 @@
 # 添加 marketplace（一次性）
 /plugin marketplace add cuipengfei/prompts
 
-# 查看所有 31 个可用插件
+# 查看所有 32 个可用插件
 /plugin list
 ```
 
-### 可用插件（31 个独立插件）
+### 可用插件（32 个独立插件）
 
 用户可以选择性安装任意组合：
 
@@ -133,6 +133,7 @@
 | 🔧 Tools         | `fuck`                     | 用户强烈指出 agent 离谱时回看偏差并校正方向 |
 | 🛠 Productivity  | `talk-behavior`            | 讲解工具与技术时按行为层级表述，不默认沉到代码实现层 |
 | 🛠 Productivity  | `note`                     | 会话笔记：保存重要信息，压缩后重新读取并补充当前对话 |
+| 🛠 Productivity  | `restating-complete-answers` | 收到反馈或纠错需修正上一条回复时，交付合并后的完整重述版而非补丁列表 |
 
 ### 安装示例
 
@@ -151,7 +152,7 @@
 # 使用: /recall 或 /recall 认证模式
 
 # 安装全部
-/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck talk-behavior note
+/plugin install improve-prompt desktop-notify natural-writing structured-responder foundational-principles quality-standards programming-workflow testing-guidelines planning-workflow ba-collaboration response-guidelines sequential-thinking shortcut-system zellij-control session-learn codex debate deep-research jpm-voice cline-kanban help-me-read uncharted jichang evolutionary-architecture exploring-generative-ai improve-skill no-bs github-repo-osint fuck talk-behavior note restating-complete-answers
 ```
 
 ## OpenCode 插件

@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "prompts",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "AI 编程助手指令框架 - 细粒度可选安装的 commands、hooks、output-styles 和 skills",
   "owner": {
     "name": "cuipengfei",
@@ -192,6 +192,12 @@
       "name": "note",
       "description": "[Skill] 会话笔记：记录重要信息，在上下文压缩后重新读取并补充当前对话",
       "source": "./plugins/note",
+      "category": "productivity"
+    },
+    {
+      "name": "restating-complete-answers",
+      "description": "[Skill] 收到顾问反馈或用户纠错需修正上一条回复时，交付合并后的完整重述版而非修正点补丁列表",
+      "source": "./plugins/restating-complete-answers",
       "category": "productivity"
     }
   ]
