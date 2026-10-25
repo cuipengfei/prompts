@@ -22,8 +22,8 @@
 
 ## Context Refresh（context 刷新）
 **何时用**：agent 在猜、用被取代的约定、或没有抵达所需证据的可靠路径。
-**怎么做**：命名当前任务边界，替换过期 reference，暴露 search/read interface，预加载不可或缺的约束，移除无关 context。
-**权衡**：策展花时间；宽泛未策展的 context 花可靠性。Context 策展提高概率；它不保证 agent 行为。
+**怎么做**：命名当前任务边界，替换过期 reference，暴露 search/read interface，预加载不可或缺的约束，移除无关 context。更新后，用原失败任务检查对象、约束和来源是否使用正确；仍有错误时，继续检查模型、工具和执行条件。
+**权衡**：整理 context 需要时间；过期或无关的 context 增加误用约定的风险。
 
 ## Local-Model Viability Funnel（本地模型可用性漏斗）
 **何时用**：为真实编码 harness 评估本地模型。
