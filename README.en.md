@@ -114,7 +114,7 @@ Users can selectively install any combination:
 | 📚 Learning | `structured-responder` | Structured response output style |
 | 📚 Learning | `response-guidelines` | Response guidelines skill |
 | 📚 Learning | `session-learn` | Session learning - three-tier storage + Memory MCP recall |
-| 📚 Learning | `help-me-read` | Read full URL content with original paragraphs or paragraph groups, optional translation, light commentary, and end synthesis |
+| 📚 Learning | `help-me-read` | Read full URL content with structure-matched breakdowns of claims, data, and evidence boundaries, plus on-demand paragraph-by-paragraph original text and translation |
 | 📚 Learning | `uncharted` | Use LLMs to enter unfamiliar fields by building domain vocabulary, knowledge frameworks, and verifiable rules |
 | 🔧 Tools | `jichang` | Jichang evaluation - ad pollution, benchmark bias, risk tiers, and low-exposure test priority |
 | 🏗 Development | `foundational-principles` | Foundational principles skill |

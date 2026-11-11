@@ -114,7 +114,7 @@
 | 📚 启智 | `structured-responder` | 结构化应答体例 |
 | 📚 启智 | `response-guidelines` | 应答准则心法 |
 | 📚 启智 | `session-learn` | 会话学习 - 三层藏经 + 忆念召唤 |
-| 📚 启智 | `help-me-read` | 取 URL 全文，按段或段组陈原文、必要译文、轻点评注与篇末综解 |
+| 📚 启智 | `help-me-read` | 取 URL 全文，顺篇体裁直剖主旨、数据与证界，亦支持按需逐段陈原文、译文与评注 |
 | 📚 启智 | `uncharted` | 借 LLM 入陌生之域，立词汇、知识框架与可验之则 |
 | 🔧 神通 | `jichang` | 机场验真之术 - 辨广告浊流、测速偏差、风险层级与低曝试序 |
 | 🏗 筑基 | `foundational-principles` | 根基要诀 |

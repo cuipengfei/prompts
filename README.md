@@ -114,7 +114,7 @@
 | 📚 Learning      | `structured-responder`    | 结构化响应输出风格                          |
 | 📚 Learning      | `response-guidelines`     | 响应指南 skill                              |
 | 📚 Learning      | `session-learn`           | 会话学习 - 三层存储分类 + Memory MCP 召回   |
-| 📚 Learning      | `help-me-read`            | 读取 URL 全文，按段落或段落组提供原文、必要译文、轻量 commentary 与文末综合解读 |
+| 📚 Learning      | `help-me-read`            | 读取 URL 全文，按文章体裁讲透核心论点、数据与证据边界，支持按需逐段原文与译文精读 |
 | 📚 Learning      | `uncharted`               | 借助 LLM 进入陌生领域，建立领域词汇、知识框架与可验证规则 |
 | 🔧 Tools         | `jichang`                 | 机场候选评估 - 广告污染、测速偏差、风险分层与低暴露测试优先级 |
 | 🏗 Development   | `foundational-principles` | 基础原则 skill                              |
